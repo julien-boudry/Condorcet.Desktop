@@ -9,21 +9,23 @@
             @endif
         </h3>
 
-        {{-- Winner & Loser --}}
-        <div class="flex gap-6 mb-4">
-            <div>
-                <span class="text-sm text-gray-500 dark:text-gray-400">Winner</span>
-                <p class="text-lg font-semibold text-green-600 dark:text-green-400">
-                    {{ $result['winner'] ?? '—' }}
-                </p>
+        {{-- Winner & Loser (only for single-winner methods) --}}
+        @if(!($result['isProportional'] ?? false) && !($result['isInformational'] ?? false))
+            <div class="flex gap-6 mb-4">
+                <div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Winner</span>
+                    <p class="text-lg font-semibold text-green-600 dark:text-green-400">
+                        {{ $result['winner'] ?? '—' }}
+                    </p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Loser</span>
+                    <p class="text-lg font-semibold text-red-600 dark:text-red-400">
+                        {{ $result['loser'] ?? '—' }}
+                    </p>
+                </div>
             </div>
-            <div>
-                <span class="text-sm text-gray-500 dark:text-gray-400">Loser</span>
-                <p class="text-lg font-semibold text-red-600 dark:text-red-400">
-                    {{ $result['loser'] ?? '—' }}
-                </p>
-            </div>
-        </div>
+        @endif
 
         {{-- Full ranking table --}}
         <table class="w-full text-sm">

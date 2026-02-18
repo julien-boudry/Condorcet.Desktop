@@ -1,7 +1,8 @@
 {{-- Overview: side-by-side comparison of all selected methods --}}
 @php
-    // Collect winners to detect disagreements (used by the notice above the table)
-    $winners = array_column($results, 'winner');
+    // Collect winners to detect disagreements — only from single-winner methods
+    $singleWinnerResults = array_filter($results, fn($r) => !($r['isProportional'] ?? false) && !($r['isInformational'] ?? false));
+    $winners = array_column($singleWinnerResults, 'winner');
     $uniqueWinners = array_unique(array_filter($winners));
     $hasDisagreement = count($uniqueWinners) > 1;
 @endphp
@@ -16,7 +17,7 @@
     </div>
 @endif
 
-<div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
+<div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
             <thead>
@@ -30,7 +31,8 @@
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                 @foreach($results as $method => $result)
                     @php
-                        $isDisagreeing = $hasDisagreement && $result['winner'] !== null && $result['winner'] !== reset($uniqueWinners);
+                        $skipWinnerLoser = ($result['isProportional'] ?? false) || ($result['isInformational'] ?? false);
+                        $isDisagreeing = !$skipWinnerLoser && $hasDisagreement && $result['winner'] !== null && $result['winner'] !== reset($uniqueWinners);
                     @endphp
                     <tr class="even:bg-gray-50 dark:even:bg-gray-800/50 {{ $isDisagreeing ? 'bg-amber-50 dark:bg-amber-900/10' : '' }}">
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
@@ -43,7 +45,14 @@
                         </td>
 
                         <td class="px-4 py-3 whitespace-nowrap">
-                            @if($result['winner'])
+                            @if($skipWinnerLoser)
+                                <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
+                                    <span class="text-gray-400 italic text-xs cursor-help">N/A</span>
+                                    <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 bottom-full mb-1 z-50 w-72 whitespace-normal rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
+                                        {{ ($result['isProportional'] ?? false) ? 'Proportional methods elect multiple seats, not a single winner.' : 'Informational methods identify a set of candidates, not a ranking.' }}
+                                    </span>
+                                </span>
+                            @elseif($result['winner'])
                                 <span class="font-semibold text-green-600 dark:text-green-400 {{ $isDisagreeing ? 'underline decoration-amber-400' : '' }}">
                                     {{ $result['winner'] }}
                                 </span>
@@ -53,7 +62,14 @@
                         </td>
 
                         <td class="px-4 py-3 whitespace-nowrap">
-                            @if($result['loser'])
+                            @if($skipWinnerLoser)
+                                <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
+                                    <span class="text-gray-400 italic text-xs cursor-help">N/A</span>
+                                    <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 bottom-full mb-1 z-50 w-72 whitespace-normal rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
+                                        {{ ($result['isProportional'] ?? false) ? 'Proportional methods elect multiple seats, not a single loser.' : 'Informational methods identify a set of candidates, not a ranking.' }}
+                                    </span>
+                                </span>
+                            @elseif($result['loser'])
                                 <span class="text-red-600 dark:text-red-400">{{ $result['loser'] }}</span>
                             @else
                                 <span class="text-gray-400 italic">—</span>

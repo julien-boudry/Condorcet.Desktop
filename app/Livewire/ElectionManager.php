@@ -656,18 +656,26 @@ class ElectionManager extends Component
                 $winner = $result->Winner;
                 $loser = $result->Loser;
 
+                // Detect if the method is informational (e.g. Smith Set, Schwartz Set)
+                $methodClass = Condorcet::getMethodClass($method);
+                $isInformational = in_array($methodClass, self::INFORMATIONAL_METHOD_CLASSES, true);
+
                 $results[$method] = [
                     'ranking' => $ranking,
                     'winner' => $winner instanceof \CondorcetPHP\Condorcet\Candidate ? (string) $winner : (is_array($winner) ? implode(' = ', array_map('strval', $winner)) : null),
                     'loser' => $loser instanceof \CondorcetPHP\Condorcet\Candidate ? (string) $loser : (is_array($loser) ? implode(' = ', array_map('strval', $loser)) : null),
                     'stats' => $this->serializeStats($result),
                     'isProportional' => $result->isProportional,
+                    'isInformational' => $isInformational,
                     'seats' => $result->seats,
                 ];
             } catch (\Throwable $e) {
                 $this->warnings[] = "{$method}: {$e->getMessage()}";
             }
         }
+
+        // Sort results alphabetically by method name for consistent display
+        ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
         return [
             'empty' => false,
