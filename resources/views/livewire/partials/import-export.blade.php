@@ -24,35 +24,30 @@
                 >
                     Import
                 </button>
-                {{-- Import from file button (reads file and triggers import directly) --}}
-                <button
-                    x-data
-                    x-on:click="$refs.fileInput.click()"
-                    class="inline-flex items-center gap-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg px-4 py-2 text-sm whitespace-nowrap transition-colors"
-                >
+                {{-- Import from file (uses Livewire file upload for large file support) --}}
+                <label class="inline-flex items-center gap-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg px-4 py-2 text-sm whitespace-nowrap transition-colors cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-5-5m0 0L6 10m5-5v12" />
                     </svg>
-                    Import file
-                </button>
-                <input
-                    x-ref="fileInput"
-                    type="file"
-                    accept=".cvotes,.txt"
-                    class="hidden"
-                    x-on:change="
-                        const file = $event.target.files[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            $wire.set('importText', e.target.result).then(() => {
-                                $wire.call('importCvotes');
+                    <span wire:loading.remove wire:target="importFile">Import file</span>
+                    <span wire:loading wire:target="importFile">Uploading…</span>
+                    <input
+                        wire:model="importFile"
+                        type="file"
+                        accept=".cvotes,.txt"
+                        class="hidden"
+                        x-on:change="
+                            // Wait for Livewire upload to complete, then trigger import
+                            $wire.upload('importFile', $event.target.files[0], () => {
+                                $wire.call('importFromFile');
                             });
-                        };
-                        reader.readAsText(file);
-                        $event.target.value = '';
-                    "
-                />
+                            $event.target.value = '';
+                        "
+                    />
+                </label>
+                @error('importFile')
+                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
                 <span class="text-xs text-amber-600 dark:text-amber-400">This will replace all current data</span>
             </div>
         </div>

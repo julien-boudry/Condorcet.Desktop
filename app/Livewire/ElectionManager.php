@@ -12,6 +12,8 @@ use CondorcetPHP\Condorcet\Election;
 use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use Livewire\WithFileUploads;
 
 /**
  * Main Livewire component for managing the entire Condorcet election.
@@ -23,6 +25,7 @@ use Livewire\Component;
 #[Layout('components.layouts.app')]
 class ElectionManager extends Component
 {
+    use WithFileUploads;
     // ──────────────────────────────────────────────
     // Election state — synced with localStorage
     // ──────────────────────────────────────────────
@@ -67,6 +70,9 @@ class ElectionManager extends Component
     public int $newVoteQuantity = 1;
 
     public string $importText = '';
+
+    /** @var TemporaryUploadedFile|null Uploaded .cvotes file for import */
+    public $importFile = null;
 
     // ──────────────────────────────────────────────
     // Per-method options
@@ -373,6 +379,28 @@ class ElectionManager extends Component
             $this->syncState();
         } catch (\Throwable $e) {
             $this->addError('importText', 'Import failed: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Import election data from an uploaded .cvotes file.
+     *
+     * Reads the file content server-side and delegates to the same
+     * import logic used by importCvotes().
+     */
+    public function importFromFile(): void
+    {
+        $this->validate([
+            'importFile' => ['required', 'file', 'max:51200'], // 50 MB max
+        ]);
+
+        try {
+            $this->importText = $this->importFile->get();
+            $this->importCvotes();
+        } catch (\Throwable $e) {
+            $this->addError('importFile', 'File import failed: '.$e->getMessage());
+        } finally {
+            $this->importFile = null;
         }
     }
 
