@@ -121,9 +121,10 @@ class ElectionManager extends Component
      * from the Condorcet library.
      *
      * Each method is categorised by inspecting the class constants:
-     * - IS_PROPORTIONAL = true  → "Proportional"
+     * - IS_DETERMINISTIC = false → skipped (Random Ballot, Random Candidates)
+     * - IS_PROPORTIONAL = true   → "Proportional"
      * - Class in INFORMATIONAL_METHOD_CLASSES → "Informational"
-     * - Everything else         → "Single Winner"
+     * - Everything else          → "Single Winner"
      *
      * Keys are the method's first alias (understood by the library);
      * values are the same alias used as a human-readable label.
@@ -139,6 +140,11 @@ class ElectionManager extends Component
         foreach (Condorcet::getAuthMethods() as $methodName) {
             /** @var class-string $className */
             $className = Condorcet::getMethodClass($methodName);
+
+            // Skip non-deterministic methods (e.g. Random Ballot, Random Candidates)
+            if (!$className::IS_DETERMINISTIC) {
+                continue;
+            }
 
             if (in_array($className, self::INFORMATIONAL_METHOD_CLASSES, true)) {
                 $informational[$methodName] = $methodName;
