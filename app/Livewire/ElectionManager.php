@@ -3,7 +3,10 @@
 namespace App\Livewire;
 
 use CondorcetPHP\Condorcet\Algo\Methods\KemenyYoung\KemenyYoung;
+use CondorcetPHP\Condorcet\Algo\Methods\Smith\SchwartzSet;
+use CondorcetPHP\Condorcet\Algo\Methods\Smith\SmithSet;
 use CondorcetPHP\Condorcet\Algo\Tools\StvQuotas;
+use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Constraints\NoTie;
 use CondorcetPHP\Condorcet\Election;
 use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
@@ -36,7 +39,7 @@ class ElectionManager extends Component
      */
     public array $votes = [];
 
-    /** @var list<string> Selected voting method aliases (Schulze Winning is selected by default) */
+    /** @var list<string> Selected voting method aliases (defaults to the library's default method) */
     public array $methods = ['Schulze Winning'];
 
     /** Number of seats for proportional methods */
@@ -102,48 +105,54 @@ class ElectionManager extends Component
     // ─────────────────────────────────────────────────────────────
 
     /**
-     * Return all voting methods organised by family.
+     * Method classes considered "informational" (return a set, not a full ranking).
      *
-     * Keys are the method aliases understood by the Condorcet library;
-     * values are human-readable labels for the UI.
+     * These cannot be auto-detected from class constants, so we list them explicitly.
+     *
+     * @var list<class-string>
+     */
+    private const array INFORMATIONAL_METHOD_CLASSES = [
+        SmithSet::class,
+        SchwartzSet::class,
+    ];
+
+    /**
+     * Return all voting methods organised by family, dynamically queried
+     * from the Condorcet library.
+     *
+     * Each method is categorised by inspecting the class constants:
+     * - IS_PROPORTIONAL = true  → "Proportional"
+     * - Class in INFORMATIONAL_METHOD_CLASSES → "Informational"
+     * - Everything else         → "Single Winner"
+     *
+     * Keys are the method's first alias (understood by the library);
+     * values are the same alias used as a human-readable label.
      *
      * @return array<string, array<string, string>>
      */
     public static function getMethodGroups(): array
     {
+        $singleWinner = [];
+        $proportional = [];
+        $informational = [];
+
+        foreach (Condorcet::getAuthMethods() as $methodName) {
+            /** @var class-string $className */
+            $className = Condorcet::getMethodClass($methodName);
+
+            if (in_array($className, self::INFORMATIONAL_METHOD_CLASSES, true)) {
+                $informational[$methodName] = $methodName;
+            } elseif ($className::IS_PROPORTIONAL) {
+                $proportional[$methodName] = $methodName;
+            } else {
+                $singleWinner[$methodName] = $methodName;
+            }
+        }
+
         return [
-            'Single Winner' => [
-                'Schulze Winning' => 'Schulze (Winning)',
-                'Schulze Margin' => 'Schulze (Margin)',
-                'Schulze Ratio' => 'Schulze (Ratio)',
-                'Ranked Pairs Margin' => 'Ranked Pairs (Margin)',
-                'Ranked Pairs Winning' => 'Ranked Pairs (Winning)',
-                'Borda Count' => 'Borda Count',
-                'Dowdall System' => 'Dowdall (Nauru)',
-                'Copeland' => 'Copeland',
-                'Instant-runoff' => 'Instant-Runoff (IRV)',
-                'Kemeny-Young' => 'Kemeny–Young',
-                'FPTP' => 'First-Past-The-Post',
-                'Multiple Rounds System' => 'Multiple Rounds',
-                'Minimax Winning' => 'Minimax (Winning)',
-                'Minimax Margin' => 'Minimax (Margin)',
-                'Minimax Opposition' => 'Minimax (Opposition)',
-                'Dodgson Quick' => 'Dodgson (Quick)',
-                'Dodgson Tideman' => 'Dodgson (Tideman)',
-                'Random Ballot' => 'Random Ballot',
-                'Random Candidates' => 'Random Candidates',
-            ],
-            'Proportional' => [
-                'STV' => 'STV',
-                'CPO-STV' => 'CPO-STV',
-                'Sainte-Laguë' => 'Sainte-Laguë',
-                'Jefferson' => "D'Hondt (Jefferson)",
-                'Largest Remainder' => 'Largest Remainder',
-            ],
-            'Informational' => [
-                'Smith set' => 'Smith Set',
-                'Schwartz set' => 'Schwartz Set',
-            ],
+            'Single Winner' => $singleWinner,
+            'Proportional' => $proportional,
+            'Informational' => $informational,
         ];
     }
 
@@ -413,7 +422,7 @@ class ElectionManager extends Component
     {
         $this->candidates = [];
         $this->votes = [];
-        $this->methods = [];
+        $this->methods = [Condorcet::getDefaultMethod()::METHOD_NAME[0]];
         $this->seats = 1;
         $this->implicitRanking = true;
         $this->weightAllowed = false;
@@ -435,6 +444,8 @@ class ElectionManager extends Component
             'computedResults' => $computedResults,
             'methodGroups' => static::getMethodGroups(),
             'quotaOptions' => $this->getQuotaOptions(),
+            'defaultMethod' => Condorcet::getDefaultMethod(),
+            'condorcetVersion' => Condorcet::getVersion(),
         ]);
     }
 

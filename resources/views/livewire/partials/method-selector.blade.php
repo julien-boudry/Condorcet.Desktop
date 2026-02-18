@@ -27,12 +27,12 @@
     </div>
 
     {{-- Per-method options (shown when relevant methods are selected) --}}
-    @if(array_intersect($methods, ['Borda Count', 'Kemeny-Young', 'STV', 'CPO-STV', 'Sainte-Laguë', 'Largest Remainder']))
+    @if(array_intersect($methods, ['BordaCount', 'Kemeny–Young', 'STV', 'CPO STV', 'Sainte-Laguë', 'Largest Remainder']))
         <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
             <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400">Method Options</h3>
 
             {{-- Borda Count starting point --}}
-            @if(in_array('Borda Count', $methods))
+            @if(in_array('BordaCount', $methods))
                 <div>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Borda starting point
@@ -48,7 +48,7 @@
             @endif
 
             {{-- Kemeny-Young max candidates --}}
-            @if(in_array('Kemeny-Young', $methods))
+            @if(in_array('Kemeny–Young', $methods))
                 <div>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
                         Kemeny–Young max candidates
@@ -83,7 +83,7 @@
             @endif
 
             {{-- CPO-STV quota --}}
-            @if(in_array('CPO-STV', $methods))
+            @if(in_array('CPO STV', $methods))
                 <div>
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">CPO-STV quota</label>
                     <select

@@ -139,7 +139,7 @@ it('resets the election', function () {
         ->call('resetElection')
         ->assertSet('candidates', [])
         ->assertSet('votes', [])
-        ->assertSet('methods', []);
+        ->assertSet('methods', ['Schulze Winning']);
 });
 
 it('exports to cvotes format', function () {
