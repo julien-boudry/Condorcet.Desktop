@@ -48,11 +48,17 @@ return [
     'quantity' => '数量',
     'add_vote' => '添加投票',
     'vote_placeholder' => 'Alice > Bob > Charlie  或  Alice = Bob > Charlie',
-    'weight_auto' => '自动',
+    'weight_auto' => '默认',
     'vote_entries' => ':count 条投票记录',
     'total_weight' => '总权重：',
     'no_votes' => '暂无投票。',
     'remove_vote' => '移除投票',
+    'bulk_add_votes' => '批量添加投票…',
+    'parse_votes_title' => '批量添加投票',
+    'parse_votes_desc' => '每行输入一张投票。格式：<code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^权重 * 数量</code>。以 <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> 开头的行将被忽略。',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => '添加投票',
+    'cancel' => '取消',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => '有效权重：',
     'overview' => '总览',
     'pairwise_matrix_tab' => '两两比较矩阵',
+    'votes_tab' => '投票',
+    'votes_list_heading' => '所有投票',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => '导出失败：:message',
     'warning_vote_error' => '投票错误：:message',
     'warning_pairwise_error' => '两两比较错误：:message',
+    'error_parse_votes_empty' => '请至少输入一行投票。',
+    'error_parse_votes_need_candidates' => '批量添加投票前请至少添加2个候选人。',
+    'error_parse_votes_failed' => '解析投票失败：:message',
 
 ];

@@ -48,11 +48,17 @@ return [
     'quantity' => '数量',
     'add_vote' => '投票を追加',
     'vote_placeholder' => 'Alice > Bob > Charlie  または  Alice = Bob > Charlie',
-    'weight_auto' => '自動',
+    'weight_auto' => 'デフォルト',
     'vote_entries' => ':count 件の投票',
     'total_weight' => '合計重み：',
     'no_votes' => '投票がまだありません。',
     'remove_vote' => '投票を削除',
+    'bulk_add_votes' => '一括投票追加…',
+    'parse_votes_title' => '一括投票追加',
+    'parse_votes_desc' => '1行に1票ずつ入力してください。形式：<code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^重み * 数量</code>。<code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> で始まる行は無視されます。',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => '投票を追加',
+    'cancel' => 'キャンセル',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => '有効重み：',
     'overview' => '概要',
     'pairwise_matrix_tab' => '一対比較行列',
+    'votes_tab' => '投票',
+    'votes_list_heading' => '全投票一覧',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => 'エクスポート失敗：:message',
     'warning_vote_error' => '投票エラー：:message',
     'warning_pairwise_error' => '一対比較エラー：:message',
+    'error_parse_votes_empty' => '少なくとも1行の投票を入力してください。',
+    'error_parse_votes_need_candidates' => '一括投票追加の前に少なくとも2人の候補者を追加してください。',
+    'error_parse_votes_failed' => '投票の解析に失敗：:message',
 
 ];

@@ -127,11 +127,12 @@ resources/views/components/layouts/app.blade.php  — HTML shell, nav bar, dark 
 resources/views/livewire/election-manager.blade.php — Main view (sidebar + results + @script)
 resources/views/livewire/partials/
     candidate-panel.blade.php     — Add/remove candidates (single + bulk)
-    vote-panel.blade.php          — Add/remove votes (ranking, weight, quantity)
+    vote-panel.blade.php          — Add single vote + bulk add modal (sidebar)
+    votes-tab.blade.php           — Full vote list table (results area tab)
     config-panel.blade.php        — Implicit ranking, weight, NoTie, seats
     method-selector.blade.php     — Method checkboxes grouped by family + per-method options
     import-export.blade.php       — .cvotes import/export textareas + reset button
-    results-display.blade.php     — Tab shell (overview, per-method, pairwise) + empty state
+    results-display.blade.php     — Tab shell (overview, per-method, pairwise, votes) + empty state
     results-overview.blade.php    — Cross-method comparison table with disagreement highlighting
     results-method-detail.blade.php — Per-method card (ranking, winner/loser, collapsible stats)
     pairwise-matrix.blade.php     — Head-to-head grid with color-coded cells

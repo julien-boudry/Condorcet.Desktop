@@ -48,11 +48,17 @@ return [
     'quantity' => 'मात्रा',
     'add_vote' => 'वोट जोड़ें',
     'vote_placeholder' => 'Alice > Bob > Charlie  या  Alice = Bob > Charlie',
-    'weight_auto' => 'स्वचालित',
+    'weight_auto' => 'डिफ़ॉल्ट',
     'vote_entries' => ':count वोट प्रविष्टि|:count वोट प्रविष्टियाँ',
     'total_weight' => 'कुल भार:',
     'no_votes' => 'अभी तक कोई वोट नहीं।',
     'remove_vote' => 'वोट हटाएँ',
+    'bulk_add_votes' => 'वोट सामूहिक जोड़ें…',
+    'parse_votes_title' => 'सामूहिक वोट जोड़ें',
+    'parse_votes_desc' => 'प्रति पंक्ति एक वोट दर्ज करें। प्रारूप: <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^भार * मात्रा</code>। <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> से शुरू होने वाली पंक्तियाँ नज़रअंदाज़ होती हैं।',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => 'वोट जोड़ें',
+    'cancel' => 'रद्द करें',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => 'वैध भार:',
     'overview' => 'अवलोकन',
     'pairwise_matrix_tab' => 'जोड़ीवार तुलना मैट्रिक्स',
+    'votes_tab' => 'वोट',
+    'votes_list_heading' => 'सभी वोट',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => 'निर्यात विफल: :message',
     'warning_vote_error' => 'वोट त्रुटि: :message',
     'warning_pairwise_error' => 'जोड़ीवार तुलना त्रुटि: :message',
+    'error_parse_votes_empty' => 'कम से कम एक वोट पंक्ति दर्ज करें।',
+    'error_parse_votes_need_candidates' => 'सामूहिक वोट जोड़ने से पहले कम से कम 2 उम्मीदवार जोड़ें।',
+    'error_parse_votes_failed' => 'वोट विश्लेषण विफल: :message',
 
 ];

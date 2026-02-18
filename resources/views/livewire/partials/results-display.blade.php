@@ -1,6 +1,6 @@
 {{-- Results display area --}}
-@if($computedResults['empty'] ?? true)
-    {{-- Empty state --}}
+@if(($computedResults['empty'] ?? true) && count($votes) === 0)
+    {{-- Empty state — no votes and no results --}}
     <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-8 text-center">
         <div class="mx-auto w-16 h-16 mb-4 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -16,8 +16,23 @@
         </p>
     </div>
 @else
-    <div class="space-y-4" x-data="{ activeTab: '{{ !empty($computedResults['results']) ? 'overview' : 'pairwise' }}' }">
-        {{-- Condorcet winner / loser banner --}}
+    @php
+        $hasResults = !($computedResults['empty'] ?? true);
+        $hasVotes = count($votes) > 0;
+        $hasPairwise = !empty($computedResults['pairwise']);
+        $hasMethodResults = !empty($computedResults['results']);
+
+        // Determine default active tab
+        $defaultTab = match (true) {
+            $hasMethodResults => 'overview',
+            $hasPairwise => 'pairwise',
+            default => 'votes',
+        };
+    @endphp
+
+    <div class="space-y-4" x-data="{ activeTab: '{{ $defaultTab }}' }">
+        {{-- Condorcet winner / loser banner (only when results exist) --}}
+        @if($hasResults)
         <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
             <div class="flex flex-col sm:flex-row gap-4">
                 {{-- Condorcet winner --}}
@@ -66,57 +81,68 @@
                 </div>
             </div>
         </div>
+        @endif
 
         {{-- Tab navigation (pure Alpine.js, no server round-trip) --}}
-        @if(!empty($computedResults['results']) || !empty($computedResults['pairwise']))
-            <div class="space-y-2">
-                {{-- Row 1: Global tabs (Overview + Pairwise) --}}
-                <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
-                    @if(!empty($computedResults['results']))
-                        <button
-                            @click="activeTab = 'overview'"
-                            :class="activeTab === 'overview' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
-                            role="tab"
-                        >
-                            {{ __('ui.overview') }}
-                        </button>
-                    @endif
+        <div class="space-y-2">
+            {{-- Row 1: Global tabs (Overview + Pairwise + Votes) --}}
+            <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
+                @if($hasMethodResults)
+                    <button
+                        @click="activeTab = 'overview'"
+                        :class="activeTab === 'overview' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
+                        class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
+                        role="tab"
+                    >
+                        {{ __('ui.overview') }}
+                    </button>
+                @endif
 
-                    @if(!empty($computedResults['pairwise']))
-                        <button
-                            @click="activeTab = 'pairwise'"
-                            :class="activeTab === 'pairwise' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
-                            role="tab"
-                        >
-                            {{ __('ui.pairwise_matrix_tab') }}
-                        </button>
-                    @endif
-                </div>
+                @if($hasPairwise)
+                    <button
+                        @click="activeTab = 'pairwise'"
+                        :class="activeTab === 'pairwise' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
+                        class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
+                        role="tab"
+                    >
+                        {{ __('ui.pairwise_matrix_tab') }}
+                    </button>
+                @endif
 
-                {{-- Row 2: Per-method tabs as wrapping pills --}}
-                @if(!empty($computedResults['results']))
-                    <div class="flex flex-wrap gap-1.5" role="tablist">
-                        @foreach($computedResults['results'] as $method => $result)
-                            <button
-                                @click="activeTab = '{{ md5($method) }}'"
-                                :class="activeTab === '{{ md5($method) }}' ? 'bg-brand text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'"
-                                class="px-2.5 py-1 text-xs font-medium rounded-full transition-colors"
-                                role="tab"
-                            >
-                                {{ $method }}
-                            </button>
-                        @endforeach
-                    </div>
+                @if($hasVotes)
+                    <button
+                        @click="activeTab = 'votes'"
+                        :class="activeTab === 'votes' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
+                        class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
+                        role="tab"
+                    >
+                        {{ __('ui.votes_tab') }}
+                        <span class="ml-1 text-xs text-gray-400 dark:text-gray-500">({{ count($votes) }})</span>
+                    </button>
                 @endif
             </div>
-        @endif
+
+            {{-- Row 2: Per-method tabs as wrapping pills --}}
+            @if($hasMethodResults)
+                <div class="flex flex-wrap gap-1.5" role="tablist">
+                    @foreach($computedResults['results'] as $method => $result)
+                        <button
+                            @click="activeTab = '{{ md5($method) }}'"
+                            :class="activeTab === '{{ md5($method) }}' ? 'bg-brand text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'"
+                            class="px-2.5 py-1 text-xs font-medium rounded-full transition-colors"
+                            role="tab"
+                        >
+                            {{ $method }}
+                        </button>
+                    @endforeach
+                </div>
+            @endif
+        </div>
 
         {{-- Tab panels --}}
         <div>
             {{-- Overview panel: side-by-side comparison of all methods --}}
-            @if(!empty($computedResults['results']))
+            @if($hasMethodResults)
                 <div x-show="activeTab === 'overview'" x-cloak>
                     @include('livewire.partials.results-overview', ['results' => $computedResults['results']])
                 </div>
@@ -130,9 +156,16 @@
             @endif
 
             {{-- Pairwise matrix panel --}}
-            @if(!empty($computedResults['pairwise']))
+            @if($hasPairwise)
                 <div x-show="activeTab === 'pairwise'" x-cloak>
                     @include('livewire.partials.pairwise-matrix', ['pairwise' => $computedResults['pairwise']])
+                </div>
+            @endif
+
+            {{-- Votes list panel --}}
+            @if($hasVotes)
+                <div x-show="activeTab === 'votes'" x-cloak>
+                    @include('livewire.partials.votes-tab')
                 </div>
             @endif
         </div>

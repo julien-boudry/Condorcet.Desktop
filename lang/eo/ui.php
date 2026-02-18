@@ -48,11 +48,17 @@ return [
     'quantity' => 'Kvanto',
     'add_vote' => 'Aldoni voĉdonon',
     'vote_placeholder' => 'Alice > Bob > Charlie  aŭ  Alice = Bob > Charlie',
-    'weight_auto' => 'aŭtomata',
+    'weight_auto' => 'defaŭlta',
     'vote_entries' => ':count voĉdona enskribo|:count voĉdonaj enskriboj',
     'total_weight' => 'totala pezo:',
     'no_votes' => 'Ankoraŭ neniuj voĉdonoj.',
     'remove_vote' => 'Forigi voĉdonon',
+    'bulk_add_votes' => 'Amase aldoni voĉdonojn…',
+    'parse_votes_title' => 'Amasa aldono de voĉdonoj',
+    'parse_votes_desc' => 'Enigu plurajn voĉdonojn, unu per linio. Formato: <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^pezo * kvanto</code>. Linioj komencanĉaj per <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> estas ignoritaj.',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => 'Aldoni voĉdonojn',
+    'cancel' => 'Nuligi',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => 'valida pezo:',
     'overview' => 'Superrigardo',
     'pairwise_matrix_tab' => 'Duopa kompara matrico',
+    'votes_tab' => 'Voĉdonoj',
+    'votes_list_heading' => 'Ĉiuj voĉdonoj',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => 'Eksporto malsukcesis: :message',
     'warning_vote_error' => 'Voĉdona eraro: :message',
     'warning_pairwise_error' => 'Duopa kompara eraro: :message',
+    'error_parse_votes_empty' => 'Enigu almenaŭ unu voĉdonan linion.',
+    'error_parse_votes_need_candidates' => 'Aldonu almenaŭ 2 kandidatojn antaŭ amasa voĉdon-aldono.',
+    'error_parse_votes_failed' => 'Malsukcesis analizi voĉdonojn: :message',
 
 ];

@@ -15,12 +15,13 @@
 
 ### Votes
 - Add votes **one by one** via a ranked-ballot form (format: `Alice > Bob > Charlie`, ties: `Alice = Bob > Charlie`)
+- **Bulk add** via a modal popup accepting the Condorcet `parseVotes` format — one vote per line, with optional `^weight` and `* quantity` suffixes; comment lines (`#`) and blank lines are skipped
 - **OR** paste raw **CondorcetElectionFormat (`.cvotes`)** text — see the format reference in [condorcet-library.md](condorcet-library.md)
-- Display current vote list; allow removing individual votes
+- Display current vote list in a dedicated **Votes tab** in the results area; allow removing individual votes from there
 
-> **Implemented in:** `ElectionManager::addVote()`, `removeVote()`
-> **View:** `partials/vote-panel.blade.php`
-> **Implementation choice:** Votes are stored as `['ranking' => string, 'weight' => int, 'quantity' => int]`. When building the Election, vote lines are assembled with `^weight` and `* quantity` suffixes and fed to `$election->parseVotes()`. This delegates all parsing (ties, weights, quantities) to the library.
+> **Implemented in:** `ElectionManager::addVote()`, `removeVote()`, `bulkAddVotes()`
+> **View:** `partials/vote-panel.blade.php` (sidebar: single-vote form + bulk add button/modal), `partials/votes-tab.blade.php` (results area: full vote table)
+> **Implementation choice:** Votes are stored as `['ranking' => string, 'weight' => int, 'quantity' => int]`. When building the Election, vote lines are assembled with `^weight` and `* quantity` suffixes and fed to `$election->parseVotes()`. This delegates all parsing (ties, weights, quantities) to the library. Bulk add parses each line individually via `new Vote($line)`, extracting `* N` quantity suffix before parsing so each entry preserves its own quantity rather than expanding into N separate Vote objects.
 
 ---
 
@@ -93,6 +94,15 @@ Expose relevant method options via the UI:
 
 > **View:** `partials/results-overview.blade.php`
 > **Implementation choice:** An overview table lists all selected methods with their winner, loser, and full ranking string. When winners disagree across methods, the table highlights discrepancies with amber styling and a pedagogical note explaining that different methods can produce different outcomes.
+
+### Vote Visualization Tab
+- The full vote list is displayed in a **Votes tab** within the results area (alongside Overview, Pairwise Matrix, and per-method tabs)
+- The Votes tab is shown whenever there are votes, even if no results have been computed yet
+- Table columns: vote index, full ranking (monospace), weight (if weight is allowed), quantity, remove button
+- Summary header shows total vote entries and total weight
+
+> **View:** `partials/votes-tab.blade.php`
+> **Implementation choice:** The results area shows the tab bar whenever there are votes OR results. The default active tab is determined dynamically: `overview` → `pairwise` → `votes` (first available).
 
 ### Pairwise Matrix
 - Always display the **pairwise comparison matrix** alongside results, regardless of selected methods

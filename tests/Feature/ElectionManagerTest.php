@@ -182,3 +182,113 @@ it('dispatches state update events on changes', function () {
         ->call('addCandidate')
         ->assertDispatched('election-state-updated');
 });
+
+// ──────────────────────────────────────────────
+// Error validation — invalid values must trigger server-side errors
+// ──────────────────────────────────────────────
+
+it('rejects an empty vote ranking', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('newVoteRanking', '')
+        ->call('addVote')
+        ->assertHasErrors('newVoteRanking')
+        ->assertCount('votes', 0);
+});
+
+it('rejects an empty vote ranking with only whitespace', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('newVoteRanking', '   ')
+        ->call('addVote')
+        ->assertHasErrors('newVoteRanking')
+        ->assertCount('votes', 0);
+});
+
+it('rejects bulk add with empty text', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob'])
+        ->set('parseVotesText', '')
+        ->call('bulkAddVotes')
+        ->assertHasErrors('parseVotesText')
+        ->assertCount('votes', 0);
+});
+
+it('rejects bulk add with only whitespace', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob'])
+        ->set('parseVotesText', "   \n  \n  ")
+        ->call('bulkAddVotes')
+        ->assertHasErrors('parseVotesText')
+        ->assertCount('votes', 0);
+});
+
+it('rejects bulk add when fewer than 2 candidates', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice'])
+        ->set('parseVotesText', 'Alice > Bob')
+        ->call('bulkAddVotes')
+        ->assertHasErrors('parseVotesText')
+        ->assertCount('votes', 0);
+});
+
+it('rejects bulk add with only comment lines', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob'])
+        ->set('parseVotesText', "# This is a comment\n# Another comment\n")
+        ->call('bulkAddVotes')
+        ->assertHasErrors('parseVotesText')
+        ->assertCount('votes', 0);
+});
+
+it('bulk adds votes successfully', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob', 'Charlie'])
+        ->set('parseVotesText', "Alice > Bob > Charlie\nBob > Alice > Charlie")
+        ->call('bulkAddVotes')
+        ->assertHasNoErrors()
+        ->assertCount('votes', 2)
+        ->assertSet('parseVotesText', '')
+        ->assertDispatched('bulk-votes-added');
+});
+
+it('bulk adds votes with weight and quantity', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob'])
+        ->set('weightAllowed', true)
+        ->set('parseVotesText', 'Alice > Bob ^3 * 5')
+        ->call('bulkAddVotes')
+        ->assertHasNoErrors()
+        ->assertCount('votes', 1)
+        ->assertSet('votes.0.weight', 3)
+        ->assertSet('votes.0.quantity', 5);
+});
+
+it('bulk add skips comments and blank lines', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob'])
+        ->set('parseVotesText', "# header comment\n\nAlice > Bob\n\n# footer\n")
+        ->call('bulkAddVotes')
+        ->assertHasNoErrors()
+        ->assertCount('votes', 1);
+});
+
+it('rejects import with empty text', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('importText', '')
+        ->call('importCvotes')
+        ->assertHasErrors('importText');
+});
+
+it('rejects import with invalid cvotes format', function () {
+    // Duplicate candidates in the directive trigger a library exception
+    Livewire::test(ElectionManager::class)
+        ->set('importText', '#/Candidates: A;A')
+        ->call('importCvotes')
+        ->assertHasErrors('importText');
+});
+
+it('rejects export with fewer than 2 candidates', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice'])
+        ->call('exportCvotes')
+        ->assertHasErrors('exportOutput');
+});

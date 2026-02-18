@@ -48,11 +48,17 @@ return [
     'quantity' => 'Quantità',
     'add_vote' => 'Aggiungi voto',
     'vote_placeholder' => 'Alice > Bob > Charlie  o  Alice = Bob > Charlie',
-    'weight_auto' => 'auto',
+    'weight_auto' => 'predefinito',
     'vote_entries' => ':count voce di voto|:count voci di voto',
     'total_weight' => 'peso totale:',
     'no_votes' => 'Nessun voto ancora.',
     'remove_vote' => 'Rimuovi voto',
+    'bulk_add_votes' => 'Aggiungi voti in blocco…',
+    'parse_votes_title' => 'Aggiunta voti in blocco',
+    'parse_votes_desc' => 'Inserisci più voti, uno per riga. Formato: <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^peso * quantità</code>. Le righe che iniziano con <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> vengono ignorate.',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => 'Aggiungi voti',
+    'cancel' => 'Annulla',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => 'peso valido:',
     'overview' => 'Panoramica',
     'pairwise_matrix_tab' => 'Matrice a coppie',
+    'votes_tab' => 'Voti',
+    'votes_list_heading' => 'Tutti i voti',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => 'Esportazione fallita: :message',
     'warning_vote_error' => 'Errore voto: :message',
     'warning_pairwise_error' => 'Errore confronto a coppie: :message',
+    'error_parse_votes_empty' => 'Inserisci almeno una riga di voto.',
+    'error_parse_votes_need_candidates' => 'Aggiungi almeno 2 candidati prima dell\'aggiunta in blocco.',
+    'error_parse_votes_failed' => 'Errore nell\'analisi dei voti: :message',
 
 ];

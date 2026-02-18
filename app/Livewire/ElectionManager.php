@@ -73,6 +73,9 @@ class ElectionManager extends Component
 
     public string $importText = '';
 
+    /** Bulk vote input for parseVotes modal */
+    public string $parseVotesText = '';
+
     /** @var TemporaryUploadedFile|null Uploaded .cvotes file for import */
     public $importFile = null;
 
@@ -276,6 +279,78 @@ class ElectionManager extends Component
         unset($this->votes[$index]);
         $this->votes = array_values($this->votes);
         $this->syncState();
+    }
+
+    /**
+     * Bulk-add votes from a multi-line text using the Condorcet parseVotes format.
+     *
+     * Each line follows the same syntax as .cvotes vote lines:
+     *   ranking ^weight * quantity
+     *
+     * Lines are parsed individually so that each entry preserves its own
+     * weight and quantity in the stored votes array. Comment lines (#)
+     * and blank lines are silently skipped.
+     */
+    public function bulkAddVotes(): void
+    {
+        $text = trim($this->parseVotesText);
+
+        if ($text === '') {
+            $this->addError('parseVotesText', __('ui.error_parse_votes_empty'));
+
+            return;
+        }
+
+        if (count($this->candidates) < 2) {
+            $this->addError('parseVotesText', __('ui.error_parse_votes_need_candidates'));
+
+            return;
+        }
+
+        $added = 0;
+
+        try {
+            $lines = preg_split('/\r?\n/', $text);
+
+            foreach ($lines as $line) {
+                $line = trim($line);
+
+                // Skip blank lines and comment lines
+                if ($line === '' || str_starts_with($line, '#')) {
+                    continue;
+                }
+
+                // Extract quantity suffix (* N)
+                $quantity = 1;
+                if (preg_match('/\*\s*(\d+)\s*$/', $line, $matches)) {
+                    $quantity = max(1, (int) $matches[1]);
+                    $line = trim(preg_replace('/\*\s*\d+\s*$/', '', $line));
+                }
+
+                // Let the Vote class parse ranking + optional ^weight
+                $vote = new Vote($line);
+
+                $this->votes[] = [
+                    'ranking' => $vote->getRankingAsString(displayWeight: false),
+                    'weight' => $this->weightAllowed ? $vote->getWeight() : 1,
+                    'quantity' => $quantity,
+                ];
+
+                $added++;
+            }
+
+            if ($added === 0) {
+                $this->addError('parseVotesText', __('ui.error_parse_votes_empty'));
+
+                return;
+            }
+
+            $this->parseVotesText = '';
+            $this->syncState();
+            $this->dispatch('bulk-votes-added');
+        } catch (\Throwable $e) {
+            $this->addError('parseVotesText', __('ui.error_parse_votes_failed', ['message' => $e->getMessage()]));
+        }
     }
 
     // ─────────────────────────────────────────────────────────────

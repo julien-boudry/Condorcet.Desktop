@@ -48,11 +48,17 @@ return [
     'quantity' => 'Quantity',
     'add_vote' => 'Add vote',
     'vote_placeholder' => 'Alice > Bob > Charlie  or  Alice = Bob > Charlie',
-    'weight_auto' => 'auto',
+    'weight_auto' => 'default',
     'vote_entries' => ':count vote entry|:count vote entries',
     'total_weight' => 'total weight:',
     'no_votes' => 'No votes yet.',
     'remove_vote' => 'Remove vote',
+    'bulk_add_votes' => 'Bulk add votes…',
+    'parse_votes_title' => 'Bulk Add Votes',
+    'parse_votes_desc' => 'Enter multiple votes, one per line. Format: <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">A > B > C ^weight * quantity</code>. Lines starting with <code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">#</code> are ignored.',
+    'parse_votes_placeholder' => "Alice > Bob > Charlie\nBob > Alice > Charlie ^2\nCharlie > Alice > Bob * 3",
+    'parse_votes_submit' => 'Add votes',
+    'cancel' => 'Cancel',
 
     // ──────────────────────────────────────────────
     // Configuration (config-panel.blade.php)
@@ -122,6 +128,8 @@ return [
     'valid_weight' => 'valid weight:',
     'overview' => 'Overview',
     'pairwise_matrix_tab' => 'Pairwise Matrix',
+    'votes_tab' => 'Votes',
+    'votes_list_heading' => 'All Votes',
 
     // ──────────────────────────────────────────────
     // Results — overview (results-overview.blade.php)
@@ -173,5 +181,8 @@ return [
     'error_export_failed' => 'Export failed: :message',
     'warning_vote_error' => 'Vote error: :message',
     'warning_pairwise_error' => 'Pairwise error: :message',
+    'error_parse_votes_empty' => 'Enter at least one vote line.',
+    'error_parse_votes_need_candidates' => 'Add at least 2 candidates before bulk-adding votes.',
+    'error_parse_votes_failed' => 'Failed to parse votes: :message',
 
 ];
