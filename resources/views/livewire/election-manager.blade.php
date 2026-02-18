@@ -29,7 +29,7 @@
     {{-- ──────────────────────────────────────────────
          Main area — Results display
          ────────────────────────────────────────────── --}}
-    <section class="flex-1 min-w-0">
+    <section id="results-section" class="flex-1 min-w-0">
         {{-- Warnings banner --}}
         @if(count($warnings) > 0)
             <div class="mb-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4">
@@ -67,4 +67,34 @@
         });
     </script>
     @endscript
+
+    {{-- Floating "See Results" button — mobile only, visible when results exist --}}
+    @if(!($computedResults['empty'] ?? true))
+        <div
+            x-data="{
+                visible: false,
+                check() {
+                    const target = document.getElementById('results-section');
+                    if (!target) { this.visible = false; return; }
+                    const rect = target.getBoundingClientRect();
+                    const distToBottom = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+                    this.visible = rect.top > window.innerHeight && distToBottom > 150;
+                }
+            }"
+            x-init="check(); window.addEventListener('scroll', () => check(), { passive: true }); window.addEventListener('resize', () => check(), { passive: true })"
+            class="lg:hidden"
+        >
+            <a
+                href="#results-section"
+                x-show="visible"
+                x-transition
+                class="fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-full bg-brand px-4 py-3 text-white text-sm font-semibold shadow-lg hover:bg-brand/90 transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+                See Results
+            </a>
+        </div>
+    @endif
 </div>
