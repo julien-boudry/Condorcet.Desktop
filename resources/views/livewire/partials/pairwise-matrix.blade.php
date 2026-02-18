@@ -4,10 +4,9 @@
 @endphp
 
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
-    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Pairwise Comparison Matrix</h3>
+    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.pairwise_heading') }}</h3>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        Each cell shows <span class="font-semibold text-green-600 dark:text-green-400">wins</span> /
-        <span class="font-semibold text-red-600 dark:text-red-400">losses</span> for the row candidate against the column candidate.
+        {!! __('ui.pairwise_desc') !!}
     </p>
 
     <div class="overflow-x-auto">
@@ -15,7 +14,7 @@
             <thead>
                 <tr>
                     <th class="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                        vs.
+                        {{ __('ui.vs') }}
                     </th>
                     @foreach($candidateNames as $opponent)
                         <th class="px-3 py-2 text-center font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 whitespace-nowrap">

@@ -11,7 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
+
+        // The "locale" cookie is set by client-side JS — it must not be encrypted.
+        $middleware->encryptCookies(except: ['locale']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -40,7 +40,7 @@ The state is serialized as a single JSON object. This is also the exact payload 
 
 The server deserializes this payload and reconstructs the `Election` object from scratch on every request.
 
-> If the schema changes during development, keep this documentation in sync. The key used in `localStorage` for the election state is `electionState`. The dark mode preference uses a separate key `colorScheme`. These must never collide.
+> If the schema changes during development, keep this documentation in sync. The key used in `localStorage` for the election state is `electionState`. The dark mode preference uses a separate key `colorScheme`. The UI language preference uses a `locale` cookie (not `localStorage`). These must never collide.
 
 ---
 
@@ -114,8 +114,16 @@ There are no controllers. The component uses the `#[Layout('components.layouts.a
 ### File Structure
 
 ```
-app/Livewire/ElectionManager.php          — All server-side logic (685 lines)
-resources/views/components/layouts/app.blade.php  — HTML shell, nav bar, dark mode toggle
+app/Http/Middleware/SetLocale.php          — Reads locale cookie, sets app locale
+app/Livewire/ElectionManager.php          — All server-side logic (765 lines)
+lang/en/ui.php                            — English UI translations (canonical)
+lang/fr/ui.php                            — French UI translations
+lang/zh/ui.php                            — Chinese (Simplified) UI translations
+lang/ja/ui.php                            — Japanese UI translations
+lang/eo/ui.php                            — Esperanto UI translations
+lang/it/ui.php                            — Italian UI translations
+lang/hi/ui.php                            — Hindi UI translations
+resources/views/components/layouts/app.blade.php  — HTML shell, nav bar, dark mode toggle, language selector
 resources/views/livewire/election-manager.blade.php — Main view (sidebar + results + @script)
 resources/views/livewire/partials/
     candidate-panel.blade.php     — Add/remove candidates (single + bulk)
@@ -212,6 +220,42 @@ Results tabs (Overview, per-method tabs, Pairwise) are managed entirely client-s
 ### Dark Mode
 
 Class-based strategy using `@variant dark (&:where(.dark, .dark *))` in CSS. A small inline `<script>` in the layout reads `localStorage.getItem('colorScheme')` **before** first paint to prevent flash. The toggle button in the nav bar uses Alpine to add/remove the `.dark` class and persist to `localStorage`.
+
+### Internationalisation (i18n)
+
+The app uses **Laravel's built-in translation system** (`__()` / `trans_choice()`). All user-facing strings are extracted into PHP translation files under `lang/{locale}/ui.php`.
+
+**Supported locales:** `en` (default), `fr`, `zh`, `ja`, `eo`, `it`, `hi`.
+
+**File structure:**
+```
+lang/
+    en/ui.php   — English strings (canonical reference)
+    fr/ui.php   — French translation
+    zh/ui.php   — Chinese (Simplified) translation
+    ja/ui.php   — Japanese translation
+    eo/ui.php   — Esperanto translation
+    it/ui.php   — Italian translation
+    hi/ui.php   — Hindi translation
+```
+
+**Locale detection:**
+- A lightweight middleware (`App\Http\Middleware\SetLocale`) reads the `locale` cookie on every request and calls `app()->setLocale()`.
+- The `locale` cookie is excluded from Laravel's cookie encryption so that client-side JavaScript can read/write it.
+- The language selector in the nav bar is a dropdown menu (Alpine.js) that sets the cookie and reloads the page — no Livewire round-trip needed for locale changes.
+- English is always the default. Browser language is never auto-detected.
+
+**Adding a new language:**
+1. Copy `lang/en/ui.php` to `lang/{locale}/ui.php` and translate all values.
+2. Add the locale to the `SUPPORTED` array in `SetLocale` middleware.
+3. Add the locale and its native label to the `$locales` map in the dropdown in `app.blade.php`.
+
+**Key conventions:**
+- All translation keys live in the `ui` namespace (single file per locale).
+- Keys are grouped by view/section with descriptive prefixes.
+- Strings containing HTML use `{!! __('ui.key') !!}` (raw output).
+- Pluralised strings use `trans_choice('ui.key', $count)` with pipe-separated forms.
+- Error/warning messages in `ElectionManager.php` also use `__()` with `:message` placeholders.
 
 ### Per-Method Options
 

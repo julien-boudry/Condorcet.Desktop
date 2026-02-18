@@ -1,6 +1,6 @@
 {{-- Election configuration panel --}}
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Configuration</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.configuration') }}</h2>
 
     <div class="space-y-3">
         {{-- Implicit ranking toggle --}}
@@ -11,10 +11,9 @@
                 class="mt-0.5 rounded border-gray-300 dark:border-gray-600 text-brand focus:ring-brand"
             />
             <div>
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Implicit ranking</span>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.implicit_ranking') }}</span>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                    When enabled, unranked candidates are implicitly tied at the last position.
-                    When disabled, they receive no points.
+                    {{ __('ui.implicit_ranking_desc') }}
                 </p>
             </div>
         </label>
@@ -27,9 +26,9 @@
                 class="mt-0.5 rounded border-gray-300 dark:border-gray-600 text-brand focus:ring-brand"
             />
             <div>
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Allow vote weight</span>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.allow_vote_weight') }}</span>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                    When enabled, each vote can carry a different weight that amplifies its influence.
+                    {{ __('ui.allow_vote_weight_desc') }}
                 </p>
             </div>
         </label>
@@ -42,9 +41,9 @@
                 class="mt-0.5 rounded border-gray-300 dark:border-gray-600 text-brand focus:ring-brand"
             />
             <div>
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">No-tie constraint</span>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.no_tie_constraint') }}</span>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                    Reject votes that contain ties. Recommended for some proportional methods (STV).
+                    {{ __('ui.no_tie_constraint_desc') }}
                 </p>
             </div>
         </label>
@@ -52,10 +51,10 @@
         {{-- Number of seats --}}
         <div>
             <label for="seats" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Number of seats
+                {{ __('ui.number_of_seats') }}
             </label>
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Required for proportional methods (STV, D'Hondt, Sainte-Laguë, etc.).
+                {{ __('ui.seats_desc') }}
             </p>
             <input
                 type="number"

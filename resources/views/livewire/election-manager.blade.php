@@ -8,13 +8,13 @@
         {{-- Reset button — only shown when election has data --}}
         @if(count($candidates) > 0 || count($votes) > 0)
             <div class="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 px-4 py-3 flex items-center justify-between">
-                <span class="text-sm text-red-700 dark:text-red-400">Election in progress</span>
+                <span class="text-sm text-red-700 dark:text-red-400">{{ __('ui.election_in_progress') }}</span>
                 <button
                     wire:click="resetElection"
-                    wire:confirm="Are you sure you want to reset the entire election?"
+                    wire:confirm="{{ __('ui.confirm_reset') }}"
                     class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium transition-colors"
                 >
-                    Reset
+                    {{ __('ui.reset') }}
                 </button>
             </div>
         @endif
@@ -33,7 +33,7 @@
         {{-- Warnings banner --}}
         @if(count($warnings) > 0)
             <div class="mb-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4">
-                <h3 class="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">Warnings</h3>
+                <h3 class="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">{{ __('ui.warnings') }}</h3>
                 <ul class="text-sm text-amber-800 dark:text-amber-300 list-disc list-inside space-y-1">
                     @foreach($warnings as $warning)
                         <li>{{ $warning }}</li>
@@ -93,7 +93,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
-                See Results
+                {{ __('ui.see_results') }}
             </a>
         </div>
     @endif

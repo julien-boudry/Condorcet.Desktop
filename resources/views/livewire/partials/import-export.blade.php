@@ -1,11 +1,11 @@
 {{-- Import / Export panel --}}
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
-    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Import / Export</h2>
+    <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.import_export') }}</h2>
 
     {{-- Import .cvotes --}}
     <details x-data="{ open: false }" x-bind:open="open" x-on:toggle="open = $el.open" wire:ignore.self class="mb-3">
         <summary class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-brand">
-            Import from .cvotes format
+            {{ __('ui.import_cvotes') }}
         </summary>
         <div class="mt-2">
             <textarea
@@ -22,15 +22,15 @@
                     wire:click="importCvotes"
                     class="bg-brand hover:bg-brand-dark text-white font-medium rounded-lg px-4 py-2 text-sm transition-colors"
                 >
-                    Import
+                    {{ __('ui.import') }}
                 </button>
                 {{-- Import from file (uses Livewire file upload for large file support) --}}
                 <label class="inline-flex items-center gap-1.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg px-4 py-2 text-sm whitespace-nowrap transition-colors cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-5-5m0 0L6 10m5-5v12" />
                     </svg>
-                    <span wire:loading.remove wire:target="importFile">Import file</span>
-                    <span wire:loading wire:target="importFile">Uploading…</span>
+                    <span wire:loading.remove wire:target="importFile">{{ __('ui.import_file') }}</span>
+                    <span wire:loading wire:target="importFile">{{ __('ui.uploading') }}</span>
                     <input
                         wire:model="importFile"
                         type="file"
@@ -48,7 +48,7 @@
                 @error('importFile')
                     <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                 @enderror
-                <span class="text-xs text-amber-600 dark:text-amber-400">This will replace all current data</span>
+                <span class="text-xs text-amber-600 dark:text-amber-400">{{ __('ui.replace_warning') }}</span>
             </div>
         </div>
     </details>
@@ -56,14 +56,14 @@
     {{-- Export .cvotes --}}
     <details x-data="{ open: false }" x-bind:open="open" x-on:toggle="open = $el.open" wire:ignore.self>
         <summary class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer hover:text-brand">
-            Export to .cvotes format
+            {{ __('ui.export_cvotes') }}
         </summary>
         <div class="mt-2">
             <button
                 wire:click="exportCvotes"
                 class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg px-4 py-2 text-sm transition-colors"
             >
-                Generate export
+                {{ __('ui.generate_export') }}
             </button>
             @error('exportOutput')
                 <p class="text-sm text-red-600 dark:text-red-400 mt-1">{{ $message }}</p>
@@ -93,7 +93,7 @@
                         <svg x-show="copied" x-cloak xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span x-text="copied ? 'Copied!' : 'Copy'"></span>
+                        <span x-text="copied ? '{{ __('ui.copied') }}' : '{{ __('ui.copy') }}'"></span>
                     </button>
                     <button
                         x-data
@@ -111,7 +111,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
                         </svg>
-                        Download .cvotes
+                        {{ __('ui.download_cvotes') }}
                     </button>
                 </div>
             @endif

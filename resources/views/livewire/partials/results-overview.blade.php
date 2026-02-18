@@ -11,8 +11,8 @@
 @if($hasDisagreement)
     <div class="mb-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-3">
         <p class="text-sm text-amber-800 dark:text-amber-300">
-            <strong>Methods disagree on the winner.</strong>
-            Different voting methods can produce different results — this is the core insight of social choice theory.
+            <strong>{{ __('ui.methods_disagree') }}</strong>
+            {{ __('ui.methods_disagree_desc') }}
         </p>
     </div>
 @endif
@@ -22,10 +22,10 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Method</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Winner</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Loser</th>
-                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Full Ranking</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">{{ __('ui.method') }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">{{ __('ui.winner') }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">{{ __('ui.loser') }}</th>
+                    <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">{{ __('ui.full_ranking') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -38,8 +38,8 @@
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
                             {{ $method }}
                             @if($result['isProportional'] ?? false)
-                                <span class="text-xs text-brand ml-1" title="Proportional method ({{ $result['seats'] ?? 0 }} seats)">
-                                    ● {{ $result['seats'] ?? 0 }} seats
+                                <span class="text-xs text-brand ml-1" title="{{ ($result['isProportional'] ?? false) ? __('ui.group_proportional') : '' }} ({{ __('ui.n_seats', ['count' => $result['seats'] ?? 0]) }})">
+                                    ● {{ __('ui.n_seats', ['count' => $result['seats'] ?? 0]) }}
                                 </span>
                             @endif
                         </td>
@@ -47,9 +47,9 @@
                         <td class="px-4 py-3 whitespace-nowrap">
                             @if($skipWinnerLoser)
                                 <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
-                                    <span class="text-gray-400 italic text-xs cursor-help">N/A</span>
+                                    <span class="text-gray-400 italic text-xs cursor-help">{{ __('ui.na') }}</span>
                                     <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 bottom-full mb-1 z-50 w-72 whitespace-normal rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
-                                        {{ ($result['isProportional'] ?? false) ? 'Proportional methods elect multiple seats, not a single winner.' : 'Informational methods identify a set of candidates, not a ranking.' }}
+                                        {{ ($result['isProportional'] ?? false) ? __('ui.na_proportional_winner') : __('ui.na_informational_winner') }}
                                     </span>
                                 </span>
                             @elseif($result['winner'])
@@ -64,9 +64,9 @@
                         <td class="px-4 py-3 whitespace-nowrap">
                             @if($skipWinnerLoser)
                                 <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
-                                    <span class="text-gray-400 italic text-xs cursor-help">N/A</span>
+                                    <span class="text-gray-400 italic text-xs cursor-help">{{ __('ui.na') }}</span>
                                     <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 bottom-full mb-1 z-50 w-72 whitespace-normal rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
-                                        {{ ($result['isProportional'] ?? false) ? 'Proportional methods elect multiple seats, not a single loser.' : 'Informational methods identify a set of candidates, not a ranking.' }}
+                                        {{ ($result['isProportional'] ?? false) ? __('ui.na_proportional_loser') : __('ui.na_informational_loser') }}
                                     </span>
                                 </span>
                             @elseif($result['loser'])

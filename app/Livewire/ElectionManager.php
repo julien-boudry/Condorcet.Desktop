@@ -185,7 +185,7 @@ class ElectionManager extends Component
         $input = trim($this->newCandidate);
 
         if ($input === '') {
-            $this->addError('newCandidate', 'Candidate name cannot be empty.');
+            $this->addError('newCandidate', __('ui.error_candidate_empty'));
 
             return;
         }
@@ -201,7 +201,7 @@ class ElectionManager extends Component
         }
 
         if ($added === 0) {
-            $this->addError('newCandidate', 'All candidates already exist or input is invalid.');
+            $this->addError('newCandidate', __('ui.error_candidate_exists'));
 
             return;
         }
@@ -236,7 +236,7 @@ class ElectionManager extends Component
         $ranking = trim($this->newVoteRanking);
 
         if ($ranking === '') {
-            $this->addError('newVoteRanking', 'Vote ranking cannot be empty.');
+            $this->addError('newVoteRanking', __('ui.error_vote_empty'));
 
             return;
         }
@@ -369,7 +369,7 @@ class ElectionManager extends Component
         $text = trim($this->importText);
 
         if ($text === '') {
-            $this->addError('importText', 'Paste some .cvotes content first.');
+            $this->addError('importText', __('ui.error_import_empty'));
 
             return;
         }
@@ -399,7 +399,7 @@ class ElectionManager extends Component
             $this->importText = '';
             $this->syncState();
         } catch (\Throwable $e) {
-            $this->addError('importText', 'Import failed: '.$e->getMessage());
+            $this->addError('importText', __('ui.error_import_failed', ['message' => $e->getMessage()]));
         }
     }
 
@@ -419,7 +419,7 @@ class ElectionManager extends Component
             $this->importText = $this->importFile->get();
             $this->importCvotes();
         } catch (\Throwable $e) {
-            $this->addError('importFile', 'File import failed: '.$e->getMessage());
+            $this->addError('importFile', __('ui.error_file_import_failed', ['message' => $e->getMessage()]));
         } finally {
             $this->importFile = null;
         }
@@ -431,7 +431,7 @@ class ElectionManager extends Component
     public function exportCvotes(): void
     {
         if (count($this->candidates) < 2) {
-            $this->addError('exportOutput', 'Need at least 2 candidates to export.');
+            $this->addError('exportOutput', __('ui.error_export_min_candidates'));
 
             return;
         }
@@ -440,14 +440,14 @@ class ElectionManager extends Component
             $election = $this->buildElection();
 
             if ($election === null) {
-                $this->addError('exportOutput', 'Could not build election.');
+                $this->addError('exportOutput', __('ui.error_export_build_failed'));
 
                 return;
             }
 
             $this->exportOutput = CondorcetElectionFormat::createFromElection($election) ?? '';
         } catch (\Throwable $e) {
-            $this->addError('exportOutput', 'Export failed: '.$e->getMessage());
+            $this->addError('exportOutput', __('ui.error_export_failed', ['message' => $e->getMessage()]));
         }
     }
 
@@ -570,7 +570,7 @@ class ElectionManager extends Component
                         $election->addVote($vote);
                     }
                 } catch (\Throwable $e) {
-                    $this->warnings[] = 'Vote error: '.$e->getMessage();
+                    $this->warnings[] = __('ui.warning_vote_error', ['message' => $e->getMessage()]);
                 }
             }
         }
@@ -695,7 +695,7 @@ class ElectionManager extends Component
         try {
             $pairwise = $election->getExplicitPairwise();
         } catch (\Throwable $e) {
-            $this->warnings[] = 'Pairwise error: '.$e->getMessage();
+            $this->warnings[] = __('ui.warning_pairwise_error', ['message' => $e->getMessage()]);
         }
 
         // Per-method results
