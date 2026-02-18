@@ -66,49 +66,47 @@
 
         {{-- Tab navigation (pure Alpine.js, no server round-trip) --}}
         @if(!empty($computedResults['results']) || !empty($computedResults['pairwise']))
-            <div class="border-b border-gray-200 dark:border-gray-700">
-                <nav class="flex gap-4 overflow-x-auto" role="tablist">
-                    {{-- Overview tab (only if methods selected) --}}
+            <div class="space-y-2">
+                {{-- Row 1: Global tabs (Overview + Pairwise) --}}
+                <div class="flex gap-2 border-b border-gray-200 dark:border-gray-700">
                     @if(!empty($computedResults['results']))
                         <button
                             @click="activeTab = 'overview'"
                             :class="activeTab === 'overview' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+                            class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
                             role="tab"
                         >
                             Overview
                         </button>
                     @endif
 
-                    {{-- Pairwise tab — always next to Overview --}}
                     @if(!empty($computedResults['pairwise']))
                         <button
                             @click="activeTab = 'pairwise'"
                             :class="activeTab === 'pairwise' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+                            class="px-3 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
                             role="tab"
                         >
                             Pairwise Matrix
                         </button>
                     @endif
+                </div>
 
-                    {{-- Separator between global tabs and per-method tabs --}}
-                    @if(!empty($computedResults['results']))
-                        <div class="self-center shrink-0 h-5 w-px bg-gray-300 dark:bg-gray-600"></div>
-                    @endif
-
-                    {{-- Per-method tabs --}}
-                    @foreach($computedResults['results'] as $method => $result)
-                        <button
-                            @click="activeTab = '{{ md5($method) }}'"
-                            :class="activeTab === '{{ md5($method) }}' ? 'border-b-2 border-brand text-brand' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-1 py-3 text-sm font-medium whitespace-nowrap transition-colors"
-                            role="tab"
-                        >
-                            {{ $method }}
-                        </button>
-                    @endforeach
-                </nav>
+                {{-- Row 2: Per-method tabs as wrapping pills --}}
+                @if(!empty($computedResults['results']))
+                    <div class="flex flex-wrap gap-1.5" role="tablist">
+                        @foreach($computedResults['results'] as $method => $result)
+                            <button
+                                @click="activeTab = '{{ md5($method) }}'"
+                                :class="activeTab === '{{ md5($method) }}' ? 'bg-brand text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'"
+                                class="px-2.5 py-1 text-xs font-medium rounded-full transition-colors"
+                                role="tab"
+                            >
+                                {{ $method }}
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         @endif
 
