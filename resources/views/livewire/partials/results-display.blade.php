@@ -169,5 +169,10 @@
                 </div>
             @endif
         </div>
+
+        {{-- Condorcet library version (discreet, bottom-right) --}}
+        <p class="text-right text-xs text-gray-400 dark:text-gray-600 mt-2">
+            <a href="https://github.com/julien-boudry/Condorcet" target="_blank" rel="noopener" class="hover:text-brand transition-colors">Condorcet PHP v{{ $condorcetVersion }}</a>
+        </p>
     </div>
 @endif
