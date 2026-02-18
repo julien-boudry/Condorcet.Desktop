@@ -8,10 +8,10 @@
 
 Read these files before doing any work on this project:
 
-- **[Architecture & Tech Stack](.github/instructions/architecture.md)** — stateless server, `localStorage` contract, technology choices, JavaScript policy
-- **[Feature Specifications](.github/instructions/features.md)** — all features to implement: election setup, configuration, voting methods, results display, import/export
-- **[Condorcet Library Reference](.github/instructions/condorcet-library.md)** — API usage, all supported methods and their aliases, method options, import/export
-- **[Design Guidelines](.github/instructions/design.md)** — brand color, logo, dark mode, layout, component conventions
+- **[Architecture & Tech Stack](.ai/architecture.md)** — stateless server, `localStorage` contract, technology choices, JavaScript policy
+- **[Feature Specifications](.ai/features.md)** — all features to implement: election setup, configuration, voting methods, results display, import/export
+- **[Condorcet Library Reference](.ai/condorcet-library.md)** — API usage, all supported methods and their aliases, method options, import/export
+- **[Design Guidelines](.ai/design.md)** — brand color, logo, dark mode, layout, component conventions
 
 ## Code Quality
 
@@ -30,7 +30,20 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 ## Foundational Context
 
-This application is a Laravel application and its main Laravel ecosystems package. You are an expert with them all. 
+This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
+
+- php - 8.5.3
+- laravel/framework (LARAVEL) - v12
+- laravel/prompts (PROMPTS) - v0
+- livewire/livewire (LIVEWIRE) - v4
+- laravel/boost (BOOST) - v2
+- laravel/mcp (MCP) - v0
+- laravel/pail (PAIL) - v1
+- laravel/pint (PINT) - v1
+- laravel/sail (SAIL) - v1
+- pestphp/pest (PEST) - v4
+- phpunit/phpunit (PHPUNIT) - v12
+- tailwindcss (TAILWINDCSS) - v4
 
 ## Skills Activation
 
@@ -83,7 +96,9 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 ## Tinker / Debugging
 
-- You should use the `tinker` tool when you need to execute PHP to debug code.
+- You should use the `tinker` tool when you need to execute PHP to debug code or query Eloquent models directly.
+- Use the `database-query` tool when you only need to read from the database.
+- Use the `database-schema` tool to inspect table structure before writing migrations or models.
 
 ## Reading Browser Logs With the `browser-logs` Tool
 
@@ -146,20 +161,42 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 # Do Things the Laravel Way
 
-- Use `php artisan make:` commands to create new files (controllers, classes, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
+- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
 - If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input.
+- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
 
-> **This project has no database.** Do not create migrations, models, seeders, or factories.
+## Database
+
+- Always use proper Eloquent relationship methods with return type hints. Prefer relationship methods over raw queries or manual joins.
+- Use Eloquent models and relationships before suggesting raw database queries.
+- Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
+- Generate code that prevents N+1 query problems by using eager loading.
+- Use Laravel's query builder for very complex database operations.
+
+### Model Creation
+
+- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `php artisan make:model`.
+
+### APIs & Eloquent Resources
+
+- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
 
 ## Controllers & Validation
 
 - Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
 - Check sibling Form Requests to see if the application uses array or string based validation rules.
 
+## Authentication & Authorization
+
+- Use Laravel's built-in authentication and authorization features (gates, policies, Sanctum, etc.).
+
 ## URL Generation
 
 - When generating links to other pages, prefer named routes and the `route()` function.
+
+## Queues
+
+- Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
 
 ## Configuration
 
@@ -167,8 +204,9 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 ## Testing
 
-- Create feature tests: `php artisan make:test --pest {name}`, unit tests: add `--unit`.
-- Use `fake()->word()` etc. for Faker data.
+- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
+- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
+- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
 
 ## Vite Error
 
@@ -189,6 +227,15 @@ protected function isAccessible(User $user, ?string $path = null): bool
 - `bootstrap/providers.php` contains application specific service providers.
 - The `app\Console\Kernel.php` file no longer exists; use `bootstrap/app.php` or `routes/console.php` for console configuration.
 - Console commands in `app/Console/Commands/` are automatically available and do not require manual registration.
+
+## Database
+
+- When modifying a column, the migration must include all of the attributes that were previously defined on the column. Otherwise, they will be dropped and lost.
+- Laravel 12 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
+
+### Models
+
+- Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
 
 === livewire/core rules ===
 
