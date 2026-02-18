@@ -58,7 +58,10 @@
                 <div class="flex-1">
                     <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Election</span>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">
-                        {{ count($candidates) }} candidates · {{ count($votes) }} vote entries
+                        {{ count($candidates) }} candidates · {{ $computedResults['countValidVotes'] }} valid votes
+                        @if($weightAllowed)
+                            <span class="italic">(valid weight: {{ $computedResults['sumValidVoteWeights'] }})</span>
+                        @endif
                     </p>
                 </div>
             </div>

@@ -142,7 +142,7 @@ class ElectionManager extends Component
             $className = Condorcet::getMethodClass($methodName);
 
             // Skip non-deterministic methods (e.g. Random Ballot, Random Candidates)
-            if (!$className::IS_DETERMINISTIC) {
+            if (! $className::IS_DETERMINISTIC) {
                 continue;
             }
 
@@ -600,7 +600,11 @@ class ElectionManager extends Component
      *     condorcetWinner: string|null,
      *     condorcetLoser: string|null,
      *     pairwise: array,
-     *     results: array<string, array{ranking: array, winner: string|null, loser: string|null, stats: array}>
+     *     results: array<string, array{ranking: array, winner: string|null, loser: string|null, stats: array}>,
+     *     countVotes: int,
+     *     sumVoteWeights: int,
+     *     countValidVotes: int,
+     *     sumValidVoteWeights: int
      * }
      */
     protected function computeResults(): array
@@ -613,6 +617,10 @@ class ElectionManager extends Component
                 'condorcetLoser' => null,
                 'pairwise' => [],
                 'results' => [],
+                'countVotes' => 0,
+                'sumVoteWeights' => 0,
+                'countValidVotes' => 0,
+                'sumValidVoteWeights' => 0,
             ];
         }
 
@@ -625,6 +633,10 @@ class ElectionManager extends Component
                 'condorcetLoser' => null,
                 'pairwise' => [],
                 'results' => [],
+                'countVotes' => 0,
+                'sumVoteWeights' => 0,
+                'countValidVotes' => 0,
+                'sumValidVoteWeights' => 0,
             ];
         }
 
@@ -683,6 +695,10 @@ class ElectionManager extends Component
             'condorcetLoser' => $condorcetLoser !== null ? (string) $condorcetLoser : null,
             'pairwise' => $pairwise,
             'results' => $results,
+            'countVotes' => $election->countVotes(),
+            'sumVoteWeights' => $election->sumVoteWeights(),
+            'countValidVotes' => $election->countValidVoteWithConstraints(),
+            'sumValidVoteWeights' => $election->sumValidVoteWeightsWithConstraints(),
         ];
     }
 

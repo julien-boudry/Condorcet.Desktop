@@ -78,7 +78,10 @@
             @endforeach
         </div>
         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            {{ count($votes) }} vote entry{{ count($votes) > 1 ? ' entries' : '' }}
+            {{ $computedResults['countVotes'] ?? count($votes) }} vote entr{{ ($computedResults['countVotes'] ?? count($votes)) > 1 ? 'ies' : 'y' }}
+            @if($weightAllowed && ($computedResults['sumVoteWeights'] ?? 0) > 0)
+                <span class="italic">(total weight: {{ $computedResults['sumVoteWeights'] }})</span>
+            @endif
         </p>
     @else
         <p class="text-sm text-gray-400 dark:text-gray-500 italic">No votes yet.</p>
