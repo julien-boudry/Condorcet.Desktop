@@ -2,9 +2,14 @@
 
 namespace App\Livewire;
 
+use CondorcetPHP\Condorcet\Algo\Methods\Borda\BordaCount;
+use CondorcetPHP\Condorcet\Algo\Methods\HighestAverages\SainteLague;
 use CondorcetPHP\Condorcet\Algo\Methods\KemenyYoung\KemenyYoung;
+use CondorcetPHP\Condorcet\Algo\Methods\LargestRemainder\LargestRemainder;
 use CondorcetPHP\Condorcet\Algo\Methods\Smith\SchwartzSet;
 use CondorcetPHP\Condorcet\Algo\Methods\Smith\SmithSet;
+use CondorcetPHP\Condorcet\Algo\Methods\STV\CPO_STV;
+use CondorcetPHP\Condorcet\Algo\Methods\STV\SingleTransferableVote;
 use CondorcetPHP\Condorcet\Algo\Tools\StvQuotas;
 use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Constraints\NoTie;
@@ -660,7 +665,7 @@ class ElectionManager extends Component
     protected function applyMethodOptions(Election $election): void
     {
         // Borda Count starting point
-        $election->setMethodOption('BordaCount', 'Starting', $this->bordaStarting);
+        $election->setMethodOption(BordaCount::class, 'Starting', $this->bordaStarting);
 
         // Kemeny–Young max candidates
         KemenyYoung::$MaxCandidates = $this->kemenyMaxCandidates;
@@ -668,22 +673,22 @@ class ElectionManager extends Component
         // STV quota
         $stvQuota = $this->resolveQuota($this->stvQuota);
         if ($stvQuota !== null) {
-            $election->setMethodOption('STV', 'Quota', $stvQuota);
+            $election->setMethodOption(SingleTransferableVote::class, 'Quota', $stvQuota);
         }
 
         // CPO-STV quota
         $cpoQuota = $this->resolveQuota($this->cpoStvQuota);
         if ($cpoQuota !== null) {
-            $election->setMethodOption('CPO STV', 'Quota', $cpoQuota);
+            $election->setMethodOption(CPO_STV::class, 'Quota', $cpoQuota);
         }
 
         // Sainte-Laguë first divisor
-        $election->setMethodOption('SainteLague', 'FirstDivisor', $this->sainteLagueFirstDivisor);
+        $election->setMethodOption(SainteLague::class, 'FirstDivisor', $this->sainteLagueFirstDivisor);
 
         // Largest Remainder quota
         $lrQuota = $this->resolveQuota($this->largestRemainderQuota);
         if ($lrQuota !== null) {
-            $election->setMethodOption('LargestRemainder', 'Quota', $lrQuota);
+            $election->setMethodOption(LargestRemainder::class, 'Quota', $lrQuota);
         }
     }
 
@@ -783,7 +788,7 @@ class ElectionManager extends Component
     protected function getMethodOptionRegistry(): array
     {
         return [
-            'BordaCount' => [
+            BordaCount::METHOD_NAME[0] => [
                 [
                     'wire' => 'bordaStarting',
                     'label' => __('ui.borda_starting'),
@@ -794,7 +799,7 @@ class ElectionManager extends Component
                     ],
                 ],
             ],
-            'Kemeny–Young' => [
+            KemenyYoung::METHOD_NAME[0] => [
                 [
                     'wire' => 'kemenyMaxCandidates',
                     'label' => __('ui.kemeny_max'),
@@ -805,21 +810,21 @@ class ElectionManager extends Component
                     'hint' => __('ui.kemeny_slow_warning'),
                 ],
             ],
-            'STV' => [
+            SingleTransferableVote::METHOD_NAME[0] => [
                 [
                     'wire' => 'stvQuota',
                     'label' => __('ui.stv_quota'),
                     'type' => 'quota',
                 ],
             ],
-            'CPO STV' => [
+            CPO_STV::METHOD_NAME[0] => [
                 [
                     'wire' => 'cpoStvQuota',
                     'label' => __('ui.cpo_stv_quota'),
                     'type' => 'quota',
                 ],
             ],
-            'Sainte-Laguë' => [
+            SainteLague::METHOD_NAME[0] => [
                 [
                     'wire' => 'sainteLagueFirstDivisor',
                     'label' => __('ui.sainte_lague_divisor'),
@@ -829,7 +834,7 @@ class ElectionManager extends Component
                     'hint' => __('ui.sainte_lague_hint'),
                 ],
             ],
-            'Largest Remainder' => [
+            LargestRemainder::METHOD_NAME[0] => [
                 [
                     'wire' => 'largestRemainderQuota',
                     'label' => __('ui.largest_remainder_quota'),
