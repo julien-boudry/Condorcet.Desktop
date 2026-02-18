@@ -21,6 +21,7 @@
                         type="number"
                         wire:model="newVoteWeight"
                         min="1"
+                        placeholder="auto"
                         class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
                     />
                 </div>

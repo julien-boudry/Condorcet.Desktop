@@ -10,6 +10,7 @@ use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Constraints\NoTie;
 use CondorcetPHP\Condorcet\Election;
 use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
+use CondorcetPHP\Condorcet\Vote;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -65,7 +66,8 @@ class ElectionManager extends Component
 
     public string $newVoteRanking = '';
 
-    public int $newVoteWeight = 1;
+    /** @var int|null Vote weight override (null = use weight from ranking string or default 1) */
+    public ?int $newVoteWeight = null;
 
     public int $newVoteQuantity = 1;
 
@@ -224,6 +226,10 @@ class ElectionManager extends Component
 
     /**
      * Add a single vote from the form inputs.
+     *
+     * Uses the Condorcet Vote object to parse the ranking string, which
+     * handles embedded weight (^N) and tags automatically. The form
+     * weight field overrides the embedded weight when explicitly filled.
      */
     public function addVote(): void
     {
@@ -235,14 +241,29 @@ class ElectionManager extends Component
             return;
         }
 
+        // Let the library parse the ranking string (handles ^weight, tags, etc.)
+        $vote = new Vote($ranking);
+
+        // Extract the clean ranking and the parsed weight from the Vote object
+        $parsedWeight = $vote->getWeight();
+        $cleanRanking = $vote->getRankingAsString(displayWeight: false);
+
+        // Form weight overrides embedded weight when explicitly set
+        $weight = ($this->weightAllowed && $this->newVoteWeight !== null)
+            ? max(1, $this->newVoteWeight)
+            : ($this->weightAllowed ? $parsedWeight : 1);
+
+        // Quantity is only from the form (not embedded in ranking string)
+        $quantity = max(1, $this->newVoteQuantity);
+
         $this->votes[] = [
-            'ranking' => $ranking,
-            'weight' => $this->weightAllowed ? max(1, $this->newVoteWeight) : 1,
-            'quantity' => max(1, $this->newVoteQuantity),
+            'ranking' => $cleanRanking,
+            'weight' => $weight,
+            'quantity' => $quantity,
         ];
 
         $this->newVoteRanking = '';
-        $this->newVoteWeight = 1;
+        $this->newVoteWeight = null;
         $this->newVoteQuantity = 1;
         $this->syncState();
     }
@@ -532,28 +553,25 @@ class ElectionManager extends Component
         // Apply method-specific options
         $this->applyMethodOptions($election);
 
-        // Add votes using parseVotes for full format support (^weight, *quantity)
+        // Add votes by creating Vote objects from stored data
         if (count($this->votes) > 0) {
-            $voteLines = [];
+            foreach ($this->votes as $voteData) {
+                try {
+                    $quantity = max(1, $voteData['quantity'] ?? 1);
 
-            foreach ($this->votes as $vote) {
-                $line = $vote['ranking'];
+                    // Create each vote instance individually
+                    for ($i = 0; $i < $quantity; $i++) {
+                        $vote = new Vote($voteData['ranking'], electionContext: $election);
 
-                if ($this->weightAllowed && ($vote['weight'] ?? 1) > 1) {
-                    $line .= ' ^'.$vote['weight'];
+                        if ($this->weightAllowed && ($voteData['weight'] ?? 1) >= 1) {
+                            $vote->setWeight($voteData['weight']);
+                        }
+
+                        $election->addVote($vote);
+                    }
+                } catch (\Throwable $e) {
+                    $this->warnings[] = 'Vote error: '.$e->getMessage();
                 }
-
-                if (($vote['quantity'] ?? 1) > 1) {
-                    $line .= ' * '.$vote['quantity'];
-                }
-
-                $voteLines[] = $line;
-            }
-
-            try {
-                $election->parseVotes(implode("\n", $voteLines));
-            } catch (\Throwable $e) {
-                $this->warnings[] = 'Vote parsing error: '.$e->getMessage();
             }
         }
 
