@@ -1,4 +1,21 @@
 {{-- Overview: side-by-side comparison of all selected methods --}}
+@php
+    // Collect winners to detect disagreements (used by the notice above the table)
+    $winners = array_column($results, 'winner');
+    $uniqueWinners = array_unique(array_filter($winners));
+    $hasDisagreement = count($uniqueWinners) > 1;
+@endphp
+
+{{-- Disagreement notice — shown above the table, below the tabs --}}
+@if($hasDisagreement)
+    <div class="mb-4 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 px-4 py-3">
+        <p class="text-sm text-amber-800 dark:text-amber-300">
+            <strong>Methods disagree on the winner.</strong>
+            Different voting methods can produce different results — this is the core insight of social choice theory.
+        </p>
+    </div>
+@endif
+
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
     <div class="overflow-x-auto">
         <table class="w-full text-sm">
@@ -11,13 +28,6 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                @php
-                    // Collect winners to detect disagreements
-                    $winners = array_column($results, 'winner');
-                    $uniqueWinners = array_unique(array_filter($winners));
-                    $hasDisagreement = count($uniqueWinners) > 1;
-                @endphp
-
                 @foreach($results as $method => $result)
                     @php
                         $isDisagreeing = $hasDisagreement && $result['winner'] !== null && $result['winner'] !== reset($uniqueWinners);
@@ -64,13 +74,5 @@
         </table>
     </div>
 
-    {{-- Disagreement notice --}}
-    @if($hasDisagreement)
-        <div class="px-4 py-3 border-t border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20">
-            <p class="text-sm text-amber-800 dark:text-amber-300">
-                <strong>Methods disagree on the winner.</strong>
-                Different voting methods can produce different results — this is the core insight of social choice theory.
-            </p>
-        </div>
-    @endif
 </div>
+

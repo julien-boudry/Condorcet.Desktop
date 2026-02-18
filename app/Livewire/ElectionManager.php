@@ -43,13 +43,13 @@ class ElectionManager extends Component
     public array $methods = ['Schulze Winning'];
 
     /** Number of seats for proportional methods */
-    public int $seats = 1;
+    public int $seats = 100;
 
     /** Whether unranked candidates are implicitly ranked last */
     public bool $implicitRanking = true;
 
     /** Whether vote weight is enabled */
-    public bool $weightAllowed = false;
+    public bool $weightAllowed = true;
 
     /** Whether the NoTie constraint is active */
     public bool $noTieConstraint = false;
@@ -423,9 +423,9 @@ class ElectionManager extends Component
         $this->candidates = [];
         $this->votes = [];
         $this->methods = [Condorcet::getDefaultMethod()::METHOD_NAME[0]];
-        $this->seats = 1;
+        $this->seats = 100;
         $this->implicitRanking = true;
-        $this->weightAllowed = false;
+        $this->weightAllowed = true;
         $this->noTieConstraint = false;
         $this->exportOutput = '';
         $this->syncState();

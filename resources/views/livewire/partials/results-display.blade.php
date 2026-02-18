@@ -27,7 +27,12 @@
                         @if($computedResults['condorcetWinner'])
                             <span class="text-green-600 dark:text-green-400">{{ $computedResults['condorcetWinner'] }}</span>
                         @else
-                            <span class="text-gray-400 dark:text-gray-500 italic">None</span>
+                            <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
+                                <span class="text-gray-400 dark:text-gray-500 italic cursor-help">None</span>
+                                <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 top-full mt-1 z-10 w-64 rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
+                                    No candidate beats every other candidate in pairwise comparison. This means there is a cycle or tie in voter preferences.
+                                </span>
+                            </span>
                         @endif
                     </p>
                 </div>
@@ -39,7 +44,12 @@
                         @if($computedResults['condorcetLoser'])
                             <span class="text-red-600 dark:text-red-400">{{ $computedResults['condorcetLoser'] }}</span>
                         @else
-                            <span class="text-gray-400 dark:text-gray-500 italic">None</span>
+                            <span class="relative inline-block" x-data="{ show: false }" @mouseenter="show = true" @mouseleave="show = false">
+                                <span class="text-gray-400 dark:text-gray-500 italic cursor-help">None</span>
+                                <span x-show="show" x-cloak x-transition.opacity class="absolute left-0 top-full mt-1 z-10 w-64 rounded-lg bg-gray-900 dark:bg-gray-700 text-white text-xs px-3 py-2 shadow-lg">
+                                    No candidate loses to every other candidate in pairwise comparison. This means there is a cycle or tie in voter preferences.
+                                </span>
+                            </span>
                         @endif
                     </p>
                 </div>
@@ -62,12 +72,29 @@
                     @if(!empty($computedResults['results']))
                         <button
                             @click="activeTab = 'overview'"
-                            :class="activeTab === 'overview' ? 'border-b-2 border-brand text-brand' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-1 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+                            :class="activeTab === 'overview' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
+                            class="px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors"
                             role="tab"
                         >
                             Overview
                         </button>
+                    @endif
+
+                    {{-- Pairwise tab — always next to Overview --}}
+                    @if(!empty($computedResults['pairwise']))
+                        <button
+                            @click="activeTab = 'pairwise'"
+                            :class="activeTab === 'pairwise' ? 'border-b-2 border-brand text-brand bg-brand/10 rounded-t' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
+                            class="px-3 py-3 text-sm font-medium whitespace-nowrap transition-colors"
+                            role="tab"
+                        >
+                            Pairwise Matrix
+                        </button>
+                    @endif
+
+                    {{-- Separator between global tabs and per-method tabs --}}
+                    @if(!empty($computedResults['results']))
+                        <div class="self-center shrink-0 h-5 w-px bg-gray-300 dark:bg-gray-600"></div>
                     @endif
 
                     {{-- Per-method tabs --}}
@@ -81,18 +108,6 @@
                             {{ $method }}
                         </button>
                     @endforeach
-
-                    {{-- Pairwise tab --}}
-                    @if(!empty($computedResults['pairwise']))
-                        <button
-                            @click="activeTab = 'pairwise'"
-                            :class="activeTab === 'pairwise' ? 'border-b-2 border-brand text-brand' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'"
-                            class="px-1 py-3 text-sm font-medium whitespace-nowrap transition-colors"
-                            role="tab"
-                        >
-                            Pairwise Matrix
-                        </button>
-                    @endif
                 </nav>
             </div>
         @endif
