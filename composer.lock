@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "463a11ac285835eb2397131096dbbdc6",
+    "content-hash": "e821fe5b7a8c520e21672f310f48f881",
     "packages": [
         {
             "name": "brick/math",
@@ -1051,6 +1051,96 @@
                 }
             ],
             "time": "2025-08-22T14:27:06+00:00"
+        },
+        {
+            "name": "julien-boudry/condorcet",
+            "version": "v5.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/julien-boudry/Condorcet.git",
+                "reference": "feaf1818cb360dfb4f6e8e94f77d2375985a76d0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/feaf1818cb360dfb4f6e8e94f77d2375985a76d0",
+                "reference": "feaf1818cb360dfb4f6e8e94f77d2375985a76d0",
+                "shasum": ""
+            },
+            "require": {
+                "brick/math": "^0.14.1",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^8.4",
+                "symfony/console": "^7.4|^8.0",
+                "symfony/yaml": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*",
+                "friendsofphp/php-cs-fixer": "^3.91",
+                "haydenpierce/class-finder": ">= 0.5.3",
+                "laravel/prompts": "^0.3",
+                "pestphp/pest": "^4.1, >=4.1.4",
+                "phpbench/phpbench": "^1.4",
+                "phpstan/phpdoc-parser": "^2.3",
+                "phpstan/phpstan": "^2.1",
+                "rector/rector": "^2.2"
+            },
+            "suggest": {
+                "ext-pdo": "Allow to use database for very large elections.",
+                "ext-pdo_sqlite": "Use sqlite3 bases for very large elections."
+            },
+            "bin": [
+                "bin/condorcet"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "CondorcetPHP\\Condorcet\\": "src/",
+                    "CondorcetPHP\\Condorcet\\Dev\\CondorcetDocumentationGenerator\\": "Dev/CondorcetDocumentationGenerator/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Boudry",
+                    "email": "julien.boudry@gmail.com",
+                    "homepage": "https://artisanat-furieux.net/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Complete election manager, providing natively many voting methods including: Condorcet / Borda (+ Nauru variant) / Copeland / Dodgson (2 Approximations) / FTPT / Instant-runoff (alternative vote) / Kemeny–Young / Minimax (+ variants) / Ranked Pairs (+ variants) / Schulze (+ variants), Single Transferable Vote (STV) / Comparison of Pairs of Outcomes by the Single Transferable Vote (CPO-STV)",
+            "homepage": "https://github.com/julien-boudry/Condorcet",
+            "keywords": [
+                "Condorcet",
+                "Tideman",
+                "alternative vote",
+                "borda",
+                "copeland",
+                "election",
+                "ranked pairs",
+                "schulze",
+                "stv",
+                "vote"
+            ],
+            "support": {
+                "issues": "https://github.com/julien-boudry/Condorcet/issues",
+                "source": "https://github.com/julien-boudry/Condorcet/tree/v5.0.3"
+            },
+            "funding": [
+                {
+                    "url": "https://blockchair.com/bitcoin/address/bc1q3jllk3qd9fjvvuqy07tawkv7t6h7qjf55fc2gh",
+                    "type": "bitcoin"
+                },
+                {
+                    "url": "https://github.com/sponsors/julien-boudry",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-29T13:42:52+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5861,6 +5951,81 @@
             "time": "2026-01-01T22:13:48+00:00"
         },
         {
+            "name": "symfony/yaml",
+            "version": "v8.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14",
+                "reference": "7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4",
+                "symfony/polyfill-ctype": "^1.8"
+            },
+            "conflict": {
+                "symfony/console": "<7.4"
+            },
+            "require-dev": {
+                "symfony/console": "^7.4|^8.0"
+            },
+            "bin": [
+                "Resources/bin/yaml-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Loads and dumps YAML files",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/v8.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-12-04T18:17:06+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "v2.4.0",
             "source": {
@@ -9373,81 +9538,6 @@
                 }
             ],
             "time": "2024-10-20T05:08:20+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v8.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14",
-                "reference": "7a1a90ba1df6e821a6b53c4cabdc32a56cabfb14",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.4",
-                "symfony/polyfill-ctype": "^1.8"
-            },
-            "conflict": {
-                "symfony/console": "<7.4"
-            },
-            "require-dev": {
-                "symfony/console": "^7.4|^8.0"
-            },
-            "bin": [
-                "Resources/bin/yaml-lint"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Loads and dumps YAML files",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/yaml/tree/v8.0.1"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/nicolas-grekas",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2025-12-04T18:17:06+00:00"
         },
         {
             "name": "ta-tikoma/phpunit-architecture-test",
