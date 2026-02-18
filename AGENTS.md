@@ -18,6 +18,8 @@ Read these files before doing any work on this project:
 - **Readability and predictability over performance.** Code must be maximally readable, conventional, and unsurprising — even at the cost of minor performance.
 - Keep code simple. Avoid clever abstractions. Prefer explicit, step-by-step code.
 - No magic, no hidden logic. Every behavior should be obvious from reading the code.
+- **Document code abundantly.** Every class, method, and non-trivial block of code must have a PHPDoc block or inline comment explaining its purpose. Over-documentation is preferable to under-documentation.
+- **Always write in English.** All code, comments, PHPDoc blocks, variable names, commit messages, and file contents must be in English — regardless of the language used in the prompt.
 
 ---
 
@@ -30,20 +32,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 ## Foundational Context
 
-This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
-
-- php - 8.5.3
-- laravel/framework (LARAVEL) - v12
-- laravel/prompts (PROMPTS) - v0
-- livewire/livewire (LIVEWIRE) - v4
-- laravel/boost (BOOST) - v2
-- laravel/mcp (MCP) - v0
-- laravel/pail (PAIL) - v1
-- laravel/pint (PINT) - v1
-- laravel/sail (SAIL) - v1
-- pestphp/pest (PEST) - v4
-- phpunit/phpunit (PHPUNIT) - v12
-- tailwindcss (TAILWINDCSS) - v4
+This application is a Laravel application and its main Laravel ecosystems package. You are an expert with them all. 
 
 ## Skills Activation
 
