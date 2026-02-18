@@ -40,42 +40,56 @@ $loser  = $election->getCondorcetLoser();
 // Implicit ranking (default: true)
 // When true, unranked candidates are treated as tied last.
 // When false, they earn no points — changes results significantly.
-$election->setImplicitRanking(false);
+$election->implicitRankingRule(false);
 
 // Vote weight
-$election->allowsVoteWeight(true);
-$election->addVote('Alice > Bob', weight: 3);
+$election->authorizeVoteWeight(true);
+$election->addVote('Alice > Bob ^3'); // weight via parseVotes syntax
 
 // Vote constraints
 use CondorcetPHP\Condorcet\Constraints\NoTie;
 $election->addConstraint(NoTie::class);
 
 // Number of seats (required for proportional methods)
-$election->setNumberOfSeats(7);
+$election->setSeatsToElect(7);
 ```
+
+> **API naming pitfalls (v5.x):**
+> - `implicitRankingRule(bool)` — not ~~`setImplicitRanking()`~~
+> - `authorizeVoteWeight(bool)` — not ~~`allowsVoteWeight()`~~
+> - `setSeatsToElect(int)` — not ~~`setNumberOfSeats()`~~
+> - Reading seats: `$election->seatsToElect` (property hook)
 
 ---
 
 ## Getting Results
 
 ```php
-// Full ranking
+// Full ranking (as an associative array: rank => candidate names)
 $result = $election->getResult('Schulze');
+$ranking = $result->rankingAsArrayString; // array<int, list<string>>
 
-// Winner / Loser for a given method
-$election->getWinner('Schulze');
-$election->getLoser('Schulze');
+// Winner / Loser for a given method (Candidate object or array if tie, or null)
+$result->Winner;
+$result->Loser;
 
 // Condorcet winner / loser (independent of method)
-$election->getCondorcetWinner(); // null if none
-$election->getCondorcetLoser();  // null if none
+$election->getCondorcetWinner(); // Candidate|null
+$election->getCondorcetLoser();  // Candidate|null
 
-// Computation stats
-$result->getStats();
+// Computation stats (returns StatsInterface)
+$result->stats->asArray; // array<string, mixed>
 
-// Number of seats (proportional methods only)
-$result->getNumberOfSeats();
+// Proportional method info
+$result->isProportional; // bool
+$result->seats;          // int
 ```
+
+> **API naming pitfalls (v5.x):**
+> - `$result->rankingAsArrayString` — property hook, not ~~`getResultAsArray()`~~
+> - `$result->Winner` / `$result->Loser` — PascalCase property hooks
+> - `$result->stats->asArray` — StatsInterface, not ~~`$result->getStats()`~~ returning an array
+> - `$result->isProportional` and `$result->seats` — property hooks
 
 ---
 
@@ -98,7 +112,7 @@ $result->getNumberOfSeats();
 | `Random Ballot` | |
 | `Random Candidates` | |
 
-### Proportional Methods (require `setNumberOfSeats()`)
+### Proportional Methods (require `setSeatsToElect()`)
 
 | Method alias | Type | Notes |
 |---|---|---|
@@ -146,16 +160,18 @@ $election->setMethodOption('Largest Remainder', 'Quota', StvQuotas::DROOP);
 `$election->getExplicitPairwise()` returns the full head-to-head comparison matrix:
 
 ```php
-// Structure: [candidateName => ['win' => [...], 'lose' => [...], 'null' => [...]]]
+// Structure: [candidateName => ['win' => [...], 'opposition' => [...], 'lose' => [...]]]
 $pairwise = $election->getExplicitPairwise();
 
 // Example: how many votes ranked Alice above Bob
-$pairwise['Alice']['win']['Bob'];  // votes where Alice beats Bob
-$pairwise['Alice']['lose']['Bob']; // votes where Bob beats Alice
-$pairwise['Alice']['null']['Bob']; // ties between Alice and Bob
+$pairwise['Alice']['win']['Bob'];        // votes where Alice beats Bob
+$pairwise['Alice']['lose']['Bob'];       // votes where Bob beats Alice
+$pairwise['Alice']['opposition']['Bob']; // total opposition votes (= lose value)
 ```
 
-This matrix is method-independent and should be displayed as a grid/table (rows = candidates, columns = opponents), showing win/lose/tie counts for every pair.
+> **API naming pitfall (v5.x):** The third key is `opposition`, not ~~`null`~~. The `opposition` key mirrors the `lose` count (votes where the opponent beats this candidate). There is no `null`/tie key in the pairwise structure.
+
+This matrix is method-independent and should be displayed as a grid/table (rows = candidates, columns = opponents), showing win/lose counts for every pair.
 
 ---
 
@@ -203,14 +219,41 @@ Charlie > Alice
 ### PHP Usage
 
 ```php
-use CondorcetPHP\Condorcet\Tools\Converters\CondorcetElectionFormat;
+use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
 
 // Import from raw .cvotes string (no file needed)
-$parser = new CondorcetElectionFormat($cvotesString);
-$election = $parser->setUpElection();
+$cef = CondorcetElectionFormat::createFromString($cvotesString);
+$election = $cef->setDataToAnElection();
 
 // Export to .cvotes string
-$output = CondorcetElectionFormat::exportElectionToString($election);
+$output = CondorcetElectionFormat::createFromElection($election);
+```
+
+> **API naming pitfalls (v5.x):**
+> - Namespace: `…\Tools\Converters\CEF\CondorcetElectionFormat` — note the `CEF` sub-namespace
+> - Import: `createFromString()` (static) → returns a CEF instance, then call `->setDataToAnElection()` to get an Election
+> - Export: `createFromElection($election)` (static) — returns the .cvotes string directly
+> - The old patterns ~~`new CondorcetElectionFormat($string)`~~ and ~~`exportElectionToString()`~~ do not exist in v5
+
+### Parsing Votes
+
+The `$election->parseVotes()` method accepts multi-line strings with the same syntax as `.cvotes` vote lines (ranking, `^weight`, `* quantity`). This is the recommended way to add votes programmatically from user input:
+
+```php
+$election->parseVotes("Alice > Bob > Charlie ^2 * 3\nBob > Alice");
+```
+
+### Reading Vote Data
+
+```php
+// Get all votes
+foreach ($election->getVotesList() as $vote) {
+    $vote->getRankingAsString(context: $election, displayWeight: false);
+    $vote->getWeight($election);
+}
+
+// Get candidate list as strings
+$election->getCandidatesListAsString(); // list<string>
 ```
 
 ---
@@ -221,6 +264,20 @@ $output = CondorcetElectionFormat::exportElectionToString($election);
 use CondorcetPHP\Condorcet\Algo\StatsVerbosity;
 
 $election->setStatsVerbosity(StatsVerbosity::FULL);
-$election->getResult('Kemeny-Young')->getStats();
+$election->getResult('Kemeny-Young')->stats->asArray;
 // Warning: FULL stats can be slow/memory-heavy for large elections
 ```
+
+---
+
+## General API Caveats (v5.x)
+
+The Condorcet v5 library makes heavy use of **PHP 8.4+ property hooks**. Many values that look like methods in older documentation are now accessed as properties:
+
+- `$election->implicitRankingRule` (read) / `$election->implicitRankingRule(bool)` (write)
+- `$election->authorizeVoteWeight` (read) / `$election->authorizeVoteWeight(bool)` (write)
+- `$election->seatsToElect` (read) / `$election->setSeatsToElect(int)` (write)
+- `$result->rankingAsArrayString`, `$result->Winner`, `$result->Loser`, `$result->isProportional`, `$result->seats`
+- `$result->stats->asArray`
+
+**Always verify method signatures against the source code** (in `vendor/julien-boudry/condorcet/src/`) when in doubt. The official docs at https://docs.condorcet.io/ may lag behind the latest API changes.

@@ -4,14 +4,25 @@
 
 **Condorcet.Desktop** is a Laravel GUI application for exploring all features of the [Condorcet PHP library](https://github.com/julien-boudry/Condorcet) (`julien-boudry/condorcet ^5.0`). It is packaged as a NativePHP desktop app but must work equally well as a plain web application.
 
+## Current Implementation Status
+
+All specified features are implemented. The app is a single-page Livewire application with one component (`App\Livewire\ElectionManager`) handling all election logic. Tests pass (21 tests, 42 assertions).
+
+**Key entry points:**
+- `app/Livewire/ElectionManager.php` — all server-side logic
+- `resources/views/livewire/election-manager.blade.php` — main view
+- `resources/views/livewire/partials/` — 9 Blade partials (sidebar + results)
+- `resources/views/components/layouts/app.blade.php` — layout shell
+- `tests/Feature/ElectionManagerTest.php` — Pest test suite
+
 ## Detailed Instructions
 
 Read these files before doing any work on this project:
 
-- **[Architecture & Tech Stack](.ai/architecture.md)** — stateless server, `localStorage` contract, technology choices, JavaScript policy
-- **[Feature Specifications](.ai/features.md)** — all features to implement: election setup, configuration, voting methods, results display, import/export
-- **[Condorcet Library Reference](.ai/condorcet-library.md)** — API usage, all supported methods and their aliases, method options, import/export
-- **[Design Guidelines](.ai/design.md)** — brand color, logo, dark mode, layout, component conventions
+- **[Architecture & Tech Stack](.ai/architecture.md)** — stateless server, `localStorage` contract, technology choices, JavaScript policy, **implementation notes**
+- **[Feature Specifications](.ai/features.md)** — all features with **implementation status** and file locations
+- **[Condorcet Library Reference](.ai/condorcet-library.md)** — **corrected** API usage for v5.x (property hooks, naming pitfalls), all supported methods, import/export
+- **[Design Guidelines](.ai/design.md)** — brand color, logo, dark mode, layout, component conventions, **reuse patterns**
 
 ## Code Quality
 
@@ -32,7 +43,7 @@ The Laravel Boost guidelines are specifically curated by Laravel maintainers for
 
 ## Foundational Context
 
-This application is a Laravel application and its main Laravel ecosystems package. You are an expert with them all. 
+This application is a Laravel application and its main Laravel ecosystems package. You are an expert with them all.
 
 ## Skills Activation
 
