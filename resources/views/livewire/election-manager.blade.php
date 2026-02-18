@@ -4,7 +4,7 @@
     {{-- ──────────────────────────────────────────────
          Left sidebar — Election setup panels
          ────────────────────────────────────────────── --}}
-    <aside class="w-full lg:w-96 shrink-0 space-y-4">
+    <aside class="w-full lg:w-96 shrink-0 space-y-4 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:py-2 lg:-my-2">
         {{-- Reset button — only shown when election has data --}}
         @if(count($candidates) > 0 || count($votes) > 0)
             <div class="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 px-4 py-3 flex items-center justify-between">
