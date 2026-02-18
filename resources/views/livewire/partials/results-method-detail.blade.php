@@ -9,6 +9,17 @@
             @endif
         </h3>
 
+        {{-- Active method options --}}
+        @if(!empty($result['methodOptions']))
+            <div class="flex flex-wrap gap-2 mb-3">
+                @foreach($result['methodOptions'] as $label => $value)
+                    <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+                        <span class="font-medium">{{ $label }}:</span> {{ $value }}
+                    </span>
+                @endforeach
+            </div>
+        @endif
+
         {{-- Winner & Loser (only for single-winner methods) --}}
         @if(!($result['isProportional'] ?? false) && !($result['isInformational'] ?? false))
             <div class="flex gap-6 mb-4">

@@ -30,109 +30,56 @@
     </div>
 
     {{-- Per-method options (shown when relevant methods are selected) --}}
-    @if(array_intersect($methods, ['BordaCount', 'Kemeny–Young', 'STV', 'CPO STV', 'Sainte-Laguë', 'Largest Remainder']))
+    @if(!empty($activeMethodOptions))
         <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
             <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400">{{ __('ui.method_options') }}</h3>
 
-            {{-- Borda Count starting point --}}
-            @if(in_array('BordaCount', $methods))
-                <div>
+            @foreach($activeMethodOptions as $opt)
+                <div wire:key="opt-{{ $opt['wire'] }}">
                     <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('ui.borda_starting') }}
+                        {{ $opt['label'] }}
                     </label>
-                    <select
-                        wire:model.live="bordaStarting"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    >
-                        <option value="1">{{ __('ui.borda_standard') }}</option>
-                        <option value="0">0</option>
-                    </select>
-                </div>
-            @endif
 
-            {{-- Kemeny-Young max candidates --}}
-            @if(in_array('Kemeny–Young', $methods))
-                <div>
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('ui.kemeny_max') }}
-                    </label>
-                    <input
-                        type="number"
-                        wire:model.live.debounce.500ms="kemenyMaxCandidates"
-                        min="3"
-                        max="20"
-                        placeholder="{{ __('ui.kemeny_placeholder') }}"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    />
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {{ __('ui.kemeny_slow_warning') }}
-                    </p>
-                </div>
-            @endif
+                    @if($opt['type'] === 'select')
+                        {{-- Generic select with explicit choices --}}
+                        <select
+                            wire:model.live="{{ $opt['wire'] }}"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+                        >
+                            @foreach($opt['choices'] as $choice)
+                                <option value="{{ $choice['value'] }}">{{ $choice['label'] }}</option>
+                            @endforeach
+                        </select>
 
-            {{-- STV quota --}}
-            @if(in_array('STV', $methods))
-                <div>
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.stv_quota') }}</label>
-                    <select
-                        wire:model.live="stvQuota"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    >
-                        @foreach($quotaOptions as $q)
-                            <option value="{{ $q }}">{{ $q }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+                    @elseif($opt['type'] === 'number')
+                        {{-- Number input with debounce --}}
+                        <input
+                            type="number"
+                            wire:model.live.debounce.500ms="{{ $opt['wire'] }}"
+                            @if(isset($opt['min'])) min="{{ $opt['min'] }}" @endif
+                            @if(isset($opt['max'])) max="{{ $opt['max'] }}" @endif
+                            @if(isset($opt['step'])) step="{{ $opt['step'] }}" @endif
+                            @if(isset($opt['placeholder'])) placeholder="{{ $opt['placeholder'] }}" @endif
+                            class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+                        />
 
-            {{-- CPO-STV quota --}}
-            @if(in_array('CPO STV', $methods))
-                <div>
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.cpo_stv_quota') }}</label>
-                    <select
-                        wire:model.live="cpoStvQuota"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    >
-                        @foreach($quotaOptions as $q)
-                            <option value="{{ $q }}">{{ $q }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+                    @elseif($opt['type'] === 'quota')
+                        {{-- Quota selector (StvQuotas enum options) --}}
+                        <select
+                            wire:model.live="{{ $opt['wire'] }}"
+                            class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
+                        >
+                            @foreach($quotaOptions as $q)
+                                <option value="{{ $q }}">{{ $q }}</option>
+                            @endforeach
+                        </select>
+                    @endif
 
-            {{-- Sainte-Laguë first divisor --}}
-            @if(in_array('Sainte-Laguë', $methods))
-                <div>
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('ui.sainte_lague_divisor') }}
-                    </label>
-                    <input
-                        type="number"
-                        wire:model.live.debounce.500ms="sainteLagueFirstDivisor"
-                        step="0.1"
-                        min="1"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    />
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        {{ __('ui.sainte_lague_hint') }}
-                    </p>
+                    @if(isset($opt['hint']))
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $opt['hint'] }}</p>
+                    @endif
                 </div>
-            @endif
-
-            {{-- Largest Remainder quota --}}
-            @if(in_array('Largest Remainder', $methods))
-                <div>
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('ui.largest_remainder_quota') }}</label>
-                    <select
-                        wire:model.live="largestRemainderQuota"
-                        class="mt-1 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-1.5 text-sm text-gray-900 dark:text-gray-100 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-                    >
-                        @foreach($quotaOptions as $q)
-                            <option value="{{ $q }}">{{ $q }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+            @endforeach
         </div>
     @endif
 </div>

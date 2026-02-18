@@ -574,6 +574,7 @@ class ElectionManager extends Component
             'computedResults' => $computedResults,
             'methodGroups' => static::getMethodGroups(),
             'quotaOptions' => $this->getQuotaOptions(),
+            'activeMethodOptions' => $this->getActiveMethodOptions(),
             'defaultMethod' => Condorcet::getDefaultMethod(),
             'condorcetVersion' => Condorcet::getVersion(),
         ]);
@@ -688,26 +689,174 @@ class ElectionManager extends Component
 
     /**
      * Resolve a quota name string to the StvQuotas enum case.
+     *
+     * Delegates to the library's own `StvQuotas::fromString()` which
+     * accepts both short names ("Droop") and full names ("Droop Quota").
      */
     protected function resolveQuota(string $name): ?StvQuotas
     {
-        return match ($name) {
-            'Droop' => StvQuotas::DROOP,
-            'Hare' => StvQuotas::HARE,
-            'Hagenbach-Bischoff' => StvQuotas::HAGENBACH_BISCHOFF,
-            'Imperiali' => StvQuotas::IMPERIALI,
-            default => null,
-        };
+        try {
+            return StvQuotas::fromString($name);
+        } catch (\Throwable) {
+            return null;
+        }
+    }
+
+    /**
+     * Return the active per-method options for a given method alias.
+     *
+     * Discovers options dynamically by inspecting static `$option*`
+     * properties on the method class via reflection. Also includes
+     * `$MaxCandidates` when explicitly set (non-null).
+     *
+     * Scalar and enum values are displayed; arrays are skipped
+     * (e.g. CPO-STV tie-breaker lists) as they are not user-facing.
+     *
+     * @return array<string, string>
+     */
+    protected function getMethodOptionsForDisplay(string $method): array
+    {
+        $class = Condorcet::getMethodClass($method);
+        $reflection = new \ReflectionClass($class);
+        $options = [];
+
+        foreach ($reflection->getStaticProperties() as $property => $value) {
+            // Include $option* properties and $MaxCandidates (when non-null)
+            if (str_starts_with($property, 'option')) {
+                $label = substr($property, 6); // strip 'option' prefix
+            } elseif ($property === 'MaxCandidates' && $value !== null) {
+                $label = $property;
+            } else {
+                continue;
+            }
+
+            // Skip arrays (not useful for display, e.g. tie-breaker method lists)
+            if (is_array($value)) {
+                continue;
+            }
+
+            // Format the value for display
+            $display = match (true) {
+                $value instanceof \BackedEnum => $value->value,
+                $value instanceof \UnitEnum => $value->name,
+                is_bool($value) => $value ? 'true' : 'false',
+                default => (string) $value,
+            };
+
+            $options[$label] = $display;
+        }
+
+        return $options;
     }
 
     /**
      * Return available quota options for the UI selectors.
      *
+     * Derived dynamically from the StvQuotas enum cases. Each case
+     * value has the format "Name Quota" — we strip the " Quota" suffix
+     * to get the short display name (e.g. "Droop", "Hare").
+     *
      * @return list<string>
      */
     protected function getQuotaOptions(): array
     {
-        return ['Droop', 'Hare', 'Hagenbach-Bischoff', 'Imperiali'];
+        return array_map(
+            fn (StvQuotas $case): string => str_replace(' Quota', '', $case->value),
+            StvQuotas::cases(),
+        );
+    }
+
+    /**
+     * Build form descriptors for all configurable method options.
+     *
+     * This is the single source of truth for the method-options UI.
+     * Each method alias maps to an array of option descriptors with:
+     *   - wire:    Livewire property name (for wire:model binding)
+     *   - label:   Translation key for the form label
+     *   - type:    'select' | 'number' | 'quota' (quota = StvQuotas selector)
+     *   - choices: (select only) array of ['value' => mixed, 'label' => string]
+     *   - min, max, step, placeholder: (number only) HTML input attributes
+     *   - hint:    Optional translation key for help text below the input
+     *
+     * @return array<string, list<array<string, mixed>>>
+     */
+    protected function getMethodOptionRegistry(): array
+    {
+        return [
+            'BordaCount' => [
+                [
+                    'wire' => 'bordaStarting',
+                    'label' => __('ui.borda_starting'),
+                    'type' => 'select',
+                    'choices' => [
+                        ['value' => 1, 'label' => __('ui.borda_standard')],
+                        ['value' => 0, 'label' => '0'],
+                    ],
+                ],
+            ],
+            'Kemeny–Young' => [
+                [
+                    'wire' => 'kemenyMaxCandidates',
+                    'label' => __('ui.kemeny_max'),
+                    'type' => 'number',
+                    'min' => 3,
+                    'max' => 20,
+                    'placeholder' => __('ui.kemeny_placeholder'),
+                    'hint' => __('ui.kemeny_slow_warning'),
+                ],
+            ],
+            'STV' => [
+                [
+                    'wire' => 'stvQuota',
+                    'label' => __('ui.stv_quota'),
+                    'type' => 'quota',
+                ],
+            ],
+            'CPO STV' => [
+                [
+                    'wire' => 'cpoStvQuota',
+                    'label' => __('ui.cpo_stv_quota'),
+                    'type' => 'quota',
+                ],
+            ],
+            'Sainte-Laguë' => [
+                [
+                    'wire' => 'sainteLagueFirstDivisor',
+                    'label' => __('ui.sainte_lague_divisor'),
+                    'type' => 'number',
+                    'min' => 1,
+                    'step' => 0.1,
+                    'hint' => __('ui.sainte_lague_hint'),
+                ],
+            ],
+            'Largest Remainder' => [
+                [
+                    'wire' => 'largestRemainderQuota',
+                    'label' => __('ui.largest_remainder_quota'),
+                    'type' => 'quota',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Return form descriptors for method options that match the currently
+     * selected voting methods.
+     *
+     * @return list<array<string, mixed>>
+     */
+    protected function getActiveMethodOptions(): array
+    {
+        $registry = $this->getMethodOptionRegistry();
+        $active = [];
+
+        foreach ($this->methods as $method) {
+            if (isset($registry[$method])) {
+                array_push($active, ...$registry[$method]);
+            }
+        }
+
+        return $active;
     }
 
     /**
@@ -801,6 +950,7 @@ class ElectionManager extends Component
                     'isProportional' => $result->isProportional,
                     'isInformational' => $isInformational,
                     'seats' => $result->seats,
+                    'methodOptions' => $this->getMethodOptionsForDisplay($method),
                 ];
             } catch (\Throwable $e) {
                 $this->warnings[] = "{$method}: {$e->getMessage()}";
