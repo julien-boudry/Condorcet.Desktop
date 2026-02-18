@@ -101,7 +101,7 @@ class ElectionManager extends Component
     public string $cpoStvQuota = 'Hagenbach-Bischoff';
 
     /** Sainte-Laguë first divisor (1 = standard, 1.4 = Norwegian) */
-    public float $sainteLagueFirstDivisor = 1.0;
+    public string $sainteLagueFirstDivisor = '1';
 
     /** Largest Remainder quota name */
     public string $largestRemainderQuota = 'Hare';
@@ -683,7 +683,7 @@ class ElectionManager extends Component
         }
 
         // Sainte-Laguë first divisor
-        $election->setMethodOption(SainteLague::class, 'FirstDivisor', $this->sainteLagueFirstDivisor);
+        $election->setMethodOption(SainteLague::class, 'FirstDivisor', (float) $this->sainteLagueFirstDivisor);
 
         // Largest Remainder quota
         $lrQuota = $this->resolveQuota($this->largestRemainderQuota);
