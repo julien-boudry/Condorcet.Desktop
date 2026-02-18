@@ -1,15 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/blank-livewire-starter-kit",
+    "name": "julien-boudry/condorcet.desktop",
     "type": "project",
-    "description": "The official Laravel starter kit for Livewire.",
+    "description": "Condorcet desktop application",
     "keywords": [
-        "laravel",
-        "framework"
+        "condorcet"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.5",
         "julien-boudry/condorcet": "^5.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
