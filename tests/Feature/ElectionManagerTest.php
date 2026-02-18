@@ -33,10 +33,10 @@ it('rejects empty candidate names', function () {
 
 it('adds candidates in bulk via semicolons', function () {
     Livewire::test(ElectionManager::class)
-        ->set('candidatesBulk', 'Alice ; Bob ; Charlie')
-        ->call('addCandidatesBulk')
+        ->set('newCandidate', 'Alice ; Bob ; Charlie')
+        ->call('addCandidate')
         ->assertSet('candidates', ['Alice', 'Bob', 'Charlie'])
-        ->assertSet('candidatesBulk', '');
+        ->assertSet('newCandidate', '');
 });
 
 it('removes a candidate by index', function () {
@@ -79,10 +79,11 @@ it('removes a vote by index', function () {
 
 it('toggles a voting method on and off', function () {
     Livewire::test(ElectionManager::class)
-        ->call('toggleMethod', 'Schulze')
-        ->assertSet('methods', ['Schulze'])
-        ->call('toggleMethod', 'Schulze')
-        ->assertSet('methods', []);
+        ->assertSet('methods', ['Schulze Winning'])
+        ->call('toggleMethod', 'Schulze Winning')
+        ->assertSet('methods', [])
+        ->call('toggleMethod', 'Schulze Winning')
+        ->assertSet('methods', ['Schulze Winning']);
 });
 
 it('shows empty state when not enough data', function () {
@@ -98,7 +99,7 @@ it('computes results with valid election data', function () {
             ['ranking' => 'Bob > Alice > Charlie', 'weight' => 1, 'quantity' => 1],
             ['ranking' => 'Alice > Charlie > Bob', 'weight' => 1, 'quantity' => 1],
         ])
-        ->set('methods', ['Schulze'])
+        ->set('methods', ['Schulze Winning'])
         ->assertSee('Condorcet Winner')
         ->assertSee('Alice');
 });
@@ -110,7 +111,7 @@ it('displays the pairwise matrix with valid data', function () {
             ['ranking' => 'Alice > Bob > Charlie', 'weight' => 1, 'quantity' => 1],
             ['ranking' => 'Bob > Charlie > Alice', 'weight' => 1, 'quantity' => 1],
         ])
-        ->set('methods', ['Schulze'])
+        ->set('methods', ['Schulze Winning'])
         ->assertSee('Pairwise Comparison Matrix');
 });
 
@@ -134,7 +135,7 @@ it('resets the election', function () {
     Livewire::test(ElectionManager::class)
         ->set('candidates', ['A', 'B'])
         ->set('votes', [['ranking' => 'A > B', 'weight' => 1, 'quantity' => 1]])
-        ->set('methods', ['Schulze'])
+        ->set('methods', ['Schulze Winning', 'Copeland'])
         ->call('resetElection')
         ->assertSet('candidates', [])
         ->assertSet('votes', [])
@@ -169,7 +170,7 @@ it('handles multiple methods simultaneously', function () {
             ['ranking' => 'B > C > A', 'weight' => 1, 'quantity' => 2],
             ['ranking' => 'C > A > B', 'weight' => 1, 'quantity' => 1],
         ])
-        ->set('methods', ['Schulze', 'Borda Count', 'Copeland'])
+        ->set('methods', ['Schulze Winning', 'Borda Count', 'Copeland'])
         ->assertSee('Schulze')
         ->assertSee('Borda Count')
         ->assertSee('Copeland');

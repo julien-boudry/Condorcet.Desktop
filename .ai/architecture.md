@@ -31,7 +31,7 @@ The state is serialized as a single JSON object. This is also the exact payload 
     { "ranking": "Alice > Bob > Charlie", "weight": 1, "quantity": 1 },
     { "ranking": "Bob > Alice", "weight": 1, "quantity": 3 }
   ],
-  "methods": ["Schulze", "Borda Count"],
+  "methods": ["Schulze Winning", "Borda Count"],
   "seats": 7,
   "implicitRanking": true,
   "weightAllowed": false
@@ -65,8 +65,8 @@ The server deserializes this payload and reconstructs the `Election` object from
 
 Never write raw JavaScript unless there is truly no other way.
 
-**No Vue, React, Inertia, or any other JS framework.**  
-**No API routes** unless strictly necessary.  
+**No Vue, React, Inertia, or any other JS framework.**
+**No API routes** unless strictly necessary.
 **No new Composer/Bun dependencies** without explicit user approval.
 
 ---

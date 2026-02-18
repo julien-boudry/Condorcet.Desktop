@@ -2,12 +2,12 @@
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">Candidates</h2>
 
-    {{-- Add single candidate --}}
+    {{-- Add one or many candidates (semicolon-separated) --}}
     <form wire:submit="addCandidate" class="flex gap-2 mb-3">
         <input
             type="text"
             wire:model="newCandidate"
-            placeholder="Candidate name…"
+            placeholder="Alice or Alice ; Bob ; Charlie"
             class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
         />
         <button
@@ -17,31 +17,11 @@
             Add
         </button>
     </form>
+    <p class="text-xs text-gray-400 dark:text-gray-500 -mt-2 mb-3">Use semicolons to add several at once</p>
 
     @error('newCandidate')
         <p class="text-sm text-red-600 dark:text-red-400 mb-2">{{ $message }}</p>
     @enderror
-
-    {{-- Bulk add (semicolon-separated) --}}
-    <details class="mb-3">
-        <summary class="text-sm text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300">
-            Add multiple at once…
-        </summary>
-        <form wire:submit="addCandidatesBulk" class="flex gap-2 mt-2">
-            <input
-                type="text"
-                wire:model="candidatesBulk"
-                placeholder="Alice ; Bob ; Charlie"
-                class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-brand focus:ring-1 focus:ring-brand focus:outline-none"
-            />
-            <button
-                type="submit"
-                class="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg px-4 py-2 text-sm transition-colors"
-            >
-                Add all
-            </button>
-        </form>
-    </details>
 
     {{-- Current candidates list --}}
     @if(count($candidates) > 0)

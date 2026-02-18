@@ -25,7 +25,7 @@ $election->addVote('Alice > Bob > Charlie');
 $election->addVote('Bob > Charlie > Alice');
 
 // Get a result
-$result = $election->getResult('Schulze');
+$result = $election->getResult('Schulze Winning');
 
 // Condorcet winner/loser (may be null)
 $winner = $election->getCondorcetWinner();
@@ -66,7 +66,7 @@ $election->setSeatsToElect(7);
 
 ```php
 // Full ranking (as an associative array: rank => candidate names)
-$result = $election->getResult('Schulze');
+$result = $election->getResult('Schulze Winning');
 $ranking = $result->rankingAsArrayString; // array<int, list<string>>
 
 // Winner / Loser for a given method (Candidate object or array if tie, or null)
@@ -99,7 +99,7 @@ $result->seats;          // int
 
 | Method alias (for `getResult()`) | Notes |
 |---|---|
-| `Schulze` | Recommended variant (Winning). Also: `Schulze Margin`, `Schulze Ratio` |
+| `Schulze Winning` | Default variant. Alias: `Schulze`. Also: `Schulze Margin`, `Schulze Ratio` |
 | `Ranked Pairs Margin` | Also: `Ranked Pairs Winning` |
 | `Borda Count` | Also: `Dowdall System` (Nauru variant) |
 | `Copeland` | |

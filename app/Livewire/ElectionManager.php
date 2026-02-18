@@ -36,8 +36,8 @@ class ElectionManager extends Component
      */
     public array $votes = [];
 
-    /** @var list<string> Selected voting method aliases */
-    public array $methods = [];
+    /** @var list<string> Selected voting method aliases (Schulze Winning is selected by default) */
+    public array $methods = ['Schulze Winning'];
 
     /** Number of seats for proportional methods */
     public int $seats = 1;
@@ -56,8 +56,6 @@ class ElectionManager extends Component
     // ──────────────────────────────────────────────
 
     public string $newCandidate = '';
-
-    public string $candidatesBulk = '';
 
     public string $newVoteRanking = '';
 
@@ -115,7 +113,7 @@ class ElectionManager extends Component
     {
         return [
             'Single Winner' => [
-                'Schulze' => 'Schulze (Winning)',
+                'Schulze Winning' => 'Schulze (Winning)',
                 'Schulze Margin' => 'Schulze (Margin)',
                 'Schulze Ratio' => 'Schulze (Ratio)',
                 'Ranked Pairs Margin' => 'Ranked Pairs (Margin)',
@@ -154,43 +152,38 @@ class ElectionManager extends Component
     // ─────────────────────────────────────────────────────────────
 
     /**
-     * Add a single candidate from the text input.
+     * Add one or more candidates from the text input.
+     *
+     * Supports semicolon-separated lists (e.g. "Alice ; Bob ; Charlie")
+     * as well as single names. Duplicates are silently skipped.
      */
     public function addCandidate(): void
     {
-        $name = trim($this->newCandidate);
+        $input = trim($this->newCandidate);
 
-        if ($name === '') {
+        if ($input === '') {
             $this->addError('newCandidate', 'Candidate name cannot be empty.');
 
             return;
         }
 
-        if (in_array($name, $this->candidates, true)) {
-            $this->addError('newCandidate', 'This candidate already exists.');
-
-            return;
-        }
-
-        $this->candidates[] = $name;
-        $this->newCandidate = '';
-        $this->syncState();
-    }
-
-    /**
-     * Add multiple candidates from a semicolon-separated string.
-     */
-    public function addCandidatesBulk(): void
-    {
-        $names = array_map('trim', explode(';', $this->candidatesBulk));
+        $names = array_map('trim', explode(';', $input));
+        $added = 0;
 
         foreach ($names as $name) {
             if ($name !== '' && ! in_array($name, $this->candidates, true)) {
                 $this->candidates[] = $name;
+                $added++;
             }
         }
 
-        $this->candidatesBulk = '';
+        if ($added === 0) {
+            $this->addError('newCandidate', 'All candidates already exist or input is invalid.');
+
+            return;
+        }
+
+        $this->newCandidate = '';
         $this->syncState();
     }
 
