@@ -6,6 +6,8 @@ GitHub: https://github.com/julien-boudry/Condorcet
 
 > Always use the official library documentation at https://docs.condorcet.io/ and the source code as the reference for the API. The examples below cover only the most common patterns — do not treat them as exhaustive.
 
+> **Important:** If you ever notice a discrepancy between this reference file and the official documentation at https://docs.condorcet.io/, report it immediately to the user. The official documentation is the source of truth.
+
 ---
 
 ## Core Workflow
@@ -280,4 +282,4 @@ The Condorcet v5 library makes heavy use of **PHP 8.4+ property hooks**. Many va
 - `$result->rankingAsArrayString`, `$result->Winner`, `$result->Loser`, `$result->isProportional`, `$result->seats`
 - `$result->stats->asArray`
 
-**Always verify method signatures against the source code** (in `vendor/julien-boudry/condorcet/src/`) when in doubt. The official docs at https://docs.condorcet.io/ may lag behind the latest API changes.
+**Always verify method signatures against the official documentation** at https://docs.condorcet.io/ or the source code (in `vendor/julien-boudry/condorcet/src/`) when in doubt.
