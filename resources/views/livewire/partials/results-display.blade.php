@@ -170,9 +170,24 @@
             @endif
         </div>
 
-        {{-- Condorcet library version (discreet, bottom-right) --}}
+        {{-- Condorcet library version + processing time (discreet, bottom-right) --}}
         <p class="text-right text-xs text-gray-400 dark:text-gray-600 mt-2">
             <a href="https://github.com/julien-boudry/Condorcet" target="_blank" rel="noopener" class="hover:text-brand transition-colors">Condorcet PHP v{{ $condorcetVersion }}</a>
+            @if(isset($computedResults['timer']))
+                @php
+                    $timerValue = $computedResults['timer'];
+                    // Display in ms for small values, seconds for larger ones
+                    if ($timerValue < 0.001) {
+                        $timerFormatted = number_format($timerValue * 1000, 3) . ' ms';
+                    } elseif ($timerValue < 1) {
+                        $timerFormatted = number_format($timerValue * 1000, 1) . ' ms';
+                    } else {
+                        $timerFormatted = number_format($timerValue, 2) . ' s';
+                    }
+                @endphp
+                <span class="mx-1">&middot;</span>
+                <span>{{ __('ui.processing_time', ['time' => $timerFormatted]) }}</span>
+            @endif
         </p>
     </div>
 @endif

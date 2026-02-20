@@ -191,5 +191,6 @@ return [
 
     'computing' => 'Computing…',
     'loading' => 'Loading election…',
+    'processing_time' => ':time',
 
 ];

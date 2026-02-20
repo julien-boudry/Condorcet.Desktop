@@ -990,6 +990,7 @@ class ElectionManager extends Component
             'sumVoteWeights' => $election->sumVoteWeights(),
             'countValidVotes' => $election->countValidVoteWithConstraints(),
             'sumValidVoteWeights' => $election->sumValidVoteWeightsWithConstraints(),
+            'timer' => $election->getGlobalTimer(),
         ];
     }
 

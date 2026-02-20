@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use CondorcetPHP\Condorcet\Condorcet;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -26,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
         // The Condorcet library performs heavy combinatorial computations
         // (especially Kemeny-Young, CPO-STV) that can exceed the default 128 MB limit.
         ini_set('memory_limit', '512M');
+
+        // Enable the Condorcet built-in timer so getGlobalTimer() returns real values
+        Condorcet::$UseTimer = true;
 
         $this->configureDefaults();
     }

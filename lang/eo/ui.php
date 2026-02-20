@@ -191,5 +191,6 @@ return [
 
     'computing' => 'Kalkulante…',
     'loading' => 'Ŝarĝante elekton…',
+    'processing_time' => ':time',
 
 ];
