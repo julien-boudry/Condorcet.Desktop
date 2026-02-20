@@ -190,5 +190,6 @@ return [
     // ──────────────────────────────────────────────
 
     'computing' => 'Calcul en cours…',
+    'loading' => 'Chargement de l\'élection…',
 
 ];

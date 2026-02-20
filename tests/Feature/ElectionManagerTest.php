@@ -292,3 +292,95 @@ it('rejects export with fewer than 2 candidates', function () {
         ->call('exportCvotes')
         ->assertHasErrors('exportOutput');
 });
+
+// ──────────────────────────────────────────────
+// updated* hooks — settings changes dispatch syncState
+// ──────────────────────────────────────────────
+
+it('dispatches state update when methods property is updated', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('methods', ['Copeland', 'Borda Count'])
+        ->assertDispatched('election-state-updated')
+        ->assertSet('methods', ['Copeland', 'Borda Count']);
+});
+
+it('dispatches state update when implicitRanking is toggled', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('implicitRanking', false)
+        ->assertDispatched('election-state-updated')
+        ->assertSet('implicitRanking', false);
+});
+
+it('dispatches state update when weightAllowed is toggled', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('weightAllowed', false)
+        ->assertDispatched('election-state-updated')
+        ->assertSet('weightAllowed', false);
+});
+
+it('dispatches state update when noTieConstraint is toggled', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('noTieConstraint', true)
+        ->assertDispatched('election-state-updated')
+        ->assertSet('noTieConstraint', true);
+});
+
+it('clamps seats to minimum 1 on update', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('seats', 0)
+        ->assertSet('seats', 1)
+        ->assertDispatched('election-state-updated');
+});
+
+it('clamps negative seats to 1', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('seats', -5)
+        ->assertSet('seats', 1);
+});
+
+// ──────────────────────────────────────────────
+// loadFromLocalStorage — full state hydration
+// ──────────────────────────────────────────────
+
+it('loads noTieConstraint from localStorage payload', function () {
+    Livewire::test(ElectionManager::class)
+        ->call('loadFromLocalStorage', [
+            'candidates' => ['A', 'B'],
+            'votes' => [],
+            'methods' => ['Schulze Winning'],
+            'seats' => 1,
+            'implicitRanking' => true,
+            'weightAllowed' => false,
+            'noTieConstraint' => true,
+        ])
+        ->assertSet('noTieConstraint', true)
+        ->assertDispatched('election-state-updated');
+});
+
+it('handles partial localStorage payload with safe defaults', function () {
+    Livewire::test(ElectionManager::class)
+        ->call('loadFromLocalStorage', [
+            'candidates' => ['X'],
+        ])
+        ->assertSet('candidates', ['X'])
+        ->assertSet('votes', [])
+        ->assertSet('methods', [])
+        ->assertSet('seats', 1)
+        ->assertSet('implicitRanking', true)
+        ->assertSet('weightAllowed', false)
+        ->assertSet('noTieConstraint', false);
+});
+
+// ──────────────────────────────────────────────
+// UI — loading and computing text
+// ──────────────────────────────────────────────
+
+it('renders the loading translation key', function () {
+    Livewire::test(ElectionManager::class)
+        ->assertSeeHtml(__('ui.loading'));
+});
+
+it('renders the computing translation key', function () {
+    Livewire::test(ElectionManager::class)
+        ->assertSeeHtml(__('ui.computing'));
+});

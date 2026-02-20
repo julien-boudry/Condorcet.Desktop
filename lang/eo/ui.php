@@ -190,5 +190,6 @@ return [
     // ──────────────────────────────────────────────
 
     'computing' => 'Kalkulante…',
+    'loading' => 'Ŝarĝante elekton…',
 
 ];

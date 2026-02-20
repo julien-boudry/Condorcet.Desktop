@@ -1,42 +1,47 @@
 {{-- Election configuration panel --}}
 {{--
     Alpine.js manages checkbox state locally for instant visual feedback.
-    A shared window-level debounce timer (window.__settingsDebounce) batches
-    changes from BOTH the config panel and the method selector into a single
-    $wire.applySettings() call.
+    $wire.$set() queues updates without sending.  A shared debounce timer
+    (window.__settingsDebounce) fires $wire.$commit() after 1 s of
+    inactivity.  If another action fires first, Livewire includes the
+    pending $set values automatically.
     wire:ignore prevents Livewire DOM morphing from conflicting with Alpine.
 --}}
 <div
     class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4"
-    x-data="{
-        implicitRanking: @js($implicitRanking),
-        weightAllowed: @js($weightAllowed),
-        noTieConstraint: @js($noTieConstraint),
-        sync() {
-            if (!window.__pendingSettings) {
-                window.__pendingSettings = {};
+    x-data="(() => {
+        let ir = @js($implicitRanking);
+        let wa = @js($weightAllowed);
+        let ntc = @js($noTieConstraint);
+        try {
+            const s = JSON.parse(localStorage.getItem('electionState'));
+            if (s) {
+                if (s.implicitRanking !== undefined) ir = s.implicitRanking;
+                if (s.weightAllowed !== undefined)   wa = s.weightAllowed;
+                if (s.noTieConstraint !== undefined) ntc = s.noTieConstraint;
             }
-            window.__pendingSettings.implicitRanking = this.implicitRanking;
-            window.__pendingSettings.weightAllowed   = this.weightAllowed;
-            window.__pendingSettings.noTieConstraint = this.noTieConstraint;
-            clearTimeout(window.__settingsDebounce);
-            window.__settingsDebounce = setTimeout(() => {
-                const s = window.__pendingSettings;
-                window.__pendingSettings = null;
-                window.__settingsDebounce = null;
-                $wire.applySettings(
-                    s.methods          ?? $wire.methods,
-                    s.implicitRanking  ?? $wire.implicitRanking,
-                    s.weightAllowed    ?? $wire.weightAllowed,
-                    s.noTieConstraint  ?? $wire.noTieConstraint
-                );
-            }, 1000);
-        }
-    }"
+        } catch {}
+        return {
+            implicitRanking: ir,
+            weightAllowed: wa,
+            noTieConstraint: ntc,
+            sync() {
+                $wire.$set('implicitRanking', this.implicitRanking, false);
+                $wire.$set('weightAllowed', this.weightAllowed, false);
+                $wire.$set('noTieConstraint', this.noTieConstraint, false);
+                clearTimeout(window.__settingsDebounce);
+                window.__settingsDebounce = setTimeout(() => {
+                    window.__settingsDebounce = null;
+                    $wire.$commit();
+                }, 1000);
+            }
+        };
+    })()"
     x-init="$wire.on('election-state-updated', ({ state }) => {
         if (!window.__settingsDebounce) {
             implicitRanking = state.implicitRanking ?? true;
             weightAllowed = state.weightAllowed ?? false;
+            noTieConstraint = state.noTieConstraint ?? false;
         }
     })"
 >

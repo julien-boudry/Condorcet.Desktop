@@ -1,41 +1,40 @@
 {{-- Voting methods selection panel --}}
 {{--
     Alpine.js manages checkbox state locally for instant visual feedback.
-    A shared window-level debounce timer (window.__settingsDebounce) batches
-    changes from BOTH the method selector and the config panel into a single
-    $wire.applySettings() call.
+    $wire.$set('methods', value, false) queues the update without sending.
+    A shared debounce timer (window.__settingsDebounce) fires $wire.$commit()
+    after 1 s of inactivity.  If another action fires first, Livewire
+    includes the pending $set values automatically.
     wire:ignore prevents Livewire DOM morphing from conflicting with Alpine.
 --}}
 <div
     class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4"
     x-data="{
-        selected: @js($methods),
+        selected: (() => {
+            try {
+                const s = JSON.parse(localStorage.getItem('electionState'));
+                if (s?.methods) return s.methods;
+            } catch {}
+            return @js($methods);
+        })(),
         toggle(alias) {
             const idx = this.selected.indexOf(alias);
             if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(alias); }
             this.scheduleSync();
         },
         scheduleSync() {
-            if (!window.__pendingSettings) {
-                window.__pendingSettings = {};
-            }
-            window.__pendingSettings.methods = [...this.selected];
+            $wire.$set('methods', [...this.selected], false);
             clearTimeout(window.__settingsDebounce);
             window.__settingsDebounce = setTimeout(() => {
-                const s = window.__pendingSettings;
-                window.__pendingSettings = null;
                 window.__settingsDebounce = null;
-                $wire.applySettings(
-                    s.methods   ?? $wire.methods,
-                    s.implicitRanking  ?? $wire.implicitRanking,
-                    s.weightAllowed    ?? $wire.weightAllowed,
-                    s.noTieConstraint  ?? $wire.noTieConstraint
-                );
+                $wire.$commit();
             }, 1000);
         }
     }"
     x-init="$wire.on('election-state-updated', ({ state }) => {
-        if (!window.__settingsDebounce) { selected = state.methods ?? []; }
+        if (!window.__settingsDebounce) {
+            selected = state.methods ?? [];
+        }
     })"
 >
     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.voting_methods') }}</h2>

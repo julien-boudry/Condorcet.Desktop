@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Hide Alpine x-cloak elements until Alpine initialises */
+[x-cloak] { display: none !important; }
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 

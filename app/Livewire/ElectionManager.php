@@ -377,17 +377,14 @@ class ElectionManager extends Component
     }
 
     /**
-     * Replace the entire selected methods list at once.
+     * Called when the methods property is set via $wire.$set().
      *
-     * Called from the Alpine.js debounced method selector so that
-     * rapid checkbox toggling produces a single server round-trip
-     * instead of one per click.
-     *
-     * @param  list<string>  $methods
+     * Ensures syncState fires so localStorage is updated even when
+     * methods arrives as a property update rather than a method call.
      */
-    public function setMethods(array $methods): void
+    public function updatedMethods(): void
     {
-        $this->methods = array_values($methods);
+        $this->methods = array_values($this->methods);
         $this->syncState();
     }
 
@@ -413,40 +410,6 @@ class ElectionManager extends Component
 
     public function updatedNoTieConstraint(): void
     {
-        $this->syncState();
-    }
-
-    /**
-     * Apply multiple configuration toggles at once.
-     *
-     * Called from the Alpine.js debounced config panel so that
-     * rapid checkbox toggling produces a single server round-trip.
-     *
-     * @param  array{implicitRanking: bool, weightAllowed: bool, noTieConstraint: bool}  $config
-     */
-    public function setConfig(bool $implicitRanking, bool $weightAllowed, bool $noTieConstraint): void
-    {
-        $this->implicitRanking = $implicitRanking;
-        $this->weightAllowed = $weightAllowed;
-        $this->noTieConstraint = $noTieConstraint;
-        $this->syncState();
-    }
-
-    /**
-     * Apply methods and configuration toggles in a single round-trip.
-     *
-     * Called from the shared Alpine.js debounce timer so that changes
-     * to both the method selector and the config panel within the
-     * debounce window are merged into one server request.
-     *
-     * @param  list<string>  $methods
-     */
-    public function applySettings(array $methods, bool $implicitRanking, bool $weightAllowed, bool $noTieConstraint): void
-    {
-        $this->methods = array_values($methods);
-        $this->implicitRanking = $implicitRanking;
-        $this->weightAllowed = $weightAllowed;
-        $this->noTieConstraint = $noTieConstraint;
         $this->syncState();
     }
 
@@ -597,6 +560,8 @@ class ElectionManager extends Component
         $this->seats = max(1, (int) ($state['seats'] ?? 1));
         $this->implicitRanking = (bool) ($state['implicitRanking'] ?? true);
         $this->weightAllowed = (bool) ($state['weightAllowed'] ?? false);
+        $this->noTieConstraint = (bool) ($state['noTieConstraint'] ?? false);
+        $this->syncState();
     }
 
     /**
@@ -650,6 +615,7 @@ class ElectionManager extends Component
             'seats' => $this->seats,
             'implicitRanking' => $this->implicitRanking,
             'weightAllowed' => $this->weightAllowed,
+            'noTieConstraint' => $this->noTieConstraint,
         ]);
     }
 

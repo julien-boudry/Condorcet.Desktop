@@ -190,5 +190,6 @@ return [
     // ──────────────────────────────────────────────
 
     'computing' => 'Computing…',
+    'loading' => 'Loading election…',
 
 ];
