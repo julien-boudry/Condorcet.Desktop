@@ -1,7 +1,7 @@
 # Condorcet PHP Library — Developer Reference
 
-Library: `julien-boudry/condorcet ^5.0`  
-Documentation: https://docs.condorcet.io/  
+Library: `julien-boudry/condorcet ^5.0`
+Documentation: https://docs.condorcet.io/
 GitHub: https://github.com/julien-boudry/Condorcet
 
 > Always use the official library documentation at https://docs.condorcet.io/ and the source code as the reference for the API. The examples below cover only the most common patterns — do not treat them as exhaustive.

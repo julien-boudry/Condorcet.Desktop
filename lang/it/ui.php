@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => 'Aggiungi almeno 2 candidati prima dell\'aggiunta in blocco.',
     'error_parse_votes_failed' => 'Errore nell\'analisi dei voti: :message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => 'Calcolo in corso…',
+
 ];

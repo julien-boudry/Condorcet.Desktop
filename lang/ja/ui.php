@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => '一括投票追加の前に少なくとも2人の候補者を追加してください。',
     'error_parse_votes_failed' => '投票の解析に失敗：:message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => '計算中…',
+
 ];

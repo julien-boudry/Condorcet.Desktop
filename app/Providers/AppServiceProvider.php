@@ -23,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // The Condorcet library performs heavy combinatorial computations
+        // (especially Kemeny-Young, CPO-STV) that can exceed the default 128 MB limit.
+        ini_set('memory_limit', '512M');
+
         $this->configureDefaults();
     }
 

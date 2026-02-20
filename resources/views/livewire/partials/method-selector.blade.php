@@ -1,8 +1,46 @@
 {{-- Voting methods selection panel --}}
-<div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
+{{--
+    Alpine.js manages checkbox state locally for instant visual feedback.
+    A shared window-level debounce timer (window.__settingsDebounce) batches
+    changes from BOTH the method selector and the config panel into a single
+    $wire.applySettings() call.
+    wire:ignore prevents Livewire DOM morphing from conflicting with Alpine.
+--}}
+<div
+    class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4"
+    x-data="{
+        selected: @js($methods),
+        toggle(alias) {
+            const idx = this.selected.indexOf(alias);
+            if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(alias); }
+            this.scheduleSync();
+        },
+        scheduleSync() {
+            if (!window.__pendingSettings) {
+                window.__pendingSettings = {};
+            }
+            window.__pendingSettings.methods = [...this.selected];
+            clearTimeout(window.__settingsDebounce);
+            window.__settingsDebounce = setTimeout(() => {
+                const s = window.__pendingSettings;
+                window.__pendingSettings = null;
+                window.__settingsDebounce = null;
+                $wire.applySettings(
+                    s.methods   ?? $wire.methods,
+                    s.implicitRanking  ?? $wire.implicitRanking,
+                    s.weightAllowed    ?? $wire.weightAllowed,
+                    s.noTieConstraint  ?? $wire.noTieConstraint
+                );
+            }, 1000);
+        }
+    }"
+    x-init="$wire.on('election-state-updated', ({ state }) => {
+        if (!window.__settingsDebounce) { selected = state.methods ?? []; }
+    })"
+>
     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.voting_methods') }}</h2>
 
-    <div class="space-y-4">
+    <div wire:ignore class="space-y-4">
         @foreach($methodGroups as $groupName => $groupMethods)
             <div>
                 <h3 class="text-sm font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-2">
@@ -13,12 +51,12 @@
                 </h3>
                 <div class="space-y-1">
                     @foreach($groupMethods as $alias => $label)
-                        <label wire:key="method-{{ $alias }}" class="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                        <label class="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                             <input
                                 type="checkbox"
                                 value="{{ $alias }}"
-                                @checked(in_array($alias, $methods))
-                                wire:click="toggleMethod('{{ $alias }}')"
+                                :checked="selected.includes('{{ $alias }}')"
+                                @click="toggle('{{ $alias }}')"
                                 class="rounded border-gray-300 dark:border-gray-600 text-brand focus:ring-brand"
                             />
                             <span class="text-sm text-gray-700 dark:text-gray-300">{{ $label }}</span>

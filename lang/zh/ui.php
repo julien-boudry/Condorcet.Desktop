@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => '批量添加投票前请至少添加2个候选人。',
     'error_parse_votes_failed' => '解析投票失败：:message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => '正在计算…',
+
 ];

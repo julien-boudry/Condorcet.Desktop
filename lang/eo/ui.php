@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => 'Aldonu almenaŭ 2 kandidatojn antaŭ amasa voĉdon-aldono.',
     'error_parse_votes_failed' => 'Malsukcesis analizi voĉdonojn: :message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => 'Kalkulante…',
+
 ];

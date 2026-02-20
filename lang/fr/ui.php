@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => 'Ajoutez au moins 2 candidats avant l\'ajout groupé de votes.',
     'error_parse_votes_failed' => 'Échec de l\'analyse des votes : :message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => 'Calcul en cours…',
+
 ];

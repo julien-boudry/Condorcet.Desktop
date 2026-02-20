@@ -185,4 +185,10 @@ return [
     'error_parse_votes_need_candidates' => 'Add at least 2 candidates before bulk-adding votes.',
     'error_parse_votes_failed' => 'Failed to parse votes: :message',
 
+    // ──────────────────────────────────────────────
+    // Loading states
+    // ──────────────────────────────────────────────
+
+    'computing' => 'Computing…',
+
 ];
