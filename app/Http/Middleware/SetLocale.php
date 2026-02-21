@@ -15,14 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SetLocale
 {
-    /** @var list<string> Supported locales */
-    private const array SUPPORTED = ['en', 'fr', 'zh', 'ja', 'eo', 'it', 'hi'];
-
     public function handle(Request $request, Closure $next): Response
     {
         $locale = $request->cookie('locale', config('app.locale'));
 
-        if (in_array($locale, self::SUPPORTED, true)) {
+        if (array_key_exists($locale, config('locales.supported', []))) {
             app()->setLocale($locale);
         }
 

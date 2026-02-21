@@ -34,15 +34,7 @@
                         class="relative"
                     >
                         @php
-                            $locales = [
-                                'en' => 'English',
-                                'fr' => 'Français',
-                                'zh' => '中文',
-                                'ja' => '日本語',
-                                'eo' => 'Esperanto',
-                                'it' => 'Italiano',
-                                'hi' => 'हिन्दी',
-                            ];
+                            $locales = config('locales.supported');
                             $currentLocale = app()->getLocale();
                         @endphp
                         <button
