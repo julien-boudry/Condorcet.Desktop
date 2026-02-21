@@ -14,6 +14,7 @@ use CondorcetPHP\Condorcet\Algo\Tools\StvQuotas;
 use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Constraints\NoTie;
 use CondorcetPHP\Condorcet\Election;
+use CondorcetPHP\Condorcet\Result;
 use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
 use CondorcetPHP\Condorcet\Vote;
 use Livewire\Attributes\Layout;
@@ -999,7 +1000,7 @@ class ElectionManager extends Component
      *
      * @return array<string, mixed>
      */
-    protected function serializeStats(\CondorcetPHP\Condorcet\Result $result): array
+    protected function serializeStats(Result $result): array
     {
         try {
             return $result->stats->asArray;
