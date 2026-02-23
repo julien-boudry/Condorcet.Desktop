@@ -14,7 +14,6 @@ return [
     // Layout (app.blade.php)
     // ──────────────────────────────────────────────
 
-    'app_name' => 'Condorcet 桌面版',
     'switch_to_light' => '切换到浅色模式',
     'switch_to_dark' => '切换到深色模式',
 

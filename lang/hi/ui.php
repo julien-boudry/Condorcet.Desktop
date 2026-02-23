@@ -14,7 +14,6 @@ return [
     // Layout (app.blade.php)
     // ──────────────────────────────────────────────
 
-    'app_name' => 'Condorcet डेस्कटॉप',
     'switch_to_light' => 'लाइट मोड में बदलें',
     'switch_to_dark' => 'डार्क मोड में बदलें',
 

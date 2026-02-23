@@ -14,7 +14,6 @@ return [
     // Layout (app.blade.php)
     // ──────────────────────────────────────────────
 
-    'app_name' => 'Condorcet Labortablo',
     'switch_to_light' => 'Ŝanĝi al hela reĝimo',
     'switch_to_dark' => 'Ŝanĝi al malhela reĝimo',
 

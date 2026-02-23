@@ -16,10 +16,16 @@ return [
     'supported' => [
         'en' => 'English',
         'fr' => 'Français',
+        'es' => 'Español',
+        'pt' => 'Português',
+        'it' => 'Italiano',
+        'pl' => 'Polski',
+        'cs' => 'Čeština',
+        'ru' => 'Русский',
+        'ar' => 'العربية',
         'zh' => '中文',
         'ja' => '日本語',
-        'eo' => 'Esperanto',
-        'it' => 'Italiano',
         'hi' => 'हिन्दी',
+        'eo' => 'Esperanto',
     ],
 ];

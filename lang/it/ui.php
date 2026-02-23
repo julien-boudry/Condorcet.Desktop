@@ -14,7 +14,6 @@ return [
     // Layout (app.blade.php)
     // ──────────────────────────────────────────────
 
-    'app_name' => 'Condorcet Desktop',
     'switch_to_light' => 'Passa alla modalità chiara',
     'switch_to_dark' => 'Passa alla modalità scura',
 

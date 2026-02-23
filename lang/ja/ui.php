@@ -14,7 +14,6 @@ return [
     // Layout (app.blade.php)
     // ──────────────────────────────────────────────
 
-    'app_name' => 'Condorcet デスクトップ',
     'switch_to_light' => 'ライトモードに切替',
     'switch_to_dark' => 'ダークモードに切替',
 
