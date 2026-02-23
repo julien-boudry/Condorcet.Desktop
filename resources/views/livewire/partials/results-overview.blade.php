@@ -36,7 +36,12 @@
                     @endphp
                     <tr class="even:bg-gray-50 dark:even:bg-gray-800/50 {{ $isDisagreeing ? 'bg-amber-50 dark:bg-amber-900/10' : '' }}">
                         <td class="px-4 py-3 font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">
-                            {{ $method }}
+                            {{-- Method name is a button that switches to the individual method detail tab --}}
+                            <button
+                                type="button"
+                                @click="activeTab = '{{ md5($method) }}'"
+                                class="cursor-pointer text-left"
+                            >{{ $method }}</button>
                             @if($result['isProportional'] ?? false)
                                 <span class="text-xs text-brand ml-1" title="{{ ($result['isProportional'] ?? false) ? __('ui.group_proportional') : '' }} ({{ __('ui.n_seats', ['count' => $result['seats'] ?? 0]) }})">
                                     ● {{ __('ui.n_seats', ['count' => $result['seats'] ?? 0]) }}
