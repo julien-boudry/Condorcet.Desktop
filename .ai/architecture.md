@@ -114,7 +114,7 @@ There are no controllers. The component uses the `#[Layout('components.layouts.a
 ### File Structure
 
 ```
-app/Http/Middleware/SetLocale.php          — Reads locale cookie, sets app locale
+app/Http/Middleware/SetLocale.php          — Resolves locale from cookie, Accept-Language header, or config default
 app/Livewire/ElectionManager.php          — All server-side logic (765 lines)
 lang/en/ui.php                            — English UI translations (canonical)
 lang/fr/ui.php                            — French UI translations
@@ -241,15 +241,16 @@ lang/
 ```
 
 **Locale detection:**
-- A lightweight middleware (`App\Http\Middleware\SetLocale`) reads the `locale` cookie on every request and calls `app()->setLocale()`.
+- A lightweight middleware (`App\Http\Middleware\SetLocale`) resolves the locale on every request using this priority:
+  1. **`locale` cookie** — explicit user choice via the language selector.
+  2. **`Accept-Language` header** — browser/OS preference, matched against supported locales via Symfony's `getPreferredLanguage()`.
+  3. **`config('app.locale')`** — application default (`en`).
 - The `locale` cookie is excluded from Laravel's cookie encryption so that client-side JavaScript can read/write it.
 - The language selector in the nav bar is a dropdown menu (Alpine.js) that sets the cookie and reloads the page — no Livewire round-trip needed for locale changes.
-- English is always the default. Browser language is never auto-detected.
 
 **Adding a new language:**
 1. Copy `lang/en/ui.php` to `lang/{locale}/ui.php` and translate all values.
-2. Add the locale to the `SUPPORTED` array in `SetLocale` middleware.
-3. Add the locale and its native label to the `$locales` map in the dropdown in `app.blade.php`.
+2. Add the locale code and its native label to the `supported` array in `config/locales.php` (keep alphabetical order by code).
 
 **Key conventions:**
 - All translation keys live in the `ui` namespace (single file per locale).

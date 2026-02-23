@@ -145,12 +145,14 @@ Expose relevant method options via the UI:
 ## 6. Internationalisation (i18n)
 
 - All user-facing strings are translated via Laravel's `__()` / `trans_choice()` helpers
-- **Supported languages:** English (default), French, Chinese, Japanese, Esperanto, Italian, Hindi
+- **Supported languages:** English (default), French, Spanish, Portuguese, Italian, Polish, Czech, Russian, Arabic, Chinese, Hindi, Japanese, Esperanto, Bassa, Douala, Ghomálá'
 - Language selector dropdown in the nav bar — pure Alpine.js, sets a `locale` cookie and reloads
-- English is always the default; browser language is never auto-detected
+- Locale detection priority: cookie (explicit user choice) → `Accept-Language` header (browser preference) → config default (`en`)
 - Translation files live under `lang/{locale}/ui.php` — one file per locale, all keys in the `ui` namespace
 
-> **Implemented in:** `App\Http\Middleware\SetLocale` (reads `locale` cookie), `bootstrap/app.php` (registers middleware, excludes cookie from encryption)
-> **Translation files:** `lang/en/ui.php` (canonical), `lang/fr/ui.php`, `lang/zh/ui.php`, `lang/ja/ui.php`, `lang/eo/ui.php`, `lang/it/ui.php`, `lang/hi/ui.php`
+> **Implemented in:** `App\Http\Middleware\SetLocale` (resolves locale from cookie, Accept-Language, or config default), `bootstrap/app.php` (registers middleware, excludes cookie from encryption)
+> **Translation files:** `lang/en/ui.php` (canonical), plus 15 other locales in `lang/*/ui.php`
+> **Config:** `config/locales.php` (single source of truth for supported locales)
 > **View:** Language selector in `components/layouts/app.blade.php`
-> **Implementation choice:** The `locale` cookie is set client-side and excluded from Laravel cookie encryption. A middleware reads it on every request and sets `app()->setLocale()`. All Blade views use `__('ui.key')` and `trans_choice()`. Error messages in `ElectionManager.php` also use `__()` with `:message` placeholders. See [architecture.md](architecture.md#internationalisation-i18n) for details on adding new languages.
+> **Tests:** `tests/Feature/SetLocaleTest.php` (cookie, Accept-Language, fallback, priority)
+> **Implementation choice:** The `locale` cookie is set client-side and excluded from Laravel cookie encryption. The middleware resolves the locale using cookie → Accept-Language → config default. All Blade views use `__('ui.key')` and `trans_choice()`. Error messages in `ElectionManager.php` also use `__()` with `:message` placeholders. See [architecture.md](architecture.md#internationalisation-i18n) for details on adding new languages.
