@@ -31,6 +31,7 @@ Read these files before doing any work on this project:
 - No magic, no hidden logic. Every behavior should be obvious from reading the code.
 - **Document code abundantly.** Every class, method, and non-trivial block of code must have a PHPDoc block or inline comment explaining its purpose. Over-documentation is preferable to under-documentation.
 - **Always write in English.** All code, comments, PHPDoc blocks, variable names, commit messages, and file contents must be in English — regardless of the language used in the prompt.
+- **Never use callable strings outside of Laravel conventions.** Do not pass function names as strings to `array_map`, `usort`, `array_filter`, etc. (e.g. `array_map('strval', $arr)`). Always use an explicit typed closure instead: `array_map(static fn (Candidate $c): string => (string) $c, $arr)`. Exception: callable strings that are a strong Laravel convention (e.g. `'required'` validation rules, `'App\Models\User'` morph maps) are acceptable.
 
 ---
 

@@ -33,6 +33,7 @@ use Livewire\WithFileUploads;
 class ElectionManager extends Component
 {
     use WithFileUploads;
+
     // ──────────────────────────────────────────────
     // Election state — synced with localStorage
     // ──────────────────────────────────────────────
@@ -191,7 +192,7 @@ class ElectionManager extends Component
      */
     public function addCandidate(): void
     {
-        $input = trim($this->newCandidate);
+        $input = mb_trim($this->newCandidate);
 
         if ($input === '') {
             $this->addError('newCandidate', __('ui.error_candidate_empty'));
@@ -199,7 +200,7 @@ class ElectionManager extends Component
             return;
         }
 
-        $names = array_map('trim', explode(';', $input));
+        $names = array_map(static fn ($name) => mb_trim($name), explode(';', $input));
         $added = 0;
 
         foreach ($names as $name) {
@@ -242,7 +243,7 @@ class ElectionManager extends Component
      */
     public function addVote(): void
     {
-        $ranking = trim($this->newVoteRanking);
+        $ranking = mb_trim($this->newVoteRanking);
 
         if ($ranking === '') {
             $this->addError('newVoteRanking', __('ui.error_vote_empty'));
@@ -299,7 +300,7 @@ class ElectionManager extends Component
      */
     public function bulkAddVotes(): void
     {
-        $text = trim($this->parseVotesText);
+        $text = mb_trim($this->parseVotesText);
 
         if ($text === '') {
             $this->addError('parseVotesText', __('ui.error_parse_votes_empty'));
@@ -319,7 +320,7 @@ class ElectionManager extends Component
             $lines = preg_split('/\r?\n/', $text);
 
             foreach ($lines as $line) {
-                $line = trim($line);
+                $line = mb_trim($line);
 
                 // Skip blank lines and comment lines
                 if ($line === '' || str_starts_with($line, '#')) {
@@ -330,7 +331,7 @@ class ElectionManager extends Component
                 $quantity = 1;
                 if (preg_match('/\*\s*(\d+)\s*$/', $line, $matches)) {
                     $quantity = max(1, (int) $matches[1]);
-                    $line = trim(preg_replace('/\*\s*\d+\s*$/', '', $line));
+                    $line = mb_trim(preg_replace('/\*\s*\d+\s*$/', '', $line));
                 }
 
                 // Let the Vote class parse ranking + optional ^weight
@@ -459,7 +460,7 @@ class ElectionManager extends Component
      */
     public function importCvotes(): void
     {
-        $text = trim($this->importText);
+        $text = mb_trim($this->importText);
 
         if ($text === '') {
             $this->addError('importText', __('ui.error_import_empty'));
@@ -963,10 +964,23 @@ class ElectionManager extends Component
                 $methodClass = Condorcet::getMethodClass($method);
                 $isInformational = in_array($methodClass, self::INFORMATIONAL_METHOD_CLASSES, true);
 
+                /**
+                 * Format a method winner/loser value as a string.
+                 *
+                 * The Condorcet library returns either a single Candidate object
+                 * (clear winner/loser) or an array of Candidates (tie), or null.
+                 * This closure normalises all three cases into a display string.
+                 */
+                $formatCandidate = static fn (\CondorcetPHP\Condorcet\Candidate|array|null $value): ?string => match (true) {
+                    $value instanceof \CondorcetPHP\Condorcet\Candidate => (string) $value,
+                    is_array($value) => implode(' = ', array_map(static fn (\CondorcetPHP\Condorcet\Candidate $c): string => (string) $c, $value)),
+                    default => null,
+                };
+
                 $results[$method] = [
                     'ranking' => $ranking,
-                    'winner' => $winner instanceof \CondorcetPHP\Condorcet\Candidate ? (string) $winner : (is_array($winner) ? implode(' = ', array_map('strval', $winner)) : null),
-                    'loser' => $loser instanceof \CondorcetPHP\Condorcet\Candidate ? (string) $loser : (is_array($loser) ? implode(' = ', array_map('strval', $loser)) : null),
+                    'winner' => $formatCandidate($winner),
+                    'loser' => $formatCandidate($loser),
                     'stats' => $this->serializeStats($result),
                     'isProportional' => $result->isProportional,
                     'isInformational' => $isInformational,
