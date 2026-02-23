@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Matriz de comparación por pares',
-    'pairwise_desc' => 'Cada celda muestra las <span class="font-semibold text-green-600 dark:text-green-400">victorias</span> / <span class="font-semibold text-red-600 dark:text-red-400">derrotas</span> del candidato en fila contra el candidato en columna.',
+    'pairwise_desc' => 'Cada celda muestra las :wins / :losses del candidato en fila contra el candidato en columna.',
+    'pairwise_wins' => 'victorias',
+    'pairwise_losses' => 'derrotas',
     'vs' => 'vs.',
 
     // ──────────────────────────────────────────────

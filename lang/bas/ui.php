@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Tablo i kayéhna i bibaa',
-    'pairwise_desc' => 'Hikii selil i lés <span class="font-semibold text-green-600 dark:text-green-400">binyéñ</span> / <span class="font-semibold text-red-600 dark:text-red-400">bikwo</span> bi mut i lign yés mut i kolôn.',
+    'pairwise_desc' => 'Hikii selil i lés :wins / :losses bi mut i lign yés mut i kolôn.',
+    'pairwise_wins' => 'binyéñ',
+    'pairwise_losses' => 'bikwo',
     'vs' => 'ni',
 
     // ──────────────────────────────────────────────

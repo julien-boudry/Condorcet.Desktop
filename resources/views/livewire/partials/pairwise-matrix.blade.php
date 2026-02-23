@@ -6,7 +6,10 @@
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4">
     <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ __('ui.pairwise_heading') }}</h3>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-        {!! __('ui.pairwise_desc') !!}
+        {!! __('ui.pairwise_desc', [
+            'wins' => '<span class="font-semibold text-green-600 dark:text-green-400">' . e(__('ui.pairwise_wins')) . '</span>',
+            'losses' => '<span class="font-semibold text-red-600 dark:text-red-400">' . e(__('ui.pairwise_losses')) . '</span>',
+        ]) !!}
     </p>
 
     <div class="overflow-x-auto">

@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => '两两比较矩阵',
-    'pairwise_desc' => '每个单元格显示行候选人对列候选人的 <span class="font-semibold text-green-600 dark:text-green-400">胜</span> / <span class="font-semibold text-red-600 dark:text-red-400">负</span>。',
+    'pairwise_desc' => '每个单元格显示行候选人对列候选人的 :wins / :losses。',
+    'pairwise_wins' => '胜',
+    'pairwise_losses' => '负',
     'vs' => '对',
 
     // ──────────────────────────────────────────────

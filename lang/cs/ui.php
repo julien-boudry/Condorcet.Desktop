@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Matice párového srovnání',
-    'pairwise_desc' => 'Každá buňka ukazuje <span class="font-semibold text-green-600 dark:text-green-400">výhry</span> / <span class="font-semibold text-red-600 dark:text-red-400">prohry</span> kandidáta v řádku proti kandidátovi ve sloupci.',
+    'pairwise_desc' => 'Každá buňka ukazuje :wins / :losses kandidáta v řádku proti kandidátovi ve sloupci.',
+    'pairwise_wins' => 'výhry',
+    'pairwise_losses' => 'prohry',
     'vs' => 'vs.',
 
     // ──────────────────────────────────────────────

@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'जोड़ीवार तुलना मैट्रिक्स',
-    'pairwise_desc' => 'प्रत्येक सेल पंक्ति उम्मीदवार की स्तंभ उम्मीदवार के विरुद्ध <span class="font-semibold text-green-600 dark:text-green-400">जीत</span> / <span class="font-semibold text-red-600 dark:text-red-400">हार</span> दिखाता है।',
+    'pairwise_desc' => 'प्रत्येक सेल पंक्ति उम्मीदवार की स्तंभ उम्मीदवार के विरुद्ध :wins / :losses दिखाता है।',
+    'pairwise_wins' => 'जीत',
+    'pairwise_losses' => 'हार',
     'vs' => 'बनाम',
 
     // ──────────────────────────────────────────────

@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Táblo a esálɛ na bibáa',
-    'pairwise_desc' => 'Ɛsɛ́ɛ́ selil ɛ tándɔ <span class="font-semibold text-green-600 dark:text-green-400">binyéni</span> / <span class="font-semibold text-red-600 dark:text-red-400">bidibɛ</span> bi muto na lɛ́n yɛsu muto na kolón.',
+    'pairwise_desc' => 'Ɛsɛ́ɛ́ selil ɛ tándɔ :wins / :losses bi muto na lɛ́n yɛsu muto na kolón.',
+    'pairwise_wins' => 'binyéni',
+    'pairwise_losses' => 'bidibɛ',
     'vs' => 'na',
 
     // ──────────────────────────────────────────────

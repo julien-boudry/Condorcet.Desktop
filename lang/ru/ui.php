@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Матрица попарных сравнений',
-    'pairwise_desc' => 'Каждая ячейка показывает <span class="font-semibold text-green-600 dark:text-green-400">победы</span> / <span class="font-semibold text-red-600 dark:text-red-400">поражения</span> кандидата в строке против кандидата в столбце.',
+    'pairwise_desc' => 'Каждая ячейка показывает :wins / :losses кандидата в строке против кандидата в столбце.',
+    'pairwise_wins' => 'победы',
+    'pairwise_losses' => 'поражения',
     'vs' => 'vs.',
 
     // ──────────────────────────────────────────────

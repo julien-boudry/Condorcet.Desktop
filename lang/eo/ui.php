@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Duopa kompara matrico',
-    'pairwise_desc' => 'Ĉiu ĉelo montras <span class="font-semibold text-green-600 dark:text-green-400">venkojn</span> / <span class="font-semibold text-red-600 dark:text-red-400">perdojn</span> por la vica kandidato kontraŭ la kolumna kandidato.',
+    'pairwise_desc' => 'Ĉiu ĉelo montras :wins / :losses por la vica kandidato kontraŭ la kolumna kandidato.',
+    'pairwise_wins' => 'venkojn',
+    'pairwise_losses' => 'perdojn',
     'vs' => 'kontraŭ',
 
     // ──────────────────────────────────────────────

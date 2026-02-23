@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Pairwise Comparison Matrix',
-    'pairwise_desc' => 'Each cell shows <span class="font-semibold text-green-600 dark:text-green-400">wins</span> / <span class="font-semibold text-red-600 dark:text-red-400">losses</span> for the row candidate against the column candidate.',
+    'pairwise_desc' => 'Each cell shows :wins / :losses for the row candidate against the column candidate.',
+    'pairwise_wins' => 'wins',
+    'pairwise_losses' => 'losses',
     'vs' => 'vs.',
 
     // ──────────────────────────────────────────────

@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'Macierz porównań parami',
-    'pairwise_desc' => 'Każda komórka pokazuje <span class="font-semibold text-green-600 dark:text-green-400">zwycięstwa</span> / <span class="font-semibold text-red-600 dark:text-red-400">porażki</span> kandydata w wierszu wobec kandydata w kolumnie.',
+    'pairwise_desc' => 'Każda komórka pokazuje :wins / :losses kandydata w wierszu wobec kandydata w kolumnie.',
+    'pairwise_wins' => 'zwycięstwa',
+    'pairwise_losses' => 'porażki',
     'vs' => 'vs.',
 
     // ──────────────────────────────────────────────

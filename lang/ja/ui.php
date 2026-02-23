@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => '一対比較行列',
-    'pairwise_desc' => '各セルは行候補者の列候補者に対する <span class="font-semibold text-green-600 dark:text-green-400">勝ち</span> / <span class="font-semibold text-red-600 dark:text-red-400">負け</span> を示します。',
+    'pairwise_desc' => '各セルは行候補者の列候補者に対する :wins / :losses を示します。',
+    'pairwise_wins' => '勝ち',
+    'pairwise_losses' => '負け',
     'vs' => '対',
 
     // ──────────────────────────────────────────────

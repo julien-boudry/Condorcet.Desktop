@@ -162,7 +162,9 @@ return [
     // ──────────────────────────────────────────────
 
     'pairwise_heading' => 'مصفوفة المقارنة الثنائية',
-    'pairwise_desc' => 'كل خلية تعرض <span class="font-semibold text-green-600 dark:text-green-400">الانتصارات</span> / <span class="font-semibold text-red-600 dark:text-red-400">الهزائم</span> للمرشح في الصف مقابل المرشح في العمود.',
+    'pairwise_desc' => 'كل خلية تعرض :wins / :losses للمرشح في الصف مقابل المرشح في العمود.',
+    'pairwise_wins' => 'الانتصارات',
+    'pairwise_losses' => 'الهزائم',
     'vs' => 'ضد',
 
     // ──────────────────────────────────────────────
