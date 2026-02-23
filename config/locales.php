@@ -16,6 +16,7 @@ return [
     'supported' => [
         'ar' => 'العربية',
         'bas' => 'Ɓasaá',
+        'bbj' => 'Ghomálá\'',
         'cs' => 'Čeština',
         'dua' => 'Duálá',
         'en' => 'English',
