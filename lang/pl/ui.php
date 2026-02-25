@@ -24,6 +24,7 @@ return [
     'about' => 'O aplikacji',
     'view_on_github' => 'Zobacz na GitHubie',
     'donate' => 'Wesprzyj',
+    'condorcet_wikipedia' => 'Metoda Condorceta (Wikipedia)',
     'created_by' => 'Stworzone przez',
 
     // ──────────────────────────────────────────────

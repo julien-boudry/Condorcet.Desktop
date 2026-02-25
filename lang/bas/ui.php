@@ -24,6 +24,7 @@ return [
     'about' => 'Inyu',
     'view_on_github' => 'Béñge i GitHub',
     'donate' => 'Ti likéblé',
+    'condorcet_wikipedia' => 'Condorcet method (Wikipedia)',
     'created_by' => 'Héñha ni',
 
     // ──────────────────────────────────────────────

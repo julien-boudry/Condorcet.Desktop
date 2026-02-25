@@ -24,6 +24,7 @@ return [
     'about' => '关于',
     'view_on_github' => '在 GitHub 上查看',
     'donate' => '捐赠',
+    'condorcet_wikipedia' => '孔多塞投票法 (维基百科)',
     'created_by' => '作者',
 
     // ──────────────────────────────────────────────

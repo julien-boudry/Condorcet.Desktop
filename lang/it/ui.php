@@ -24,6 +24,7 @@ return [
     'about' => 'Informazioni',
     'view_on_github' => 'Vedi su GitHub',
     'donate' => 'Dona',
+    'condorcet_wikipedia' => 'Metodo di Condorcet (Wikipedia)',
     'created_by' => 'Creato da',
 
     // ──────────────────────────────────────────────
