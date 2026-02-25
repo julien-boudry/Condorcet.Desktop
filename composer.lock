@@ -1054,20 +1054,20 @@
         },
         {
             "name": "julien-boudry/condorcet",
-            "version": "v5.0.4",
+            "version": "v5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/julien-boudry/Condorcet.git",
-                "reference": "cc0b92c6448a5943ab96f8b0da51ea2ec4774590"
+                "reference": "684713402e7e37c50bc3dfb5d504a4c2eb0201ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/cc0b92c6448a5943ab96f8b0da51ea2ec4774590",
-                "reference": "cc0b92c6448a5943ab96f8b0da51ea2ec4774590",
+                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/684713402e7e37c50bc3dfb5d504a4c2eb0201ae",
+                "reference": "684713402e7e37c50bc3dfb5d504a4c2eb0201ae",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.14.1",
+                "brick/math": "^0.14|^0.15",
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "php": "^8.4",
@@ -1077,10 +1077,10 @@
             "require-dev": {
                 "ext-pdo": "*",
                 "ext-pdo_sqlite": "*",
-                "friendsofphp/php-cs-fixer": "^3.91",
+                "friendsofphp/php-cs-fixer": "^3.94",
                 "haydenpierce/class-finder": ">= 0.5.3",
                 "laravel/prompts": "^0.3",
-                "pestphp/pest": "^4.1, >=4.1.4",
+                "pestphp/pest": "^4.4",
                 "phpbench/phpbench": "^1.4",
                 "phpstan/phpdoc-parser": "^2.3",
                 "phpstan/phpstan": "^2.1",
@@ -1128,7 +1128,7 @@
             ],
             "support": {
                 "issues": "https://github.com/julien-boudry/Condorcet/issues",
-                "source": "https://github.com/julien-boudry/Condorcet/tree/v5.0.4"
+                "source": "https://github.com/julien-boudry/Condorcet/tree/v5.0.7"
             },
             "funding": [
                 {
@@ -1140,7 +1140,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-20T15:05:09+00:00"
+            "time": "2026-02-25T21:09:23+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -1919,16 +1919,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "3.31.0",
+            "version": "3.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "1717e0b3642b0df65ecb0cc89cdd99fa840672ff"
+                "reference": "254b1595b16b22dbddaaef9ed6ca9fdac4956725"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1717e0b3642b0df65ecb0cc89cdd99fa840672ff",
-                "reference": "1717e0b3642b0df65ecb0cc89cdd99fa840672ff",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/254b1595b16b22dbddaaef9ed6ca9fdac4956725",
+                "reference": "254b1595b16b22dbddaaef9ed6ca9fdac4956725",
                 "shasum": ""
             },
             "require": {
@@ -1996,9 +1996,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/3.31.0"
+                "source": "https://github.com/thephpleague/flysystem/tree/3.32.0"
             },
-            "time": "2026-01-23T15:38:47+00:00"
+            "time": "2026-02-25T17:01:41+00:00"
         },
         {
             "name": "league/flysystem-local",
@@ -7195,16 +7195,16 @@
         },
         {
             "name": "laravel/boost",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/boost.git",
-                "reference": "b4c5bed7b45e9cd9f705ef3ab1157d437376323c"
+                "reference": "e27f1616177377fef95296620530c44a7dda4df9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/boost/zipball/b4c5bed7b45e9cd9f705ef3ab1157d437376323c",
-                "reference": "b4c5bed7b45e9cd9f705ef3ab1157d437376323c",
+                "url": "https://api.github.com/repos/laravel/boost/zipball/e27f1616177377fef95296620530c44a7dda4df9",
+                "reference": "e27f1616177377fef95296620530c44a7dda4df9",
                 "shasum": ""
             },
             "require": {
@@ -7257,7 +7257,7 @@
                 "issues": "https://github.com/laravel/boost/issues",
                 "source": "https://github.com/laravel/boost"
             },
-            "time": "2026-02-20T14:45:22+00:00"
+            "time": "2026-02-25T16:07:36+00:00"
         },
         {
             "name": "laravel/mcp",
