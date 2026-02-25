@@ -73,13 +73,6 @@ QUEUE_CONNECTION=sync
 DB_CONNECTION=sqlite
 ```
 
-### Variables You Can Remove
-
-Since this app uses no authentication, no mail, no AWS, no Redis (unless
-chosen), the following `.env` sections are unused and can be omitted:
-
-- `MAIL_*`, `AWS_*`, `REDIS_*`, `BROADCAST_CONNECTION`
-
 ---
 
 ## Build Frontend Assets
@@ -255,16 +248,13 @@ composer install --no-dev --optimize-autoloader --no-interaction
 bun install
 bun run build
 
-# 4. Run migrations (if using a database)
-php artisan migrate --force
-
-# 5. Cache everything
+# 4. Cache everything
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 php artisan event:cache
 
-# 6. Restart Octane workers (graceful reload)
+# 5. Restart Octane workers (graceful reload)
 php artisan octane:reload
 ```
 
@@ -287,46 +277,6 @@ This project is **fully Octane-compatible**. Key architectural properties:
 ---
 
 ## Optional Enhancements
-
-### Reverse Proxy (nginx / Caddy)
-
-For TLS termination, HTTP/2, and static file serving, place a reverse proxy in
-front of FrankenPHP:
-
-```nginx
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com;
-
-    ssl_certificate     /etc/ssl/certs/your-cert.pem;
-    ssl_certificate_key /etc/ssl/private/your-key.pem;
-
-    # Serve static assets directly
-    location /build/ {
-        alias /var/www/condorcet/public/build/;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    location /images/ {
-        alias /var/www/condorcet/public/images/;
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-
-    # Proxy everything else to Octane
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-> Note: FrankenPHP can also handle TLS natively via its built-in Caddy server,
-> making a separate reverse proxy optional.
 
 ### Response Caching
 
