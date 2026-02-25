@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Condorcet Desktop</title>
-        <link rel="icon" href="/images/condorcet-logo.avif" type="image/avif" />
+        <link rel="icon" href="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" type="image/avif" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -22,7 +22,7 @@
             <div class="mx-auto max-w-screen-2xl flex items-center justify-between px-4 py-3">
                 {{-- Logo & app name --}}
                 <div class="flex items-center gap-3">
-                    <img src="/images/condorcet-logo.avif" alt="Condorcet" class="h-8 w-8" />
+                    <img src="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" alt="Condorcet Logo" class="h-8 w-8" />
                     <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ config('app.name') }}</span>
                 </div>
 
