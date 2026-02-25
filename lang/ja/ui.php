@@ -24,7 +24,7 @@ return [
     'about' => 'このアプリについて',
     'view_on_github' => 'GitHubで見る',
     'donate' => '寄付',
-    'condorcet_wikipedia' => 'コンドルセ方式 (Wikipedia)',
+    'condorcet_wikipedia' => 'コンドルセ方式',
     'created_by' => '作者',
 
     // ──────────────────────────────────────────────

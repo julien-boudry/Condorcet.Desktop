@@ -24,7 +24,7 @@ return [
     'about' => 'Ońola',
     'view_on_github' => 'Jɛnɛ o GitHub',
     'donate' => 'Bóla mabea',
-    'condorcet_wikipedia' => 'Condorcet method (Wikipedia)',
+    'condorcet_wikipedia' => 'Condorcet method',
     'created_by' => 'E wekabe̱ na',
 
     // ──────────────────────────────────────────────

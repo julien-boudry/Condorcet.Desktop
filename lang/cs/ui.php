@@ -24,7 +24,7 @@ return [
     'about' => 'O aplikaci',
     'view_on_github' => 'Zobrazit na GitHubu',
     'donate' => 'Přispět',
-    'condorcet_wikipedia' => 'Condorcetova metoda (Wikipedie)',
+    'condorcet_wikipedia' => 'Condorcetova metoda',
     'created_by' => 'Vytvořil',
 
     // ──────────────────────────────────────────────

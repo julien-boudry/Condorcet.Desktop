@@ -24,7 +24,7 @@ return [
     'about' => 'के बारे में',
     'view_on_github' => 'GitHub पर देखें',
     'donate' => 'दान करें',
-    'condorcet_wikipedia' => 'कोंडोरसेट विधि (विकिपीडिया)',
+    'condorcet_wikipedia' => 'कोंडोरसेट विधि',
     'created_by' => 'निर्माता',
 
     // ──────────────────────────────────────────────

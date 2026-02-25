@@ -24,7 +24,7 @@ return [
     'about' => 'Pri',
     'view_on_github' => 'Vidi en GitHub',
     'donate' => 'Donaci',
-    'condorcet_wikipedia' => 'Kondorceta metodo (Vikipedio)',
+    'condorcet_wikipedia' => 'Kondorceta metodo',
     'created_by' => 'Kreita de',
 
     // ──────────────────────────────────────────────
