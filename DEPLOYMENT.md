@@ -287,6 +287,12 @@ warrants it.
 
 ### Rate Limiting
 
-For a public-facing deployment, consider adding rate limiting in
-`bootstrap/app.php` to protect against abuse of the computation-heavy election
-methods (Kemeny-Young, CPO-STV).
+Rate limiting is already active. The `web` rate limiter is registered in
+`AppServiceProvider::configureRateLimiting()` and applied via
+`ThrottleRequests::class.':web'` in `bootstrap/app.php`:
+
+- **60 requests per minute per IP** on all web routes.
+- Protects against abuse of computation-heavy election methods (Kemeny-Young,
+  CPO-STV) which are CPU and memory intensive.
+
+Adjust the limit in `app/Providers/AppServiceProvider.php` if needed.
