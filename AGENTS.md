@@ -23,6 +23,7 @@ Read these files before doing any work on this project:
 - **[Feature Specifications](.ai/features.md)** — all features with **implementation status** and file locations
 - **[Condorcet Library Reference](.ai/condorcet-library.md)** — **corrected** API usage for v5.x (property hooks, naming pitfalls), all supported methods, import/export
 - **[Design Guidelines](.ai/design.md)** — brand color, logo, dark mode, layout, component conventions, **reuse patterns**
+- **[Deployment Guide](DEPLOYMENT.md)** — FrankenPHP + Octane production deployment, caches, sessions, Docker. **Keep this file up to date** when deployment-related changes are made.
 
 ## Code Quality
 
