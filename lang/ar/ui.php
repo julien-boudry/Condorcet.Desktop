@@ -24,7 +24,7 @@ return [
     'about' => 'حول',
     'view_on_github' => 'عرض على GitHub',
     'donate' => 'تبرع',
-    'condorcet_wikipedia' => 'طريقة كوندورسيه
+    'condorcet_wikipedia' => 'طريقة كوندورسيه',
 
     // ──────────────────────────────────────────────
     // Election manager (election-manager.blade.php)
