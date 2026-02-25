@@ -1,0 +1,46 @@
+# =============================================================================
+# Condorcet Desktop — Docker Compose (production)
+# =============================================================================
+#
+# Prerequisites:
+#   1. Fill in the production values in the .env file at the project root
+#      (see DEPLOYMENT.md — "Environment Configuration").
+#   2. Ensure ports 80 and 443 are open on the host firewall.
+#
+# Usage (production — ports 80/443):
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   docker compose logs -f
+#   docker compose down
+#
+# Usage (local test — ports 8000/8443):
+#   docker compose -f docker-compose.yml -f docker-compose.test.yml up --build
+# =============================================================================
+
+services:
+  app:
+    build: .
+    # Inject environment variables from the project .env file as process env
+    # vars. Laravel reads them via getenv() — no .env file inside the container
+    # is needed or used.
+    env_file: .env
+    # Ports are defined in overlay files, not here, to prevent Docker Compose
+    # from merging (appending) them when an overlay is used:
+    #   - docker-compose.prod.yml  → 80:80, 443:443 (production)
+    #   - docker-compose.test.yml  → 8000:80, 8443:443 (local test)
+    volumes:
+      # Persist Caddy's TLS certificates across container restarts.
+      # Without this, FrankenPHP re-requests certificates from Let's Encrypt
+      # on every restart and you will quickly hit their rate limits
+      # (5 certificates per registered domain per week).
+      - caddy_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  # Named volume for Caddy TLS certificate storage.
+  caddy_data:

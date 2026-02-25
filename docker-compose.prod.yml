@@ -1,0 +1,18 @@
+# =============================================================================
+# Condorcet Desktop — Docker Compose overlay for production
+# =============================================================================
+#
+# Binds the standard HTTP/HTTPS ports on the host.
+# FrankenPHP (Caddy) will automatically provision TLS certificates when
+# APP_URL points to a public domain.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# =============================================================================
+
+services:
+  app:
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3 (QUIC) — supported natively by FrankenPHP

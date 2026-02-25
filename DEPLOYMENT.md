@@ -46,7 +46,8 @@ cp .env.example .env
 php artisan key:generate --force
 ```
 
-**Required production values:**
+**Required production values** — set these in the `.env` file at the project
+root (all deployments, including Docker Compose):
 
 ```dotenv
 APP_ENV=production
@@ -55,6 +56,10 @@ APP_URL=https://your-domain.com
 
 LOG_CHANNEL=stack
 LOG_LEVEL=error
+# Container / cloud deployment (logs collected by the runtime):
+LOG_STACK=stderr
+# Bare-metal single server (writes to storage/logs/laravel.log, 14-day rotation):
+# LOG_STACK=daily
 
 # Stateless session — CSRF token lives in an encrypted cookie,
 # no server-side session storage needed.
@@ -160,7 +165,7 @@ SESSION_DRIVER=cookie
 ### Direct (binary)
 
 ```bash
-php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --workers=auto
+php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --workers=auto
 ```
 
 - `--workers=auto` lets Octane auto-detect the optimal worker count based on
@@ -178,7 +183,7 @@ After=network.target
 [Service]
 User=www-data
 WorkingDirectory=/var/www/condorcet
-ExecStart=/usr/bin/php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=8000 --workers=auto --max-requests=1000
+ExecStart=/usr/bin/php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --workers=auto --max-requests=1000
 Restart=always
 RestartSec=5
 
@@ -188,37 +193,53 @@ WantedBy=multi-user.target
 
 ### Docker (FrankenPHP official image)
 
-Use the official `dunglas/frankenphp` image. A minimal Dockerfile:
+The [`Dockerfile`](Dockerfile) and [`docker-compose.yml`](docker-compose.yml)
+are committed at the root of the repository. Both files are fully commented —
+refer to them directly for the complete configuration.
 
-```dockerfile
-FROM dunglas/frankenphp:latest
+Key design decisions, documented in the files themselves:
 
-# Install PHP extensions required by Laravel
-RUN install-php-extensions \
-    pcntl \
-    mbstring \
-    openssl \
-    tokenizer \
-    xml \
-    ctype \
-    fileinfo \
-    pdo_sqlite
+- **Multi-stage build** — Bun compiles assets in an isolated stage; no
+  Node/Bun runtime ends up in the production image.
+- **`.dockerignore`** — keeps the image lean and prevents local `.env` files,
+  logs, and build artifacts from leaking into the image.
+- **Caches at startup** — `config:cache` and friends run in `CMD`, not at
+  build time, so they read env vars injected by the runtime.
+- **`exec`** — Octane becomes PID 1 and receives `SIGTERM` directly for
+  graceful shutdown.
+- **`caddy_data` volume** — persists Let's Encrypt certificates across
+  restarts to avoid rate limits.
 
-WORKDIR /app
-COPY . /app
+### Docker Compose
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-RUN bun install && bun run build
+Three Compose files are committed to the repository:
 
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan event:cache
+| File | Purpose |
+|---|---|
+| `docker-compose.yml` | Base service definition (no ports) |
+| `docker-compose.prod.yml` | Adds ports `80:80` and `443:443` for production |
+| `docker-compose.test.yml` | Adds ports `8000:80` and `8443:443` for local testing |
 
-EXPOSE 8000
+Ports are kept in overlay files rather than the base file because Docker Compose
+**merges** (appends) `ports` arrays instead of replacing them — defining ports
+only in overlays avoids conflicts when switching between environments.
 
-CMD ["php", "artisan", "octane:start", "--server=frankenphp", "--host=0.0.0.0", "--port=8000", "--workers=auto", "--max-requests=1000"]
+Set the production values in `.env`, then:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
+
+Docker Compose injects the values from `.env` directly as process environment
+variables — no `.env` file inside the container is needed or used.
+
+### Testing the production image locally
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.test.yml up --build
+```
+
+The app will be reachable at `http://localhost:8000`.
 
 ---
 

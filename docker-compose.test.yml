@@ -1,0 +1,19 @@
+# =============================================================================
+# Condorcet Desktop — Docker Compose override for local image testing
+# =============================================================================
+#
+# Overrides docker-compose.yml to test the production image locally without
+# affecting a running production deployment. Uses the same .env file as prod.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.test.yml up --build
+# =============================================================================
+
+services:
+  app:
+    ports:
+      # Map to unprivileged ports on the host for local testing.
+      # The container always listens on 80/443 internally (FrankenPHP default).
+      - "8000:8000"
+      - "8443:443"
+      - "8443:443/udp"  # HTTP/3 (QUIC)
