@@ -193,5 +193,6 @@ return [
     'computing' => 'Výpočet…',
     'loading' => 'Načítání voleb…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Resetovat volby',
 
 ];

@@ -193,5 +193,6 @@ return [
     'computing' => 'Kalkulante…',
     'loading' => 'Ŝarĝante elekton…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Restarigi elekton',
 
 ];

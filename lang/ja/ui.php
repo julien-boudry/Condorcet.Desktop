@@ -193,5 +193,6 @@ return [
     'computing' => '計算中…',
     'loading' => '選挙を読み込み中…',
     'processing_time' => ':time',
+    'reset_during_loading' => '選挙をリセット',
 
 ];

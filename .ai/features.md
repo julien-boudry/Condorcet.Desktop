@@ -145,7 +145,7 @@ Expose relevant method options via the UI:
 ## 6. Internationalisation (i18n)
 
 - All user-facing strings are translated via Laravel's `__()` / `trans_choice()` helpers
-- **Supported languages:** English (default), French, Spanish, Portuguese, Italian, Polish, Czech, Russian, Arabic, Chinese, Hindi, Japanese, Esperanto, Bassa, Douala, Ghomálá'
+a- **Supported languages:** English (default), French, Spanish, Portuguese, Italian, Polish, Czech, Russian, Arabic, Chinese, Hindi, Japanese, Esperanto, Bassa, Douala, Ghomálá'
 - Language selector dropdown in the nav bar — pure Alpine.js, sets a `locale` cookie and reloads
 - Locale detection priority: cookie (explicit user choice) → `Accept-Language` header (browser preference) → config default (`en`)
 - Translation files live under `lang/{locale}/ui.php` — one file per locale, all keys in the `ui` namespace

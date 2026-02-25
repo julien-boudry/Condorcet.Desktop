@@ -193,5 +193,6 @@ return [
     'computing' => 'गणना हो रही है…',
     'loading' => 'चुनाव लोड हो रहा है…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'चुनाव रीसेट करें',
 
 ];

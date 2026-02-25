@@ -193,5 +193,6 @@ return [
     'computing' => 'Ŋkhǔm…',
     'loading' => 'Ntǎŋ ntsǒ ŋkwɛ̌…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Sɛ̌t ntsǒ ŋkwɛ̌',
 
 ];

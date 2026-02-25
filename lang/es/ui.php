@@ -193,5 +193,6 @@ return [
     'computing' => 'Calculando…',
     'loading' => 'Cargando elección…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Restablecer elección',
 
 ];

@@ -193,5 +193,6 @@ return [
     'computing' => 'Obliczanie…',
     'loading' => 'Ładowanie wyborów…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Resetuj wybory',
 
 ];

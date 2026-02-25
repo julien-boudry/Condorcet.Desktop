@@ -18,6 +18,7 @@
         class="w-full lg:w-96 shrink-0 space-y-4 lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:py-2 lg:-my-2"
         x-data="{ hydrated: !localStorage.getItem('electionState') }"
         x-init="$wire.on('election-state-updated', () => { hydrated = true; })"
+        @election-force-reset.window="hydrated = true"
     >
         {{-- Hydration spinner — visible until loadFromLocalStorage completes --}}
         <div x-show="!hydrated" class="flex flex-col items-center justify-center gap-3 py-16">
@@ -26,6 +27,17 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
             <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('ui.loading') }}</span>
+
+            {{-- Reset button — interrupts loading and clears all election state.
+                 window.stop() aborts the in-flight Livewire request;
+                 the Alpine event flips hydrated=true to show the clean default UI instantly.
+                 The @script block will reconcile server state when it regains control. --}}
+            <button
+                @click="window.stop(); localStorage.removeItem('electionState'); window.__pendingReset = true; $dispatch('election-force-reset');"
+                class="mt-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors"
+            >
+                {{ __('ui.reset_during_loading') }}
+            </button>
         </div>
 
         {{-- Sidebar content — hidden until hydration, then morphable by Livewire --}}
@@ -60,6 +72,7 @@
         class="flex-1 min-w-0 relative"
         x-data="{ hydrated: !localStorage.getItem('electionState') }"
         x-init="$wire.on('election-state-updated', () => { hydrated = true; })"
+        @election-force-reset.window="hydrated = true"
     >
         {{-- Loading overlay — dims results during server computation --}}
         <div
@@ -67,12 +80,20 @@
             x-transition.opacity
             class="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/60 dark:bg-gray-900/60 backdrop-blur-xs"
         >
-            <div class="flex flex-col items-center gap-2">
+            <div class="flex flex-col items-center gap-3">
                 <svg class="h-8 w-8 animate-spin text-brand" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
                 <span class="text-sm font-medium text-gray-600 dark:text-gray-400">{{ __('ui.loading') }}</span>
+
+                {{-- Reset button — same mechanism as the sidebar spinner reset --}}
+                <button
+                    @click="window.stop(); localStorage.removeItem('electionState'); window.__pendingReset = true; $dispatch('election-force-reset');"
+                    class="mt-1 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors"
+                >
+                    {{ __('ui.reset_during_loading') }}
+                </button>
             </div>
         </div>
         <div
@@ -118,6 +139,15 @@
             } catch (e) {
                 console.warn('Failed to parse saved election state', e);
             }
+        }
+
+        // If the user clicked "Reset" during loading, the in-flight request
+        // may have completed (or been aborted). Reconcile server-side state
+        // so the Livewire snapshot matches the clean default.
+        if (window.__pendingReset) {
+            window.__pendingReset = false;
+            localStorage.removeItem('electionState');
+            await $wire.resetElection();
         }
 
         // Persist state to localStorage whenever it changes

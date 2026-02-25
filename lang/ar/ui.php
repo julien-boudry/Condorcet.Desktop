@@ -193,5 +193,6 @@ return [
     'computing' => 'جارٍ الحساب…',
     'loading' => 'جارٍ تحميل الانتخابات…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'إعادة تعيين الانتخابات',
 
 ];

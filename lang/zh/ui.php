@@ -193,5 +193,6 @@ return [
     'computing' => '正在计算…',
     'loading' => '正在加载选举…',
     'processing_time' => ':time',
+    'reset_during_loading' => '重置选举',
 
 ];

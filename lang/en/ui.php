@@ -193,5 +193,6 @@ return [
     'computing' => 'Computing…',
     'loading' => 'Loading election…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Reset Election',
 
 ];

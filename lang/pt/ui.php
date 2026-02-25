@@ -193,5 +193,6 @@ return [
     'computing' => 'A calcular…',
     'loading' => 'A carregar eleição…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Reiniciar eleição',
 
 ];

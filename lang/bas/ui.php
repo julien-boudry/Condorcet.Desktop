@@ -193,5 +193,6 @@ return [
     'computing' => 'Kayéhna…',
     'loading' => 'Nlôdôl bisombo…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Bɔ̂l bisombo',
 
 ];

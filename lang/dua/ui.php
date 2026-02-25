@@ -193,5 +193,6 @@ return [
     'computing' => 'Esálɛ…',
     'loading' => 'Nlɔ́dɔ dipɔ́si…',
     'processing_time' => ':time',
+    'reset_during_loading' => 'Bwámba dipɔ́si',
 
 ];
