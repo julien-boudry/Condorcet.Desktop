@@ -13,6 +13,11 @@
         <p class="text-sm text-amber-800 dark:text-amber-300">
             <strong>{{ __('ui.methods_disagree') }}</strong>
             {{ __('ui.methods_disagree_desc') }}
+            <a href="https://en.wikipedia.org/wiki/Social_choice_theory"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline hover:no-underline whitespace-nowrap"
+            >&nearr; Wikipedia</a>
         </p>
     </div>
 @endif
