@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Échec de l\'analyse des votes : :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count vote rejeté par les contraintes|:count votes rejetés par les contraintes',
+    'status' => 'Statut',
+    'vote_valid' => 'Valide',
+    'vote_invalid' => 'Rejeté',
+    'vote_rejected_by_constraint' => 'Ce vote est rejeté par la ou les contrainte(s) active(s) et est exclu du calcul.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

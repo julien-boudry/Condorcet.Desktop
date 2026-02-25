@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Nie udało się przeanalizować głosów: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count głos odrzucony przez ograniczenia|:count głosów odrzuconych przez ograniczenia',
+    'status' => 'Status',
+    'vote_valid' => 'Ważny',
+    'vote_invalid' => 'Odrzucony',
+    'vote_rejected_by_constraint' => 'Ten głos jest odrzucony przez aktywne ograniczenie(a) i jest wykluczony z obliczeń.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

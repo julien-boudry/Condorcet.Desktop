@@ -1,4 +1,10 @@
 {{-- Votes list tab — displayed in the results area for a complete view --}}
+@php
+    /** @var array<int, bool> $voteValidity — per-source-vote constraint validity from computeResults() */
+    $voteValidity = $computedResults['voteValidity'] ?? [];
+    $hasConstraints = !empty($voteValidity);
+    $invalidCount = $hasConstraints ? count(array_filter($voteValidity, static fn (bool $v): bool => !$v)) : 0;
+@endphp
 <div class="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
     {{-- Header --}}
     <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
@@ -9,6 +15,11 @@
             {{ trans_choice('ui.vote_entries', count($votes)) }}
             @if($weightAllowed && ($computedResults['sumVoteWeights'] ?? 0) > 0)
                 <span class="italic ml-1">({{ __('ui.total_weight') }} {{ $computedResults['sumVoteWeights'] }})</span>
+            @endif
+            @if($hasConstraints && $invalidCount > 0)
+                <span class="ml-2 text-amber-600 dark:text-amber-400 font-medium">
+                    — {{ trans_choice('ui.n_invalid_under_constraints', $invalidCount) }}
+                </span>
             @endif
         </span>
     </div>
@@ -25,14 +36,21 @@
                             <th class="px-4 py-2 text-center">{{ __('ui.weight') }}</th>
                         @endif
                         <th class="px-4 py-2 text-center">{{ __('ui.quantity') }}</th>
+                        @if($hasConstraints)
+                            <th class="px-4 py-2 text-center">{{ __('ui.status') }}</th>
+                        @endif
                         <th class="px-4 py-2 text-right"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @foreach($votes as $index => $vote)
-                        <tr wire:key="vote-row-{{ $index }}" class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+                        @php
+                            /** Whether this vote passes currently active constraints */
+                            $isValid = $voteValidity[$index] ?? true;
+                        @endphp
+                        <tr wire:key="vote-row-{{ $index }}" class="{{ $isValid ? 'hover:bg-gray-50 dark:hover:bg-gray-800/30' : 'bg-amber-50/50 dark:bg-amber-950/20 opacity-60' }} transition-colors">
                             <td class="px-4 py-2 text-gray-400 dark:text-gray-500 tabular-nums">{{ $index + 1 }}</td>
-                            <td class="px-4 py-2 font-mono text-gray-900 dark:text-gray-100">{{ $vote['ranking'] }}</td>
+                            <td class="px-4 py-2 font-mono {{ $isValid ? 'text-gray-900 dark:text-gray-100' : 'text-gray-400 dark:text-gray-500 line-through' }}">{{ $vote['ranking'] }}</td>
                             @if($weightAllowed)
                                 <td class="px-4 py-2 text-center tabular-nums">
                                     @if(($vote['weight'] ?? 1) > 1)
@@ -49,6 +67,19 @@
                                     <span class="text-gray-300 dark:text-gray-600">1</span>
                                 @endif
                             </td>
+                            @if($hasConstraints)
+                                <td class="px-4 py-2 text-center">
+                                    @if($isValid)
+                                        <span class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/40 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400">
+                                            {{ __('ui.vote_valid') }}
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center rounded-full bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 text-xs font-medium text-amber-700 dark:text-amber-400" title="{{ __('ui.vote_rejected_by_constraint') }}">
+                                            {{ __('ui.vote_invalid') }}
+                                        </span>
+                                    @endif
+                                </td>
+                            @endif
                             <td class="px-4 py-2 text-right">
                                 <button
                                     wire:click="removeVote({{ $index }})"

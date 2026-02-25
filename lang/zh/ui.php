@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => '解析投票失败：:message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count 票被约束条件拒绝|:count 票被约束条件拒绝',
+    'status' => '状态',
+    'vote_valid' => '有效',
+    'vote_invalid' => '已拒绝',
+    'vote_rejected_by_constraint' => '此投票被当前活动的约束条件拒绝，不参与计算。',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

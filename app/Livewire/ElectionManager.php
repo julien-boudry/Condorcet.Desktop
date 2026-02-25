@@ -625,8 +625,15 @@ class ElectionManager extends Component
      * Build an Election object from the current component state.
      *
      * Returns null when insufficient data is available.
+     *
+     * When the optional `$voteRepresentatives` array is passed by reference, it
+     * will be populated with one representative Vote object per source vote index.
+     * This allows the caller to check constraint validity per original vote entry
+     * without re-creating Vote objects.
+     *
+     * @param  array<int, Vote>|null  &$voteRepresentatives  Populated with one Vote per source index (optional).
      */
-    protected function buildElection(): ?Election
+    protected function buildElection(?array &$voteRepresentatives = null): ?Election
     {
         if (count($this->candidates) < 2) {
             return null;
@@ -651,9 +658,14 @@ class ElectionManager extends Component
         // Apply method-specific options
         $this->applyMethodOptions($election);
 
+        // Initialise the representative tracking array when requested
+        if ($voteRepresentatives !== null) {
+            $voteRepresentatives = [];
+        }
+
         // Add votes by creating Vote objects from stored data
         if (count($this->votes) > 0) {
-            foreach ($this->votes as $voteData) {
+            foreach ($this->votes as $sourceIndex => $voteData) {
                 try {
                     $quantity = max(1, $voteData['quantity'] ?? 1);
 
@@ -666,6 +678,11 @@ class ElectionManager extends Component
                         }
 
                         $election->addVote($vote);
+
+                        // Keep the first expanded Vote as the representative for this source entry
+                        if ($voteRepresentatives !== null && $i === 0) {
+                            $voteRepresentatives[$sourceIndex] = $vote;
+                        }
                     }
                 } catch (\Throwable $e) {
                     $this->warnings[] = __('ui.warning_vote_error', ['message' => $e->getMessage()]);
@@ -896,7 +913,8 @@ class ElectionManager extends Component
      *     countVotes: int,
      *     sumVoteWeights: int,
      *     countValidVotes: int,
-     *     sumValidVoteWeights: int
+     *     sumValidVoteWeights: int,
+     *     voteValidity: array<int, bool>
      * }
      */
     protected function computeResults(): array
@@ -913,10 +931,12 @@ class ElectionManager extends Component
                 'sumVoteWeights' => 0,
                 'countValidVotes' => 0,
                 'sumValidVoteWeights' => 0,
+                'voteValidity' => [],
             ];
         }
 
-        $election = $this->buildElection();
+        $voteRepresentatives = [];
+        $election = $this->buildElection($voteRepresentatives);
 
         if ($election === null || $election->countVotes() === 0) {
             return [
@@ -929,6 +949,7 @@ class ElectionManager extends Component
                 'sumVoteWeights' => 0,
                 'countValidVotes' => 0,
                 'sumValidVoteWeights' => 0,
+                'voteValidity' => [],
             ];
         }
 
@@ -995,6 +1016,17 @@ class ElectionManager extends Component
         // Sort results alphabetically by method name for consistent display
         ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 
+        // Build per-source-vote constraint validity map.
+        // Only populated when at least one constraint is active, so the view
+        // can distinguish between "no constraints" (empty array) and
+        // "constraints present, all votes valid" (all-true array).
+        $voteValidity = [];
+        if ($this->noTieConstraint) {
+            foreach ($voteRepresentatives as $sourceIndex => $representativeVote) {
+                $voteValidity[$sourceIndex] = $election->isVoteValidUnderConstraints($representativeVote);
+            }
+        }
+
         return [
             'empty' => false,
             'condorcetWinner' => $condorcetWinner !== null ? (string) $condorcetWinner : null,
@@ -1005,6 +1037,7 @@ class ElectionManager extends Component
             'sumVoteWeights' => $election->sumVoteWeights(),
             'countValidVotes' => $election->countValidVoteWithConstraints(),
             'sumValidVoteWeights' => $election->sumValidVoteWeightsWithConstraints(),
+            'voteValidity' => $voteValidity,
             'timer' => $election->getGlobalTimer(),
         ];
     }

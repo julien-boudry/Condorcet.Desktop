@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Ɛ́ nla pɛ sálɛ mipɔ́si: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count epɔ́si ɛ́ kwányá na miɓɔ́di|:count mipɔ́si mí kwányá na miɓɔ́di',
+    'status' => 'Ndɛ́',
+    'vote_valid' => 'Ɛ́ bwam',
+    'vote_invalid' => 'Ɛ́ kwányá',
+    'vote_rejected_by_constraint' => 'Epɔ́si éni ɛ́ kwányá na miɓɔ́di mí mɛ́sɛ́, ɛ́ nyola pɛ na esálɛ.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

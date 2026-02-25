@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Errore nell\'analisi dei voti: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count voto rifiutato dai vincoli|:count voti rifiutati dai vincoli',
+    'status' => 'Stato',
+    'vote_valid' => 'Valido',
+    'vote_invalid' => 'Rifiutato',
+    'vote_rejected_by_constraint' => 'Questo voto è rifiutato dal/dai vincolo/i attivo/i ed è escluso dal calcolo.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

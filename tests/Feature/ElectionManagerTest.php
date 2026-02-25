@@ -325,6 +325,32 @@ it('dispatches state update when noTieConstraint is toggled', function () {
         ->assertSet('noTieConstraint', true);
 });
 
+it('marks votes with ties as invalid when NoTie constraint is active', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob', 'Charlie'])
+        ->set('noTieConstraint', true)
+        ->set('votes', [
+            ['ranking' => 'Alice > Bob > Charlie', 'weight' => 1, 'quantity' => 1],
+            ['ranking' => 'Alice = Bob > Charlie', 'weight' => 1, 'quantity' => 1],
+            ['ranking' => 'Bob > Charlie > Alice', 'weight' => 1, 'quantity' => 1],
+        ])
+        ->set('methods', ['Schulze Winning'])
+        ->assertSee(__('ui.vote_valid'))
+        ->assertSee(__('ui.vote_invalid'));
+});
+
+it('does not show status column when no constraint is active', function () {
+    Livewire::test(ElectionManager::class)
+        ->set('candidates', ['Alice', 'Bob', 'Charlie'])
+        ->set('noTieConstraint', false)
+        ->set('votes', [
+            ['ranking' => 'Alice = Bob > Charlie', 'weight' => 1, 'quantity' => 1],
+        ])
+        ->set('methods', ['Schulze Winning'])
+        ->assertDontSee(__('ui.vote_invalid'))
+        ->assertDontSee(__('ui.status'));
+});
+
 it('clamps seats to minimum 1 on update', function () {
     Livewire::test(ElectionManager::class)
         ->set('seats', 0)

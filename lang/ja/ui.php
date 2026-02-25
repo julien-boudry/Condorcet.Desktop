@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => '投票の解析に失敗：:message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count 票が制約により拒否|:count 票が制約により拒否',
+    'status' => 'ステータス',
+    'vote_valid' => '有効',
+    'vote_invalid' => '拒否',
+    'vote_rejected_by_constraint' => 'この投票はアクティブな制約により拒否され、計算から除外されます。',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

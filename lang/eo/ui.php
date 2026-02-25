@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Malsukcesis analizi voĉdonojn: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count voĉdono malakceptita de limigoj|:count voĉdonoj malakceptitaj de limigoj',
+    'status' => 'Stato',
+    'vote_valid' => 'Valida',
+    'vote_invalid' => 'Malakceptita',
+    'vote_rejected_by_constraint' => 'Ĉi tiu voĉdono estas malakceptita de la aktiva(j) limigo(j) kaj estas ekskludita el la kalkulo.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

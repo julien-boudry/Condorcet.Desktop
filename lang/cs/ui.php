@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Nepodařilo se analyzovat hlasy: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count hlas odmítnut omezeními|:count hlasů odmítnuto omezeními',
+    'status' => 'Stav',
+    'vote_valid' => 'Platný',
+    'vote_invalid' => 'Odmítnut',
+    'vote_rejected_by_constraint' => 'Tento hlas je odmítnut aktivním omezením a je vyřazen z výpočtu.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

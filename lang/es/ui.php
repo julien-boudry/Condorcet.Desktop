@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Error al analizar los votos: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count voto rechazado por restricciones|:count votos rechazados por restricciones',
+    'status' => 'Estado',
+    'vote_valid' => 'Válido',
+    'vote_invalid' => 'Rechazado',
+    'vote_rejected_by_constraint' => 'Este voto es rechazado por la(s) restricción(es) activa(s) y se excluye del cálculo.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

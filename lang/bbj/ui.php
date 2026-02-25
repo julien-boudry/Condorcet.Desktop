@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Kɑ́ pɑ̀ŋ ŋkhǔm mtsǒ ŋkwɛ̌: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count ntsǒ ŋkwɛ̌ tə̀ jɛ̌ʼ pə̀ nsɛ̌m|:count mtsǒ ŋkwɛ̌ tə̀ jɛ̌ʼ pə̀ nsɛ̌m',
+    'status' => 'Nɛ̀',
+    'vote_valid' => 'Tə̀ pɑ̌',
+    'vote_invalid' => 'Tə̀ jɛ̌ʼ',
+    'vote_rejected_by_constraint' => 'Ntsǒ ŋkwɛ̌ yɔ̀ tə̀ jɛ̌ʼ pə̀ nsɛ̌m mə̀ yɑ̀, kɑ́ pɑ̀ŋ nɑ́ ŋkhǔm.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

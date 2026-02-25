@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Failed to parse votes: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count vote rejected by constraints|:count votes rejected by constraints',
+    'status' => 'Status',
+    'vote_valid' => 'Valid',
+    'vote_invalid' => 'Rejected',
+    'vote_rejected_by_constraint' => 'This vote is rejected by the active constraint(s) and is excluded from the computation.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 

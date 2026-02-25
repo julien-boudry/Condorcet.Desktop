@@ -197,6 +197,16 @@ return [
     'error_parse_votes_failed' => 'Bi nla bé kayéh bisombo: :message',
 
     // ──────────────────────────────────────────────
+    // Constraint validity (votes-tab.blade.php)
+    // ──────────────────────────────────────────────
+
+    'n_invalid_under_constraints' => ':count sombo i gwéha ni ndigi|:count bisombo bi gwéha ni ndigi',
+    'status' => 'Hala',
+    'vote_valid' => 'I bé somb',
+    'vote_invalid' => 'I gwéha',
+    'vote_rejected_by_constraint' => 'Sombo ini i gwéha ni ndigi i yé i nkéña, i nyila bé i kayéhna.',
+
+    // ──────────────────────────────────────────────
     // Loading states
     // ──────────────────────────────────────────────
 
