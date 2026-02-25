@@ -18,6 +18,15 @@ return [
     'switch_to_dark' => 'Přepnout na tmavý režim',
 
     // ──────────────────────────────────────────────
+    // About menu (app.blade.php)
+    // ──────────────────────────────────────────────
+
+    'about' => 'O aplikaci',
+    'view_on_github' => 'Zobrazit na GitHubu',
+    'donate' => 'Přispět',
+    'created_by' => 'Vytvořil',
+
+    // ──────────────────────────────────────────────
     // Election manager (election-manager.blade.php)
     // ──────────────────────────────────────────────
 

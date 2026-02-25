@@ -18,6 +18,15 @@ return [
     'switch_to_dark' => 'Ŝanĝi al malhela reĝimo',
 
     // ──────────────────────────────────────────────
+    // About menu (app.blade.php)
+    // ──────────────────────────────────────────────
+
+    'about' => 'Pri',
+    'view_on_github' => 'Vidi en GitHub',
+    'donate' => 'Donaci',
+    'created_by' => 'Kreita de',
+
+    // ──────────────────────────────────────────────
     // Election manager (election-manager.blade.php)
     // ──────────────────────────────────────────────
 

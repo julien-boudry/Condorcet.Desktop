@@ -18,6 +18,15 @@ return [
     'switch_to_dark' => 'Hôla i bégés ñôñ',
 
     // ──────────────────────────────────────────────
+    // About menu (app.blade.php)
+    // ──────────────────────────────────────────────
+
+    'about' => 'Inyu',
+    'view_on_github' => 'Béñge i GitHub',
+    'donate' => 'Ti likéblé',
+    'created_by' => 'Héñha ni',
+
+    // ──────────────────────────────────────────────
     // Election manager (election-manager.blade.php)
     // ──────────────────────────────────────────────
 

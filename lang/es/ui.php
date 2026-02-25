@@ -18,6 +18,15 @@ return [
     'switch_to_dark' => 'Cambiar a modo oscuro',
 
     // ──────────────────────────────────────────────
+    // About menu (app.blade.php)
+    // ──────────────────────────────────────────────
+
+    'about' => 'Acerca de',
+    'view_on_github' => 'Ver en GitHub',
+    'donate' => 'Donar',
+    'created_by' => 'Creado por',
+
+    // ──────────────────────────────────────────────
     // Election manager (election-manager.blade.php)
     // ──────────────────────────────────────────────
 
