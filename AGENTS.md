@@ -49,6 +49,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 - php - 8.5.3
 - laravel/framework (LARAVEL) - v12
+- laravel/octane (OCTANE) - v2
 - laravel/prompts (PROMPTS) - v0
 - livewire/livewire (LIVEWIRE) - v4
 - laravel/boost (BOOST) - v2

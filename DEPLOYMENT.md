@@ -12,18 +12,17 @@ served by **FrankenPHP** with **Laravel Octane**.
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Install Laravel Octane](#install-laravel-octane)
-3. [Environment Configuration](#environment-configuration)
-4. [Build Frontend Assets](#build-frontend-assets)
-5. [Composer Production Install](#composer-production-install)
-6. [Database & Migrations](#database--migrations)
-7. [Laravel Caches](#laravel-caches)
-8. [Sessions](#sessions)
-9. [Running with FrankenPHP + Octane](#running-with-frankenphp--octane)
-10. [Health Check](#health-check)
-11. [Full Deployment Script](#full-deployment-script)
-12. [Octane Compatibility Notes](#octane-compatibility-notes)
-13. [Optional Enhancements](#optional-enhancements)
+2. [Environment Configuration](#environment-configuration)
+3. [Build Frontend Assets](#build-frontend-assets)
+4. [Composer Production Install](#composer-production-install)
+5. [Database & Migrations](#database--migrations)
+6. [Laravel Caches](#laravel-caches)
+7. [Sessions](#sessions)
+8. [Running with FrankenPHP + Octane](#running-with-frankenphp--octane)
+9. [Health Check](#health-check)
+10. [Full Deployment Script](#full-deployment-script)
+11. [Octane Compatibility Notes](#octane-compatibility-notes)
+12. [Optional Enhancements](#optional-enhancements)
 
 ---
 
@@ -33,18 +32,8 @@ served by **FrankenPHP** with **Laravel Octane**.
 - **FrankenPHP** installed (standalone binary or Docker image)
 - **Bun** (for building frontend assets)
 - **Composer 2.x**
-
----
-
-## Install Laravel Octane
-
-```bash
-composer require laravel/octane
-php artisan octane:install --server=frankenphp --no-interaction
-```
-
-This creates `config/octane.php`. No further configuration is typically needed —
-the defaults work well for this project.
+- **Laravel Octane** with the FrankenPHP driver — already installed and configured
+  (`config/octane.php` is committed to the repository)
 
 ---
 
