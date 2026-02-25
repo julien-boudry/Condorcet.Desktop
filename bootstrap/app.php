@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':web',
             \App\Http\Middleware\SetLocale::class,
         ]);
 
