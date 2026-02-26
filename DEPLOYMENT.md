@@ -54,6 +54,9 @@ APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://your-domain.com
 OCTANE_HTTPS=true
+# Required in production. Must match the public domain used in APP_URL
+# (host only, no scheme).
+OCTANE_HOST=your-domain.com
 
 LOG_CHANNEL=stack
 LOG_LEVEL=error
@@ -166,7 +169,7 @@ SESSION_DRIVER=cookie
 ### Direct (binary)
 
 ```bash
-php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect
+php artisan octane:frankenphp --host=your-domain.com --port=443 --workers=auto --max-requests=1000 --https --http-redirect
 ```
 
 - `--workers=auto` lets Octane auto-detect the optimal worker count based on
@@ -184,7 +187,7 @@ After=network.target
 [Service]
 User=www-data
 WorkingDirectory=/var/www/condorcet
-ExecStart=/usr/bin/php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect
+ExecStart=/usr/bin/php artisan octane:frankenphp --host=your-domain.com --port=443 --workers=auto --max-requests=1000 --https --http-redirect
 Restart=always
 RestartSec=5
 
@@ -208,8 +211,8 @@ Key design decisions, documented in the files themselves:
   build time, so they read env vars injected by the runtime.
 - **`exec`** — Octane becomes PID 1 and receives `SIGTERM` directly for
   graceful shutdown.
-- **`caddy_data` volume** — persists Let's Encrypt certificates across
-  restarts to avoid rate limits.
+- **`caddy_data` + `caddy_config` volumes** — persist certificate material and
+  Caddy runtime state across restarts to avoid unnecessary re-issuance.
 
 ### Docker Compose
 
@@ -218,7 +221,7 @@ Three Compose files are committed to the repository:
 | File | Purpose |
 |---|---|
 | `docker-compose.yml` | Base service definition (no ports) |
-| `docker-compose.prod.yml` | Adds ports `80:80` and `443:443` for production |
+| `docker-compose.prod.yml` | Adds ports `80:80` and `443:443` for production, and hardcodes `APP_URL` / `OCTANE_HOST` to `desktop.condorcet.vote` |
 | `docker-compose.test.yml` | Adds port `8000:80` and overrides startup command for HTTP-only local testing |
 
 Ports are kept in overlay files rather than the base file because Docker Compose

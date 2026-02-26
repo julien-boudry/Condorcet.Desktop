@@ -12,6 +12,9 @@
 
 services:
   app:
+    environment:
+      APP_URL: https://desktop.condorcet.vote
+      OCTANE_HOST: desktop.condorcet.vote
     ports:
       - "80:80"
       - "443:443"

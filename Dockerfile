@@ -72,10 +72,10 @@ EXPOSE 80
 EXPOSE 443
 EXPOSE 443/udp
 
-# Caddy stores its TLS certificates under /data. Mount a named volume here
-# (see docker-compose.yml) to persist certificates across container restarts
-# and avoid hitting Let's Encrypt rate limits.
-VOLUME ["/data"]
+# Caddy stores TLS assets under /data and runtime config/state under /config.
+# Mount named volumes for both paths (see docker-compose.yml) to persist
+# certificates and related state across container restarts.
+VOLUME ["/data", "/config"]
 
 # Health check against the built-in Laravel /up endpoint.
 HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=3 \
@@ -91,4 +91,4 @@ CMD sh -c "php artisan config:cache && \
            php artisan route:cache && \
            php artisan view:cache && \
            php artisan event:cache && \
-           exec php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect"
+           exec php artisan octane:frankenphp --host=\"${OCTANE_HOST:?Set OCTANE_HOST in .env (example: desktop.condorcet.vote)}\" --port=443 --workers=auto --max-requests=1000 --https --http-redirect"
