@@ -16,6 +16,6 @@ services:
       APP_URL: https://desktop.condorcet.vote
       OCTANE_HOST: desktop.condorcet.vote
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"   # HTTP/3 (QUIC) — supported natively by FrankenPHP
+      - "51.38.192.192:80:80"
+      - "51.38.192.192:443:443"
+      - "51.38.192.192:443:443/udp"   # HTTP/3 (QUIC) — supported natively by FrankenPHP
