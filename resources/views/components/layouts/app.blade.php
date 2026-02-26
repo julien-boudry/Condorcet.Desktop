@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Condorcet Desktop</title>
+        <title>{{ config('app.name') }}</title>
         <link rel="icon" href="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" type="image/avif" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
