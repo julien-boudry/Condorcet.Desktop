@@ -53,6 +53,7 @@ root (all deployments, including Docker Compose):
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://your-domain.com
+OCTANE_HTTPS=true
 
 LOG_CHANNEL=stack
 LOG_LEVEL=error
