@@ -91,4 +91,4 @@ CMD sh -c "php artisan config:cache && \
            php artisan route:cache && \
            php artisan view:cache && \
            php artisan event:cache && \
-           exec php artisan octane:start"
+           exec php artisan octane:frankenphp"
