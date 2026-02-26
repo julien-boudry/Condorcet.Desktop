@@ -19,6 +19,3 @@ services:
       - "51.38.192.192:80:80"
       - "51.38.192.192:443:443"
       - "51.38.192.192:443:443/udp"   # HTTP/3 (QUIC) — supported natively by FrankenPHP
-      - "[2001:41d0:304:200::1888]:80:80"
-      - "[2001:41d0:304:200::1888]:443:443"
-      - "[2001:41d0:304:200::1888]:443:443/udp"   # HTTP/3 (QUIC) — supported natively by FrankenPHP
