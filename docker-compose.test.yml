@@ -11,9 +11,14 @@
 
 services:
   app:
+    # Local validation mode: run without TLS so localhost testing is stable and
+    # does not depend on local certificate trust / ACME behavior.
+    command: >
+      sh -c "php artisan config:cache &&
+             php artisan route:cache &&
+             php artisan view:cache &&
+             php artisan event:cache &&
+             exec php artisan octane:frankenphp --host=0.0.0.0 --port=80 --workers=auto --max-requests=1000"
     ports:
-      # Map to unprivileged ports on the host for local testing.
-      # The container always listens on 80/443 internally (FrankenPHP default).
-      - "8000:8000"
-      - "8443:443"
-      - "8443:443/udp"  # HTTP/3 (QUIC)
+      # Map HTTP to an unprivileged host port for local image testing.
+      - "8000:80"

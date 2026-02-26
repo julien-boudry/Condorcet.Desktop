@@ -166,7 +166,7 @@ SESSION_DRIVER=cookie
 ### Direct (binary)
 
 ```bash
-php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --workers=auto
+php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect
 ```
 
 - `--workers=auto` lets Octane auto-detect the optimal worker count based on
@@ -184,7 +184,7 @@ After=network.target
 [Service]
 User=www-data
 WorkingDirectory=/var/www/condorcet
-ExecStart=/usr/bin/php artisan octane:start --server=frankenphp --host=0.0.0.0 --port=80 --workers=auto --max-requests=1000
+ExecStart=/usr/bin/php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect
 Restart=always
 RestartSec=5
 
@@ -219,7 +219,7 @@ Three Compose files are committed to the repository:
 |---|---|
 | `docker-compose.yml` | Base service definition (no ports) |
 | `docker-compose.prod.yml` | Adds ports `80:80` and `443:443` for production |
-| `docker-compose.test.yml` | Adds ports `8000:80` and `8443:443` for local testing |
+| `docker-compose.test.yml` | Adds port `8000:80` and overrides startup command for HTTP-only local testing |
 
 Ports are kept in overlay files rather than the base file because Docker Compose
 **merges** (appends) `ports` arrays instead of replacing them — defining ports

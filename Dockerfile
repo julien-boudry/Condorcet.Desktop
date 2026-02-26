@@ -65,9 +65,9 @@ COPY --from=frontend /app/public/build /app/public/build
 # Install production PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Declare the ports FrankenPHP listens on.
-# FrankenPHP (Caddy) automatically provisions TLS on 443 when APP_URL is a
-# public domain — no extra configuration required.
+# Declare the ports FrankenPHP listens on in production.
+# HTTP is used for ACME HTTP challenges and HTTP->HTTPS redirection, while
+# HTTPS serves the application traffic (including HTTP/2 and HTTP/3).
 EXPOSE 80
 EXPOSE 443
 EXPOSE 443/udp
@@ -91,4 +91,4 @@ CMD sh -c "php artisan config:cache && \
            php artisan route:cache && \
            php artisan view:cache && \
            php artisan event:cache && \
-           exec php artisan octane:frankenphp"
+           exec php artisan octane:frankenphp --host=0.0.0.0 --port=443 --workers=auto --max-requests=1000 --https --http-redirect"
