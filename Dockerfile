@@ -62,8 +62,13 @@ COPY . /app
 # Copy compiled frontend assets from the build stage
 COPY --from=frontend /app/public/build /app/public/build
 
-# Install production PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install production PHP dependencies.
+# NativePHP bundles standalone PHP binaries for desktop packaging — they are
+# useless inside a Docker container that already has PHP/FrankenPHP. Remove
+# them and clear the Composer cache to save ~250 MB in the final image.
+RUN composer install --no-dev --optimize-autoloader --no-interaction \
+    && rm -rf vendor/nativephp/php-bin \
+    && rm -rf /root/.composer/cache /tmp/*
 
 # Declare the ports FrankenPHP listens on in production.
 # HTTP is used for ACME HTTP challenges and HTTP->HTTPS redirection, while

@@ -6,6 +6,9 @@
 node_modules
 vendor
 
+# Local FrankenPHP binary (macOS) — the Docker image uses its own
+frankenphp
+
 # Frontend build output — generated during the Docker build (frontend stage)
 public/build
 
