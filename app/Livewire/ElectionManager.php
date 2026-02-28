@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use CondorcetPHP\Condorcet\Algo\Methods\Borda\BordaCount;
 use CondorcetPHP\Condorcet\Algo\Methods\HighestAverages\SainteLague;
-use CondorcetPHP\Condorcet\Algo\Methods\KemenyYoung\KemenyYoung;
 use CondorcetPHP\Condorcet\Algo\Methods\LargestRemainder\LargestRemainder;
 use CondorcetPHP\Condorcet\Algo\Methods\Smith\SchwartzSet;
 use CondorcetPHP\Condorcet\Algo\Methods\Smith\SmithSet;
@@ -92,9 +91,6 @@ class ElectionManager extends Component
 
     /** Borda Count starting point (0 or 1) */
     public int $bordaStarting = 1;
-
-    /** Kemeny–Young maximum candidates (null = no limit) */
-    public ?int $kemenyMaxCandidates = 10;
 
     /** STV quota name */
     public string $stvQuota = 'Droop';
@@ -426,11 +422,6 @@ class ElectionManager extends Component
         $this->syncState();
     }
 
-    public function updatedKemenyMaxCandidates(): void
-    {
-        $this->syncState();
-    }
-
     public function updatedStvQuota(): void
     {
         $this->syncState();
@@ -701,9 +692,6 @@ class ElectionManager extends Component
         // Borda Count starting point
         $election->setMethodOption(BordaCount::class, 'Starting', $this->bordaStarting);
 
-        // Kemeny–Young max candidates
-        KemenyYoung::$MaxCandidates = $this->kemenyMaxCandidates;
-
         // STV quota
         $stvQuota = $this->resolveQuota($this->stvQuota);
         if ($stvQuota !== null) {
@@ -831,17 +819,6 @@ class ElectionManager extends Component
                         ['value' => 1, 'label' => __('ui.borda_standard')],
                         ['value' => 0, 'label' => '0'],
                     ],
-                ],
-            ],
-            KemenyYoung::METHOD_NAME[0] => [
-                [
-                    'wire' => 'kemenyMaxCandidates',
-                    'label' => __('ui.kemeny_max'),
-                    'type' => 'number',
-                    'min' => 3,
-                    'max' => 20,
-                    'placeholder' => __('ui.kemeny_placeholder'),
-                    'hint' => __('ui.kemeny_slow_warning'),
                 ],
             ],
             SingleTransferableVote::METHOD_NAME[0] => [
