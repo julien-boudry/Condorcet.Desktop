@@ -170,8 +170,10 @@
             @endif
         </div>
 
-        {{-- Condorcet library version + processing time (discreet, bottom-right) --}}
+        {{-- App version, Condorcet library version + processing time (discreet, bottom-right) --}}
         <p class="text-right text-xs text-gray-400 dark:text-gray-600 mt-2">
+            <a href="https://github.com/julien-boudry/Condorcet.Desktop" target="_blank" rel="noopener" class="hover:text-brand transition-colors">Condorcet Desktop {{ $appVersion }}</a>
+            <span class="mx-1">&middot;</span>
             <a href="https://github.com/julien-boudry/Condorcet" target="_blank" rel="noopener" class="hover:text-brand transition-colors">Condorcet PHP v{{ $condorcetVersion }}</a>
             @if(isset($computedResults['timer']))
                 @php

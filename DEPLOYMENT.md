@@ -231,11 +231,34 @@ only in overlays avoids conflicts when switching between environments.
 Set the production values in `.env`, then:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+APP_VERSION=$(git describe --tags --always --dirty) \
+  docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 Docker Compose injects the values from `.env` directly as process environment
 variables — no `.env` file inside the container is needed or used.
+
+### Version Stamping
+
+The Docker image is stamped with a git version at build time. The `APP_VERSION`
+build-arg is written to a `VERSION` file inside the image and read at runtime
+by `config/version.php`.
+
+The `docker-compose.yml` base file passes `APP_VERSION` as a build argument
+with a default value of `dev`. To inject the real git version, export the
+variable before building:
+
+```bash
+# One-liner: build with the current git version
+APP_VERSION=$(git describe --tags --always --dirty) docker compose up -d --build
+```
+
+If git tags are used (`git tag v1.0.0`), the version will look like `v1.0.0` or
+`v1.0.0-3-gabcdef` (3 commits after the tag). Without tags, it falls back to
+the short commit hash (e.g. `abcdef`).
+
+The version is displayed in the results footer alongside the Condorcet PHP
+library version.
 
 ### Testing the production image locally
 

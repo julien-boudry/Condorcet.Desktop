@@ -55,9 +55,16 @@ RUN install-php-extensions \
 
 WORKDIR /app
 
+# Application version — injected at build time by docker-compose via
+# `git describe --tags --always --dirty`. Falls back to 'dev' when omitted.
+ARG APP_VERSION=dev
+
 # Copy application code — vendor/ and other dev artifacts are excluded
 # via .dockerignore so they never end up in the image.
 COPY . /app
+
+# Write the version stamp read by config/version.php at runtime.
+RUN echo "${APP_VERSION}" > /app/VERSION
 
 # Copy compiled frontend assets from the build stage
 COPY --from=frontend /app/public/build /app/public/build

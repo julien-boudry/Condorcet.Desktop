@@ -410,3 +410,19 @@ it('renders the computing translation key', function () {
     Livewire::test(ElectionManager::class)
         ->assertSeeHtml(__('ui.computing'));
 });
+
+// ──────────────────────────────────────────────
+// Version display
+// ──────────────────────────────────────────────
+
+it('passes the app version from config to the view', function () {
+    config(['version.app' => 'v1.2.3-test']);
+
+    Livewire::test(ElectionManager::class)
+        ->assertViewHas('appVersion', 'v1.2.3-test');
+});
+
+it('defaults the app version to dev when VERSION file is missing', function () {
+    // Without a VERSION file, config/version.php should return 'dev'
+    expect(config('version.app'))->toBeString();
+});

@@ -589,6 +589,7 @@ class ElectionManager extends Component
             'activeMethodOptions' => $this->getActiveMethodOptions(),
             'defaultMethod' => Condorcet::getDefaultMethod(),
             'condorcetVersion' => Condorcet::getVersion(),
+            'appVersion' => config('version.app'),
         ]);
     }
 

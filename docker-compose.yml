@@ -18,7 +18,13 @@
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        # Stamp the image with the current git version.
+        # Requires .git to be accessible at build time (it is: docker-compose
+        # runs on the host where the repo is checked out).
+        APP_VERSION: ${APP_VERSION:-dev}
     # Inject environment variables from the project .env file as process env
     # vars. Laravel reads them via getenv() — no .env file inside the container
     # is needed or used.
