@@ -14,6 +14,13 @@
                 (!localStorage.getItem('colorScheme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             }
+
+            // Follow OS theme changes in real time when user has no explicit preference
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+                if (!localStorage.getItem('colorScheme')) {
+                    document.documentElement.classList.toggle('dark', e.matches);
+                }
+            });
         </script>
     </head>
     <body class="h-full bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
