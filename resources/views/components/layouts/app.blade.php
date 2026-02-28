@@ -6,6 +6,19 @@
         <title>{{ config('app.name') }}</title>
         <link rel="icon" href="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" type="image/avif" />
 
+        {{-- Alternate hreflang tags for SEO — one per supported locale --}}
+        @php
+            $baseUrl = url('/');
+            $supportedLocales = config('locales.supported');
+        @endphp
+        @foreach($supportedLocales as $code => $label)
+            @if($code !== app()->getLocale())
+                <link rel="alternate" hreflang="{{ $code }}" href="{{ $baseUrl . '?lang=' . $code }}" />
+            @endif
+        @endforeach
+        <link rel="alternate" hreflang="x-default" href="{{ $baseUrl }}" />
+        <link rel="canonical" href="{{ $baseUrl }}" />
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         {{-- Apply dark mode class before render to prevent flash --}}
