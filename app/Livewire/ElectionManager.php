@@ -582,6 +582,14 @@ class ElectionManager extends Component
         $this->warnings = [];
         $computedResults = $this->computeResults();
 
+        // Notify the browser that a real election calculation completed.
+        // The analytics layer listens for this event to track computation usage.
+        // We only fire when results are available (i.e. enough candidates and
+        // votes were present) to avoid counting empty/initial renders.
+        if (! ($computedResults['empty'] ?? true)) {
+            $this->dispatch('election-rendered');
+        }
+
         return view('livewire.election-manager', [
             'computedResults' => $computedResults,
             'methodGroups' => static::getMethodGroups(),

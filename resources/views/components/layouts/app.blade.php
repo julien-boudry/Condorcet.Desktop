@@ -35,6 +35,17 @@
                 }
             });
         </script>
+
+        {{-- Rybbit analytics — loaded only when ANALYTICS_ENABLED is true. --}}
+        @if(config('analytics.enabled') && config('analytics.site_id'))
+        <script src="{{ config('analytics.script_url') }}" async data-site-id="{{ config('analytics.site_id') }}"></script>
+        <script>
+            // Track server-side election computation events dispatched by Livewire.
+            window.addEventListener('election-rendered', function () {
+                window.rybbit?.event('election_rendered');
+            });
+        </script>
+        @endif
     </head>
     <body class="h-full bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans">
         {{-- Top navigation bar --}}
@@ -80,6 +91,7 @@
                                 <button
                                     @click="
                                         if ('{{ $currentLocale }}' !== '{{ $code }}') {
+                                            window.rybbit?.event('language_changed', { locale: '{{ $code }}' });
                                             document.cookie = 'locale={{ $code }}; path=/; max-age=31536000; SameSite=Lax';
                                             location.reload();
                                         }
@@ -139,7 +151,7 @@
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="flex items-center gap-2 w-full px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                @click="open = false"
+                                @click="open = false; window.rybbit?.event('github_clicked')"
                             >
                                 {{-- GitHub mark SVG --}}
                                 <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -154,7 +166,7 @@
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="flex items-center gap-2 w-full px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                                @click="open = false"
+                                @click="open = false; window.rybbit?.event('donation_clicked')"
                             >
                                 {{-- Heart icon --}}
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
@@ -176,7 +188,7 @@
                     {{-- Dark mode toggle --}}
                     <button
                         x-data="{ dark: document.documentElement.classList.contains('dark') }"
-                        x-on:click="dark = !dark; document.documentElement.classList.toggle('dark'); localStorage.setItem('colorScheme', dark ? 'dark' : 'light')"
+                        x-on:click="dark = !dark; document.documentElement.classList.toggle('dark'); localStorage.setItem('colorScheme', dark ? 'dark' : 'light'); window.rybbit?.event('theme_changed', { theme: dark ? 'dark' : 'light' })"
                         class="rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
                         :title="dark ? '{{ __('ui.switch_to_light') }}' : '{{ __('ui.switch_to_dark') }}'"
                     >
