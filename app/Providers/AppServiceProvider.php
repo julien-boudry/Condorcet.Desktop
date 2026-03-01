@@ -47,8 +47,7 @@ class AppServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting(): void
     {
-        RateLimiter::for('web', static fn (Request $request): Limit =>
-            Limit::perMinute(60)->by($request->ip())
+        RateLimiter::for('web', static fn (Request $request): Limit => Limit::perMinute(60)->by($request->ip())
         );
     }
 
