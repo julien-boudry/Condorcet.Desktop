@@ -101,11 +101,26 @@ class SetLocale
             return $cookie;
         }
 
-        // 3. Browser Accept-Language header
-        $preferred = $request->getPreferredLanguage(array_keys($supported));
+        // 3. Browser Accept-Language header.
+        //    We do NOT use Symfony's getPreferredLanguage() because it silently
+        //    returns the first item of the provided list when no language matches
+        //    (or when the header is absent). Instead, we iterate the browser's
+        //    preferred languages (sorted by quality) and pick the first match.
+        if ($request->headers->has('Accept-Language')) {
+            $supportedKeys = array_keys($supported);
 
-        if ($preferred !== null && array_key_exists($preferred, $supported)) {
-            return $preferred;
+            foreach ($request->getLanguages() as $lang) {
+                if (\in_array($lang, $supportedKeys, true)) {
+                    return $lang;
+                }
+
+                // Try the base language — e.g. "en" from "en_US".
+                $base = strstr($lang, '_', before_needle: true);
+
+                if ($base !== false && \in_array($base, $supportedKeys, true)) {
+                    return $base;
+                }
+            }
         }
 
         // 4. Application default

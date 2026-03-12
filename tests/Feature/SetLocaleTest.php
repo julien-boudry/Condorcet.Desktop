@@ -61,11 +61,20 @@ it('detects locale from Accept-Language header when no cookie is set', function 
     expect(app()->getLocale())->toBe('es');
 });
 
-it('falls back to app default when Accept-Language has no supported match', function () {
+it('falls back to English when Accept-Language has no supported match', function () {
     $this->get('/', ['Accept-Language' => 'xx;q=1.0'])
         ->assertSuccessful();
 
-    expect(app()->getLocale())->toBe(config('app.locale'));
+    // Must be 'en' explicitly — config('app.locale') would be a tautology
+    // because setLocale() also updates the config value.
+    expect(app()->getLocale())->toBe('en');
+});
+
+it('falls back to English when no Accept-Language header is sent (bot crawl)', function () {
+    $this->get('/')
+        ->assertSuccessful();
+
+    expect(app()->getLocale())->toBe('en');
 });
 
 it('prefers the cookie over Accept-Language header', function () {
