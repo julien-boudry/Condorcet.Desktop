@@ -7,14 +7,14 @@
         "dev": "vite"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.2.1",
+        "@tailwindcss/vite": "^4.2.2",
         "laravel-vite-plugin": "^2.1.0",
-        "tailwindcss": "^4.2.1",
+        "tailwindcss": "^4.2.2",
         "vite": "^7.3.1"
     },
     "optionalDependencies": {
         "@rollup/rollup-linux-x64-gnu": "4.9.5",
-        "@tailwindcss/oxide-linux-x64-gnu": "^4.2.1",
+        "@tailwindcss/oxide-linux-x64-gnu": "^4.2.2",
         "lightningcss-linux-x64-gnu": "^1.32.0"
     }
 }
