@@ -79,7 +79,7 @@ class SetLocale
             value: $queryLocale,
             minutes: self::COOKIE_LIFETIME_MINUTES,
             path: '/',
-            secure: null,
+            secure: app()->isProduction(),
             httpOnly: false,
             sameSite: 'Lax',
         );

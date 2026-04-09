@@ -10,12 +10,14 @@ use CondorcetPHP\Condorcet\Algo\Methods\Smith\SmithSet;
 use CondorcetPHP\Condorcet\Algo\Methods\STV\CPO_STV;
 use CondorcetPHP\Condorcet\Algo\Methods\STV\SingleTransferableVote;
 use CondorcetPHP\Condorcet\Algo\Tools\StvQuotas;
+use CondorcetPHP\Condorcet\Candidate;
 use CondorcetPHP\Condorcet\Condorcet;
 use CondorcetPHP\Condorcet\Constraints\NoTie;
 use CondorcetPHP\Condorcet\Election;
 use CondorcetPHP\Condorcet\Result;
 use CondorcetPHP\Condorcet\Tools\Converters\CEF\CondorcetElectionFormat;
 use CondorcetPHP\Condorcet\Vote;
+use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -497,7 +499,7 @@ class ElectionManager extends Component
     public function importFromFile(): void
     {
         $this->validate([
-            'importFile' => ['required', 'file', 'max:51200'], // 50 MB max
+            'importFile' => ['required', 'file', 'max:10240'], // 10 MB max
         ]);
 
         try {
@@ -577,7 +579,7 @@ class ElectionManager extends Component
     //  Render — recompute everything on every cycle
     // ─────────────────────────────────────────────────────────────
 
-    public function render(): \Illuminate\Contracts\View\View
+    public function render(): View
     {
         $this->warnings = [];
         $computedResults = $this->computeResults();
@@ -979,8 +981,8 @@ class ElectionManager extends Component
                  * This closure normalises all three cases into a display string.
                  */
                 $formatCandidate = static fn (\CondorcetPHP\Condorcet\Candidate|array|null $value): ?string => match (true) {
-                    $value instanceof \CondorcetPHP\Condorcet\Candidate => (string) $value,
-                    is_array($value) => implode(' = ', array_map(static fn (\CondorcetPHP\Condorcet\Candidate $c): string => (string) $c, $value)),
+                    $value instanceof Candidate => (string) $value,
+                    is_array($value) => implode(' = ', array_map(static fn (Candidate $c): string => (string) $c, $value)),
                     default => null,
                 };
 

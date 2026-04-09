@@ -98,7 +98,10 @@
                     {{-- Modal body --}}
                     <div class="px-5 py-4 space-y-3">
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            {!! __('ui.parse_votes_desc') !!}
+                            {!! __('ui.parse_votes_desc', [
+                                'format' => '<code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">' . e(__('ui.parse_votes_format')) . '</code>',
+                                'comment' => '<code class="bg-gray-100 dark:bg-gray-800 px-1 rounded">' . e(__('ui.parse_votes_comment')) . '</code>',
+                            ]) !!}
                         </p>
 
                         <textarea

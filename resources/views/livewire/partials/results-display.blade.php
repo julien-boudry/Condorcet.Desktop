@@ -9,9 +9,14 @@
         </div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ __('ui.no_results') }}</h3>
         <p class="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-            {!! __('ui.no_results_hint') !!}
+            {!! __('ui.no_results_hint', [
+                'candidates' => '<strong>' . e(__('ui.no_results_hint_candidates')) . '</strong>',
+                'vote' => '<strong>' . e(__('ui.no_results_hint_vote')) . '</strong>',
+            ]) !!}
             @if(count($methods) === 0 && count($candidates) >= 2 && count($votes) > 0)
-                <br/>{!! __('ui.no_results_methods_hint') !!}
+                <br/>{!! __('ui.no_results_methods_hint', [
+                    'methods' => '<strong>' . e(__('ui.no_results_methods_hint_methods')) . '</strong>',
+                ]) !!}
             @endif
         </p>
     </div>
