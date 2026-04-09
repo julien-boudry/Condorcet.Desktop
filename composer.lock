@@ -1055,16 +1055,16 @@
         },
         {
             "name": "julien-boudry/condorcet",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/julien-boudry/Condorcet.git",
-                "reference": "684713402e7e37c50bc3dfb5d504a4c2eb0201ae"
+                "reference": "8936bf2739824f814e0bd0bd5f75bf6975b97d3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/684713402e7e37c50bc3dfb5d504a4c2eb0201ae",
-                "reference": "684713402e7e37c50bc3dfb5d504a4c2eb0201ae",
+                "url": "https://api.github.com/repos/julien-boudry/Condorcet/zipball/8936bf2739824f814e0bd0bd5f75bf6975b97d3e",
+                "reference": "8936bf2739824f814e0bd0bd5f75bf6975b97d3e",
                 "shasum": ""
             },
             "require": {
@@ -1129,7 +1129,7 @@
             ],
             "support": {
                 "issues": "https://github.com/julien-boudry/Condorcet/issues",
-                "source": "https://github.com/julien-boudry/Condorcet/tree/v5.0.7"
+                "source": "https://github.com/julien-boudry/Condorcet/tree/v5.0.8"
             },
             "funding": [
                 {
@@ -1141,7 +1141,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-25T21:09:23+00:00"
+            "time": "2026-04-09T10:20:24+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
