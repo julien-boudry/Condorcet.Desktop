@@ -4,22 +4,26 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{{ config('app.name') }}</title>
-        <link rel="icon" href="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" type="image/avif" />
 
-        {{-- Alternate hreflang tags for SEO — one per supported locale --}}
         @php
             $baseUrl = url('/');
             $supportedLocales = config('locales.supported');
+            $currentLocale = app()->getLocale();
+            $logoVersion = filemtime(public_path('images/condorcet-logo.avif'));
         @endphp
+
+        <link rel="icon" href="{{ asset('images/condorcet-logo.avif') . '?v=' . $logoVersion }}" type="image/avif" />
+
+        {{-- Alternate hreflang tags for SEO — one per supported locale --}}
         @foreach($supportedLocales as $code => $label)
-            @if($code !== app()->getLocale())
+            @if($code !== $currentLocale)
                 <link rel="alternate" hreflang="{{ $code }}" href="{{ $baseUrl . '?lang=' . $code }}" />
             @endif
         @endforeach
         <link rel="alternate" hreflang="x-default" href="{{ $baseUrl }}" />
         <link rel="canonical" href="{{ $baseUrl }}" />
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css'])
 
         {{-- Apply dark mode class before render to prevent flash --}}
         <script>
@@ -53,7 +57,7 @@
             <div class="mx-auto max-w-screen-2xl flex items-center justify-between px-2 py-2 sm:px-4 sm:py-3">
                 {{-- Logo & app name --}}
                 <div class="flex items-center gap-2 sm:gap-3">
-                    <img src="{{ asset('images/condorcet-logo.avif') . '?v=' . filemtime(public_path('images/condorcet-logo.avif')) }}" alt="Condorcet Logo" class="h-8 w-8" />
+                    <img src="{{ asset('images/condorcet-logo.avif') . '?v=' . $logoVersion }}" alt="Condorcet Logo" width="32" height="32" class="h-8 w-8" />
                     <span class="hidden sm:inline text-lg font-semibold text-gray-900 dark:text-gray-100">{{ config('app.name') }}</span>
                 </div>
 
@@ -65,10 +69,6 @@
                         @click.outside="open = false"
                         class="relative"
                     >
-                        @php
-                            $locales = config('locales.supported');
-                            $currentLocale = app()->getLocale();
-                        @endphp
                         <button
                             @click="open = !open"
                             class="flex items-center gap-1 sm:gap-1.5 rounded-lg px-1.5 py-1.5 sm:px-2.5 text-sm text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors"
@@ -87,7 +87,7 @@
                             x-transition.opacity
                             class="absolute right-0 mt-1 w-40 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg py-1 z-50"
                         >
-                            @foreach($locales as $code => $label)
+                            @foreach($supportedLocales as $code => $label)
                                 <button
                                     @click="
                                         if ('{{ $currentLocale }}' !== '{{ $code }}') {
