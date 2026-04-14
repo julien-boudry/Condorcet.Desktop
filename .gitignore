@@ -30,3 +30,4 @@ frankenphp-worker.php
 # Laravel Boost managed files
 boost.json
 .github/skills/
+.claude/settings.local.json
