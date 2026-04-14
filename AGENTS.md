@@ -34,6 +34,9 @@ Read these files before doing any work on this project:
 - **Always write in English.** All code, comments, PHPDoc blocks, variable names, commit messages, and file contents must be in English — regardless of the language used in the prompt.
 - **Never use callable strings outside of Laravel conventions.** Do not pass function names as strings to `array_map`, `usort`, `array_filter`, etc. (e.g. `array_map('strval', $arr)`). Always use an explicit typed closure instead: `array_map(static fn (Candidate $c): string => (string) $c, $arr)`. Exception: callable strings that are a strong Laravel convention (e.g. `'required'` validation rules, `'App\Models\User'` morph maps) are acceptable.
 
+## Tools
+- **Use `bun` as the JavaScript package manager** for all JS commands: `bun add <pkg>`, `bun install`, `bun run <script>`. Never use npm, yarn, or pnpm.
+
 ---
 
 <laravel-boost-guidelines>
@@ -86,7 +89,6 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 ## Frontend Bundling
 
-- **Use `bun` as the JavaScript package manager** for all JS commands: `bun add <pkg>`, `bun install`, `bun run <script>`. Never use npm, yarn, or pnpm.
 - If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `bun run build`, `bun run dev`, or `composer run dev`. Ask them.
 
 ## Documentation Files
