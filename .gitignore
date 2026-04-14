@@ -26,3 +26,7 @@ yarn-error.log
 frankenphp
 frankenphp-worker.php
 .claude/settings.local.json
+
+# Laravel Boost managed files
+boost.json
+.github/skills/
