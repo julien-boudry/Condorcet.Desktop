@@ -232,7 +232,7 @@ Set the production values in `.env`, then:
 
 ```bash
 APP_VERSION=$(git describe --tags --always --dirty) \
-  docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+  docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build --pull always
 ```
 
 Docker Compose injects the values from `.env` directly as process environment
