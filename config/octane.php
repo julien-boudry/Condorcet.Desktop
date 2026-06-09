@@ -221,4 +221,20 @@ return [
 
     'max_execution_time' => 30,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Server Output Polling Interval
+    |--------------------------------------------------------------------------
+    |
+    | The Octane supervisor process polls the underlying server's output pipes
+    | on this interval (in microseconds) to relay logs to stdout. The framework
+    | default is 10ms (100 polls/second), which keeps the otherwise-idle
+    | supervisor process busy-spinning and burning ~1.5% of a CPU core even with
+    | no traffic. In production we only forward warnings, so a much larger
+    | interval slashes idle CPU at the cost of slightly delayed/batched logs.
+    |
+    */
+
+    'usleep_between_writing_server_output' => (int) env('OCTANE_OUTPUT_USLEEP', 250_000),
+
 ];
