@@ -89,9 +89,9 @@ EXPOSE 443/udp
 # certificates and related state across container restarts.
 VOLUME ["/data", "/config"]
 
-# Health check against the built-in Laravel /up endpoint.
-HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=3 \
-    CMD curl -f http://localhost/up || exit 1
+# The health check is defined in docker-compose.yml so it can be tuned without
+# rebuilding the image (and a Compose-level healthcheck would override any
+# HEALTHCHECK declared here anyway).
 
 # Laravel caches run at container startup so they read environment variables
 # injected by the container runtime (Docker Compose env_file:, Kubernetes

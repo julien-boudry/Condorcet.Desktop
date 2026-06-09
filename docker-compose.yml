@@ -44,11 +44,17 @@ services:
       - caddy_config:/config
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/up"]
-      interval: 10s
+      # Caddy only serves the configured server name (OCTANE_HOST), so we must
+      # request that exact host for the request to match the site block and
+      # reach PHP — a "localhost" request would miss every site and 404. The
+      # --resolve pins that hostname to the loopback so the check stays local
+      # while still presenting the right SNI/Host and validating the real cert.
+      # (-k tolerates a brief cert mismatch, e.g. mid-renewal, without flapping.)
+      test: ["CMD", "curl", "-fsS", "-k", "--resolve", "${OCTANE_HOST}:443:127.0.0.1", "https://${OCTANE_HOST}/up"]
+      interval: 30s
       timeout: 5s
       retries: 3
-      start_period: 20s
+      start_period: 30s
 
 volumes:
   # Named volume for Caddy TLS certificate storage.
