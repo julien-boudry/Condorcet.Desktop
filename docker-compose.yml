@@ -50,7 +50,12 @@ services:
       # --resolve pins that hostname to the loopback so the check stays local
       # while still presenting the right SNI/Host and validating the real cert.
       # (-k tolerates a brief cert mismatch, e.g. mid-renewal, without flapping.)
-      test: ["CMD", "curl", "-fsS", "-k", "--resolve", "${OCTANE_HOST}:443:127.0.0.1", "https://${OCTANE_HOST}/up"]
+      #
+      # OCTANE_HOST is resolved by the container shell at runtime (it comes from
+      # env_file), NOT by Compose's YAML interpolation — those are separate, and
+      # Compose's would expand to an empty string here. Hence CMD-SHELL + the
+      # escaped "$$" so Compose passes a literal "$OCTANE_HOST" to the shell.
+      test: ["CMD-SHELL", "curl -fsS -k --resolve \"$$OCTANE_HOST:443:127.0.0.1\" \"https://$$OCTANE_HOST/up\""]
       interval: 30s
       timeout: 5s
       retries: 3
