@@ -31,3 +31,4 @@ frankenphp-worker.php
 boost.json
 .github/skills/
 .claude/settings.local.json
+.claude/skills/
