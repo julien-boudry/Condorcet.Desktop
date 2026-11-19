@@ -42,6 +42,8 @@ services:
       # Persist Caddy runtime state/config associated with certificate
       # management and HTTP server state.
       - caddy_config:/config
+    networks:
+      - default
     restart: unless-stopped
     healthcheck:
       # Caddy only serves the configured server name (OCTANE_HOST), so we must
@@ -60,6 +62,16 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+
+networks:
+  default:
+    # Give the container an IPv6 address so Docker forwards IPv6 traffic with
+    # ip6tables DNAT instead of the userland docker-proxy. Without it, IPv6
+    # clients reach the container through an IPv4 relay and REMOTE_ADDR shows
+    # the bridge gateway (172.x.0.1) instead of the real client address.
+    # Docker Engine 27+ allocates a ULA subnet automatically and enables
+    # ip6tables by default.
+    enable_ipv6: true
 
 volumes:
   # Named volume for Caddy TLS certificate storage.
